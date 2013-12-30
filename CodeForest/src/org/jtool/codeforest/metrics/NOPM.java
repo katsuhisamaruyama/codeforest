@@ -4,8 +4,8 @@
 
 package org.jtool.codeforest.metrics;
 
-import org.jtool.codeforest.metrics.java.ClassMetrics;
-import org.jtool.codeforest.metrics.java.ProjectMetrics;
+import org.jtool.codeforest.java.metrics.ClassMetrics;
+import org.jtool.codeforest.java.metrics.ProjectMetrics;
 
 /**
  * Measures the numbers of public methods within a class.

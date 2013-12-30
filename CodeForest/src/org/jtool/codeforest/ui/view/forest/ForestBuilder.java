@@ -4,9 +4,10 @@
 
 package org.jtool.codeforest.ui.view.forest;
 
-import org.jtool.codeforest.metrics.java.ProjectMetrics;
-import org.jtool.codeforest.metrics.java.PackageMetrics;
-import org.jtool.codeforest.metrics.java.ClassMetrics;
+import org.jtool.codeforest.java.metrics.ClassMetrics;
+import org.jtool.codeforest.java.metrics.PackageMetrics;
+import org.jtool.codeforest.java.metrics.ProjectMetrics;
+
 import java.util.HashMap;
 import java.util.Map;
 

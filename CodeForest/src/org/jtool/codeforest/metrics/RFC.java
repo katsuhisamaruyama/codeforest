@@ -4,8 +4,8 @@
 
 package org.jtool.codeforest.metrics;
 
-import org.jtool.codeforest.metrics.java.ClassMetrics;
-import org.jtool.codeforest.metrics.java.ProjectMetrics;
+import org.jtool.codeforest.java.metrics.ClassMetrics;
+import org.jtool.codeforest.java.metrics.ProjectMetrics;
 
 /**
  * Measures the number of methods of a class plus the number of methods called by any method.

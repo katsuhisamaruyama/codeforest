@@ -5,15 +5,15 @@
 package org.jtool.codeforest.ui.view;
 
 import org.jtool.codeforest.Activator;
-import org.jtool.codeforest.metrics.java.MethodMetrics;
-import org.jtool.codeforest.metrics.java.FieldMetrics;
-import org.jtool.codeforest.metrics.java.ClassMetrics;
-import org.jtool.codeforest.metrics.java.PackageMetrics;
-import org.jtool.codeforest.metrics.java.ProjectMetrics;
-import org.jtool.codeforest.metrics.java.CommonMetrics;
-import org.jtool.eclipse.model.java.JavaClass;
-import org.jtool.eclipse.model.java.JavaMethod;
-import org.jtool.eclipse.model.java.JavaField;
+import org.jtool.codeforest.java.JavaClass;
+import org.jtool.codeforest.java.JavaField;
+import org.jtool.codeforest.java.JavaMethod;
+import org.jtool.codeforest.java.metrics.ClassMetrics;
+import org.jtool.codeforest.java.metrics.CommonMetrics;
+import org.jtool.codeforest.java.metrics.FieldMetrics;
+import org.jtool.codeforest.java.metrics.MethodMetrics;
+import org.jtool.codeforest.java.metrics.PackageMetrics;
+import org.jtool.codeforest.java.metrics.ProjectMetrics;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -22,6 +22,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -144,7 +145,7 @@ public class PropertyView {
         }
         
         propertyList.add(new PropertyData("Abstract", getBoolean(mclass.getJavaClass().isAbstract()), false, null));
-        propertyList.add(new PropertyData("Visibility", getVivibility(mclass.getJavaClass()), false, null));
+        propertyList.add(new PropertyData("Visibility", getVisibility(mclass.getJavaClass()), false, null));
         
         List<PropertyData> properties = new ArrayList<PropertyData>();
         Map<String, Double> metrics = mclass.getMetricValues();
@@ -165,7 +166,7 @@ public class PropertyView {
         }
     }
     
-    private String getVivibility(JavaClass jclass) {
+    private String getVisibility(JavaClass jclass) {
         if (jclass.isPrivate()) {
             return "private";
         } else if (jclass.isProtected()) {
@@ -227,7 +228,7 @@ public class PropertyView {
         
         propertyList.add(new PropertyData("Abstract", getBoolean(mmethod.getJavaMethod().isAbstract()), false, null));
         propertyList.add(new PropertyData("Static", getBoolean(mmethod.getJavaMethod().isStatic()), false, null));
-        propertyList.add(new PropertyData("Visibility", getVivibility(mmethod.getJavaMethod()), false, null));
+        propertyList.add(new PropertyData("Visibility", getVisibility(mmethod.getJavaMethod()), false, null));
         
         List<PropertyData> properties = new ArrayList<PropertyData>();
         Map<String, Double> metrics = mmethod.getMetricValues();
@@ -240,7 +241,7 @@ public class PropertyView {
         propertyList.addAll(properties);
     }
     
-    private String getVivibility(JavaMethod jmethod) {
+    private String getVisibility(JavaMethod jmethod) {
         if (jmethod.isPrivate()) {
             return "private";
         } else if (jmethod.isProtected()) {

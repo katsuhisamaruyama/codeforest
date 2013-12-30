@@ -27,17 +27,8 @@ Bundle-ClassPath: .,
  lib/java3d-1.6.0-pre8/j3dcore.jar,
  lib/java3d-1.6.0-pre8/j3dutils.jar,
  lib/java3d-1.6.0-pre8/vecmath.jar
-Export-Package: org.jtool.codeforest.metrics;uses:="org.jtool.codeforest.metrics.java",
- org.jtool.codeforest.metrics.java;uses:="org.eclipse.jdt.core.dom,org.jtool.eclipse.model.java"
-Import-Package: org.jtool.eclipse,
- org.jtool.eclipse.event,
- org.jtool.eclipse.io,
- org.jtool.eclipse.model.cfg,
- org.jtool.eclipse.model.cfg.internal,
- org.jtool.eclipse.model.graph,
- org.jtool.eclipse.model.java,
- org.jtool.eclipse.model.java.internal,
- org.jtool.eclipse.model.pdg,
- org.jtool.eclipse.model.pdg.internal
+Export-Package: org.jtool.codeforest.java,
+ org.jtool.codeforest.java.metrics;uses:="org.eclipse.jdt.core.dom,org.jtool.eclipse.model.java",
+ org.jtool.codeforest.metrics;uses:="org.jtool.codeforest.metrics.java"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
  JavaSE-1.6

@@ -10,9 +10,9 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.jtool.codeforest.metrics.java.MetricsManager;
-import org.jtool.codeforest.metrics.java.ProjectMetrics;
-import org.jtool.codeforest.metrics.java.XMLExporter;
+import org.jtool.codeforest.java.metrics.MetricsManager;
+import org.jtool.codeforest.java.metrics.ProjectMetrics;
+import org.jtool.codeforest.java.metrics.XMLExporter;
 import org.jtool.codeforest.ui.CodeForestFrame;
 
 /**
@@ -47,17 +47,22 @@ public class NewAction extends AbstractHandler {
         part = HandlerUtil.getActivePart(event);
         window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
         
-        // String path = "/Users/maru/Desktop/eclipse-4.3-CodeForest/runtime-EclipseApplication/CodeForest";
-        // String path = "/Users/maru/Desktop/eclipse-4.3-CodeForest/runtime-EclipseApplication/org.jtool.eclipse";
-        String path = "/Users/maru/Desktop/eclipse-4.3-CodeForest/runtime-EclipseApplication/sample";
+        // String path = "/Users/maru/Desktop/eclipse-4.3.1-CodeForest/runtime-EclipseApplication/CodeForest";
+        // String path = "/Users/maru/Desktop/eclipse-4.3.1-CodeForest/runtime-EclipseApplication/org.jtool.eclipse";
+        String path = "/Users/maru/Desktop/eclipse-4.3.1-CodeForest/runtime-EclipseApplication/sample";
         MetricsManager manager = new MetricsManager();
         ProjectMetrics mproject = manager.readXML(path);
+        
+        if (mproject == null) {
+        	System.out.println("Not found: " + path);
+        	return null;
+        }
         
         System.out.println("PROJECT NAME = " + mproject.getName());
         
         CodeForestFrame frame = new CodeForestFrame(window.getShell(), mproject);
         
-        org.jtool.codeforest.metrics.java.XMLExporter exporter = new XMLExporter();
+        org.jtool.codeforest.java.metrics.XMLExporter exporter = new XMLExporter();
         exporter.export(frame.getProjectMetrics());
         // System.out.println(exporter.getContents());
         

@@ -4,13 +4,14 @@
 
 package org.jtool.codeforest.ui.view.forest;
 
-import org.jtool.codeforest.metrics.java.ProjectMetrics;
+import org.jtool.codeforest.java.metrics.ProjectMetrics;
 import org.jtool.codeforest.ui.CodeForestFrame;
 import org.jtool.codeforest.ui.view.CodeForestUniverse;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;

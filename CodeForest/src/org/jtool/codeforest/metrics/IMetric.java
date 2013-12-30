@@ -4,11 +4,11 @@
 
 package org.jtool.codeforest.metrics;
 
-import org.jtool.codeforest.metrics.java.ClassMetrics;
-import org.jtool.codeforest.metrics.java.FieldMetrics;
-import org.jtool.codeforest.metrics.java.MethodMetrics;
-import org.jtool.codeforest.metrics.java.PackageMetrics;
-import org.jtool.codeforest.metrics.java.ProjectMetrics;
+import org.jtool.codeforest.java.metrics.ClassMetrics;
+import org.jtool.codeforest.java.metrics.FieldMetrics;
+import org.jtool.codeforest.java.metrics.MethodMetrics;
+import org.jtool.codeforest.java.metrics.PackageMetrics;
+import org.jtool.codeforest.java.metrics.ProjectMetrics;
 
 /**
  * An interface for metric measurements.

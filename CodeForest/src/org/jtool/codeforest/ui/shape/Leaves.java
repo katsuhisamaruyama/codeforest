@@ -5,9 +5,9 @@
 package org.jtool.codeforest.ui.shape;
 
 import org.jtool.codeforest.ui.view.forest.ForestData;
-import org.jtool.codeforest.metrics.java.ProjectMetrics;
-import org.jtool.codeforest.metrics.java.ClassMetrics;
-import org.jtool.codeforest.metrics.java.MethodMetrics;
+import org.jtool.codeforest.java.metrics.ClassMetrics;
+import org.jtool.codeforest.java.metrics.MethodMetrics;
+import org.jtool.codeforest.java.metrics.ProjectMetrics;
 import org.jtool.codeforest.metrics.IMetric;
 import org.jtool.codeforest.metrics.MetricSort;
 

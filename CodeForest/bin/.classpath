@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="lib" path="lib/java3d-1.6.0-pre8/j3dcore.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/java3d-1.6.0-pre8/j3dutils.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/java3d-1.6.0-pre8/vecmath.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/gogl-2.0.2-rc12/gluegen-rt-natives-macosx-universal.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/gogl-2.0.2-rc12/gluegen-rt.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/gogl-2.0.2-rc12/gluegen.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/gogl-2.0.2-rc12/jogl-all-natives-macosx-universal.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/gogl-2.0.2-rc12/jogl-all-noawt.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/gogl-2.0.2-rc12/jogl-all.jar"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="src/|lib/jung2-2_0_1/|lib/" kind="src" path="">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="CodeForest/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="lib"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
