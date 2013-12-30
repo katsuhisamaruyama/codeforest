@@ -10,9 +10,9 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.jtool.codeforest.java.metrics.MetricsManager;
-import org.jtool.codeforest.java.metrics.ProjectMetrics;
-import org.jtool.codeforest.java.metrics.XMLExporter;
+import org.jtool.codeforest.metrics.java.MetricsManager;
+import org.jtool.codeforest.metrics.java.ProjectMetrics;
+import org.jtool.codeforest.metrics.java.XMLExporter;
 import org.jtool.codeforest.ui.CodeForestFrame;
 
 /**
@@ -62,7 +62,7 @@ public class NewAction extends AbstractHandler {
         
         CodeForestFrame frame = new CodeForestFrame(window.getShell(), mproject);
         
-        org.jtool.codeforest.java.metrics.XMLExporter exporter = new XMLExporter();
+        org.jtool.codeforest.metrics.java.XMLExporter exporter = new XMLExporter();
         exporter.export(frame.getProjectMetrics());
         // System.out.println(exporter.getContents());
         

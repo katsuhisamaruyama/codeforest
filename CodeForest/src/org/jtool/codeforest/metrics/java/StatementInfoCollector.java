@@ -2,7 +2,7 @@
  *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
  */
 
-package org.jtool.codeforest.java.metrics;
+package org.jtool.codeforest.metrics.java;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AssertStatement;

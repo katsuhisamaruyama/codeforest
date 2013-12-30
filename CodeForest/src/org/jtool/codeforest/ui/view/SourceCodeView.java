@@ -4,9 +4,9 @@
 
 package org.jtool.codeforest.ui.view;
 
-import org.jtool.codeforest.java.JavaClass;
-import org.jtool.codeforest.java.metrics.ClassMetrics;
-import org.jtool.codeforest.java.metrics.CommonMetrics;
+import org.jtool.eclipse.model.java.JavaClass;
+import org.jtool.codeforest.metrics.java.ClassMetrics;
+import org.jtool.codeforest.metrics.java.CommonMetrics;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.preference.IPreferenceStore;

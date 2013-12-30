@@ -2,9 +2,9 @@
  *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
  */
 
-package org.jtool.codeforest.java.metrics;
+package org.jtool.codeforest.metrics.java;
 
-import org.jtool.codeforest.java.JavaElement;
+import org.jtool.eclipse.model.java.JavaElement;
 import java.io.File;
 import java.io.BufferedWriter;
 import java.io.FileWriter;

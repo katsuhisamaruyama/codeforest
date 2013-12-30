@@ -4,10 +4,10 @@
  
 package org.jtool.codeforest.handlers;
 
-import org.jtool.codeforest.java.JavaModelFactory;
-import org.jtool.codeforest.java.JavaProject;
-import org.jtool.codeforest.java.metrics.MetricsManager;
-import org.jtool.codeforest.java.metrics.ProjectMetrics;
+import org.jtool.eclipse.model.java.JavaModelFactory;
+import org.jtool.eclipse.model.java.JavaProject;
+import org.jtool.codeforest.metrics.java.MetricsManager;
+import org.jtool.codeforest.metrics.java.ProjectMetrics;
 import org.jtool.codeforest.ui.CodeForestFrame;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -86,12 +86,10 @@ public class OpenAction extends AbstractHandler {
                 ProjectMetrics mproject = manager.create(jproject);
                 manager.writeXML(jproject, mproject);
                 
-                /*
                 CodeForestFrame frame = new CodeForestFrame(window.getShell(), mproject);
                 frame.createPane();
-                
                 frame.dispose();
-                */
+                
                 System.out.println("Code Forest fin.");
             }
         }

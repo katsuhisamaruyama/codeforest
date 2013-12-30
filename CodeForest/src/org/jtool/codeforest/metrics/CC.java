@@ -4,8 +4,8 @@
 
 package org.jtool.codeforest.metrics;
 
-import org.jtool.codeforest.java.metrics.ClassMetrics;
-import org.jtool.codeforest.java.metrics.MethodMetrics;
+import org.jtool.codeforest.metrics.java.ClassMetrics;
+import org.jtool.codeforest.metrics.java.MethodMetrics;
 
 /**
  * Measures the cyclomatic number for measuring complexity of this method.

@@ -4,7 +4,7 @@
 
 package org.jtool.codeforest.ui;
 
-import org.jtool.codeforest.java.metrics.ProjectMetrics;
+import org.jtool.codeforest.metrics.java.ProjectMetrics;
 import org.jtool.codeforest.ui.view.PropertyView;
 import org.jtool.codeforest.ui.view.SettingView;
 import org.jtool.codeforest.ui.view.SourceCodeView;

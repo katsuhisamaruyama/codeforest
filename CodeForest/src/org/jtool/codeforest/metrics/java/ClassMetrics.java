@@ -2,14 +2,14 @@
  *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
  */
 
-package org.jtool.codeforest.java.metrics;
+package org.jtool.codeforest.metrics.java;
 
-import org.jtool.codeforest.java.JavaClass;
-import org.jtool.codeforest.java.JavaField;
-import org.jtool.codeforest.java.JavaFile;
-import org.jtool.codeforest.java.JavaMethod;
-import org.jtool.codeforest.java.JavaPackage;
-import org.jtool.codeforest.java.JavaProject;
+import org.jtool.eclipse.model.java.JavaClass;
+import org.jtool.eclipse.model.java.JavaField;
+import org.jtool.eclipse.model.java.JavaFile;
+import org.jtool.eclipse.model.java.JavaMethod;
+import org.jtool.eclipse.model.java.JavaPackage;
+import org.jtool.eclipse.model.java.JavaProject;
 import org.jtool.codeforest.metrics.MetricSort;
 import org.jtool.codeforest.metrics.UnsupportedMetricsException;
 import java.util.ArrayList;

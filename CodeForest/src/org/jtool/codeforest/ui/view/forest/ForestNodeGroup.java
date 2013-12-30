@@ -7,7 +7,7 @@ package org.jtool.codeforest.ui.view.forest;
 import org.jtool.codeforest.ui.layout.IMapModel;
 import org.jtool.codeforest.ui.layout.IMappable;
 import org.jtool.codeforest.ui.shape.Ground;
-import org.jtool.codeforest.java.metrics.PackageMetrics;
+import org.jtool.codeforest.metrics.java.PackageMetrics;
 
 import javax.media.j3d.TransformGroup;
 

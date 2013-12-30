@@ -5,15 +5,15 @@
 package org.jtool.codeforest.ui.view;
 
 import org.jtool.codeforest.Activator;
-import org.jtool.codeforest.java.JavaClass;
-import org.jtool.codeforest.java.JavaField;
-import org.jtool.codeforest.java.JavaMethod;
-import org.jtool.codeforest.java.metrics.ClassMetrics;
-import org.jtool.codeforest.java.metrics.CommonMetrics;
-import org.jtool.codeforest.java.metrics.FieldMetrics;
-import org.jtool.codeforest.java.metrics.MethodMetrics;
-import org.jtool.codeforest.java.metrics.PackageMetrics;
-import org.jtool.codeforest.java.metrics.ProjectMetrics;
+import org.jtool.eclipse.model.java.JavaClass;
+import org.jtool.eclipse.model.java.JavaField;
+import org.jtool.eclipse.model.java.JavaMethod;
+import org.jtool.codeforest.metrics.java.ClassMetrics;
+import org.jtool.codeforest.metrics.java.CommonMetrics;
+import org.jtool.codeforest.metrics.java.FieldMetrics;
+import org.jtool.codeforest.metrics.java.MethodMetrics;
+import org.jtool.codeforest.metrics.java.PackageMetrics;
+import org.jtool.codeforest.metrics.java.ProjectMetrics;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;

@@ -2,9 +2,9 @@
  *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
  */
 
-package org.jtool.codeforest.java.metrics;
+package org.jtool.codeforest.metrics.java;
 
-import org.jtool.codeforest.java.JavaProject;
+import org.jtool.eclipse.model.java.JavaProject;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;

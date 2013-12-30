@@ -2,10 +2,10 @@
  *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
  */
 
-package org.jtool.codeforest.java.metrics;
+package org.jtool.codeforest.metrics.java;
 
-import org.jtool.codeforest.java.JavaClass;
-import org.jtool.codeforest.java.JavaMethod;
+import org.jtool.eclipse.model.java.JavaClass;
+import org.jtool.eclipse.model.java.JavaMethod;
 import org.jtool.codeforest.metrics.MetricSort;
 
 /**

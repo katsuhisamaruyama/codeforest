@@ -4,8 +4,8 @@
 
 package org.jtool.codeforest.ui.view.forest;
 
-import org.jtool.codeforest.java.metrics.ProjectMetrics;
 import org.jtool.codeforest.metrics.MetricSort;
+import org.jtool.codeforest.metrics.java.ProjectMetrics;
 
 import javax.media.j3d.Background;
 import javax.media.j3d.BoundingSphere;
