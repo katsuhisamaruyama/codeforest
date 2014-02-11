@@ -25,10 +25,11 @@ public class Forest3DView {
     
     private ForestBuilder builder;
     
-    public Forest3DView() {
+    public Forest3DView(Composite parent, CodeForestFrame frame) {
+        createPane(parent, frame);
     }
     
-    public void createPane(Composite parent, CodeForestFrame frame) {
+    private void createPane(Composite parent, CodeForestFrame frame) {
         parent.setLayout(new FillLayout());
         
         // SWT_AWT.embeddedFrameClass = "sun.lwawt.macosx.CViewEmbeddedFrame";

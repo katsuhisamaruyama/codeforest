@@ -15,17 +15,17 @@ import java.util.List;
  */
 public class SettingData {
     
-    static final String TRUNK_HEIGHT = "Trunk height";
-    static final String TRUNK_RADIUS = "Trunk radius";
-    static final String TRUNK_COLOR = "Trunk color";
-    static final String FOLIAGE_HEIGHT = "Foliage height";
-    static final String FOLIAGE_RADIUS = "Foliage radius";
-    static final String FOLIAGE_COLOR = "Foliage color";
+    public static final String TRUNK_HEIGHT = "Trunk height";
+    public static final String TRUNK_RADIUS = "Trunk radius";
+    public static final String TRUNK_COLOR = "Trunk color";
+    public static final String FOLIAGE_HEIGHT = "Foliage height";
+    public static final String FOLIAGE_RADIUS = "Foliage radius";
+    public static final String FOLIAGE_COLOR = "Foliage color";
     
-    static final String BRANCH_LENGTH = "Branch length";
-    static final String LEAF_NUMBER = "Leaf number";
-    static final String LEAF_SIZE = "Leaf size";
-    static final String LEAF_COLOR = "Leaf color";
+    public static final String BRANCH_LENGTH = "Branch length";
+    public static final String LEAF_NUMBER = "Leaf number";
+    public static final String LEAF_SIZE = "Leaf size";
+    public static final String LEAF_COLOR = "Leaf color";
     
     private IMetric trunkHeight = null;
     private IMetric trunkRadius = null;
@@ -46,7 +46,7 @@ public class SettingData {
     public SettingData() {
     }
     
-    void setTrunkHeight(String name) {
+    public void setTrunkHeight(String name) {
         needsUpdateForestView = !isSame(trunkHeight, name);
         if (needsUpdateForestView) {
             trunkHeight = getMetric(name);
@@ -55,7 +55,7 @@ public class SettingData {
         needsUpdateTreeView = needsUpdateForestView;
     }
     
-    void setTrunkRadius(String name) {
+    public void setTrunkRadius(String name) {
         needsUpdateForestView = !isSame(trunkRadius, name);
         if (needsUpdateForestView) {
             trunkRadius = getMetric(name);
@@ -64,7 +64,7 @@ public class SettingData {
         needsUpdateTreeView = needsUpdateForestView;
     }
     
-    void setTrunkColor(String name) {
+    public void setTrunkColor(String name) {
         needsUpdateForestView = !isSame(trunkColor, name);
         if (needsUpdateForestView) {
             trunkColor = getMetric(name);
@@ -73,7 +73,7 @@ public class SettingData {
         needsUpdateTreeView = needsUpdateForestView;
     }
     
-    void setFoliageHeight(String name) {
+    public void setFoliageHeight(String name) {
         needsUpdateForestView = !isSame(foliageHeight, name);
         if (needsUpdateForestView) {
             foliageHeight = getMetric(name);
@@ -82,7 +82,7 @@ public class SettingData {
         needsUpdateTreeView = false;
     }
     
-    void setFoliageRadius(String name) {
+    public void setFoliageRadius(String name) {
         needsUpdateForestView = !isSame(foliageRadius, name);
         if (needsUpdateForestView) {
             foliageRadius = getMetric(name);
@@ -91,7 +91,7 @@ public class SettingData {
         needsUpdateTreeView = false;
     }
     
-    void setFoliageColor(String name) {
+    public void setFoliageColor(String name) {
         needsUpdateForestView = !isSame(foliageColor, name);
         if (needsUpdateForestView) {
             foliageColor = getMetric(name);
@@ -100,7 +100,7 @@ public class SettingData {
         needsUpdateTreeView = false;
     }
     
-    void setBranchLength(String name) {
+    public void setBranchLength(String name) {
         needsUpdateTreeView = !isSame(branchLength, name);
         if (needsUpdateTreeView) {
             branchLength = getMetric(name);
@@ -109,7 +109,7 @@ public class SettingData {
         needsUpdateForestView = false;
     }
     
-    void setLeafNumber(String name) {
+    public void setLeafNumber(String name) {
         needsUpdateTreeView = !isSame(leafNumber, name);
         if (needsUpdateTreeView) {
             leafNumber = getMetric(name);
@@ -118,7 +118,7 @@ public class SettingData {
         needsUpdateForestView = false;
     }
     
-    void setLeafSize(String name) {
+    public void setLeafSize(String name) {
         needsUpdateTreeView = !isSame(leafSize, name);
         if (needsUpdateTreeView) {
             leafSize = getMetric(name);
@@ -127,7 +127,7 @@ public class SettingData {
         needsUpdateForestView = false;
     }
     
-    void setLeafColor(String name) {
+    public void setLeafColor(String name) {
         needsUpdateTreeView = !isSame(leafColor, name);
         if (needsUpdateTreeView) {
             leafColor = getMetric(name);
@@ -202,7 +202,7 @@ public class SettingData {
         return MetricSort.DEFAULT_METRIC;
     }
     
-    String[] getHeightItems(boolean bool) {
+    public String[] getHeightItems(boolean bool) {
         IMetric[] metrics = MetricSort.ALL_SELECTABLE;
         List<String> items = new ArrayList<String>();
         
@@ -218,7 +218,7 @@ public class SettingData {
         return (String[])items.toArray(new String[0]);
     }
     
-    String[] getWidthItems(boolean bool) {
+    public String[] getWidthItems(boolean bool) {
         IMetric[] metrics = MetricSort.ALL_SELECTABLE;
         List<String> items = new ArrayList<String>();
         
@@ -234,7 +234,7 @@ public class SettingData {
         return (String[])items.toArray(new String[0]);
     }
     
-    String[] getClassItems(boolean bool) {
+    public String[] getClassItems(boolean bool) {
         List<String> items = new ArrayList<String>();
         IMetric[] metrics = MetricSort.ALL_SELECTABLE;
         
@@ -251,7 +251,7 @@ public class SettingData {
         return (String[])items.toArray(new String[0]);
     }
     
-    String[] getMethodItems(boolean bool) {
+    public String[] getMethodItems(boolean bool) {
         IMetric[] metrics = MetricSort.ALL_SELECTABLE;
         List<String> items = new ArrayList<String>();
         

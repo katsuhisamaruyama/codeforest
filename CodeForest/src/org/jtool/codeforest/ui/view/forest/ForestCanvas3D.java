@@ -5,13 +5,16 @@
 package org.jtool.codeforest.ui.view.forest;
 
 import org.jtool.codeforest.ui.CodeForestFrame;
+
 import java.awt.GraphicsConfiguration;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.TransformGroup;
 import javax.media.j3d.Transform3D;
+import javax.media.j3d.View;
 import javax.vecmath.Vector3f;
 
 /**
@@ -28,6 +31,8 @@ public class ForestCanvas3D extends Canvas3D implements MouseListener, MouseMoti
     public ForestCanvas3D(GraphicsConfiguration configuration, CodeForestFrame frame) {
         super(configuration);
         universe = new ForestUniverse(this, frame);
+        universe.getViewer().getView().setBackClipPolicy(View.VIRTUAL_EYE);
+        universe.getViewer().getView().setBackClipDistance(1000.0);
         
         addMouseListener(this);
         addMouseMotionListener(this);

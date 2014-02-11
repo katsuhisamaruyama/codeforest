@@ -1,11 +1,12 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
-package org.jtool.codeforest.ui.view.forest;
+package org.jtool.codeforest.ui.view.tree;
 
 import org.jtool.codeforest.ui.CodeForestFrame;
 import org.jtool.codeforest.ui.view.CodeForestUniverse;
+import org.jtool.codeforest.ui.view.forest.ForestNode;
 
 import javax.media.j3d.Background;
 import javax.media.j3d.BoundingSphere;

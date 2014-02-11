@@ -43,7 +43,9 @@ public class SourceCodeView {
     }
     
     public void dispose() {
-        font12 = null;
+        font12.dispose();
+        
+        sourceViewer = null;
         sourceViewerConf = null;
         currentPath = null;
     }

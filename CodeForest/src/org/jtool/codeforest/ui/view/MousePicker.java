@@ -6,16 +6,14 @@ package org.jtool.codeforest.ui.view;
 
 import org.jtool.codeforest.ui.CodeForestFrame;
 import org.jtool.codeforest.ui.view.forest.Forest3DView;
-import org.jtool.codeforest.ui.view.forest.Tree3DView;
 import org.jtool.codeforest.ui.view.forest.ForestNode;
+import org.jtool.codeforest.ui.view.tree.Tree3DView;
 import org.jtool.codeforest.ui.shape.ForestTree;
-
 import javax.media.j3d.Bounds;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.Node;
 import javax.media.j3d.Transform3D;
-
 import com.sun.j3d.utils.behaviors.mouse.MouseBehaviorCallback;
 import com.sun.j3d.utils.picking.PickResult;
 import com.sun.j3d.utils.picking.behaviors.PickMouseBehavior;
@@ -37,12 +35,12 @@ public class MousePicker extends PickMouseBehavior implements MouseBehaviorCallb
         this.frame = frame;
     }
     
-    public Forest3DView getForestView() {
+    public Forest3DView getForest3DView() {
         return frame.getForestView();
     }
     
-    public Tree3DView getTreeView() {
-        return frame.getTreeView();
+    public Tree3DView getTree3DView() {
+        return frame.getTreeView().getTree3DView();
     }
     
     public PropertyView getPropertyView() {
@@ -70,8 +68,8 @@ public class MousePicker extends PickMouseBehavior implements MouseBehaviorCallb
                 
                 ForestNode node = (ForestNode)pickedShape.getUserData();
                 
-                getTreeView().setSceneGraph(node);
-                getTreeView().repaint();
+                getTree3DView().setSceneGraph(node);
+                getTree3DView().repaint();
                 
                 getSourceCodeView().setMetrics(node.getMetrics());
                 getPropertyView().setMetrics(node.getMetrics());

@@ -1,11 +1,12 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
-package org.jtool.codeforest.ui.view.forest;
+package org.jtool.codeforest.ui.view.tree;
 
 import org.jtool.codeforest.ui.CodeForestFrame;
 import org.jtool.codeforest.ui.view.CodeForestUniverse;
+import org.jtool.codeforest.ui.view.forest.ForestNode;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
@@ -25,10 +26,11 @@ public class Tree3DView {
     
     private TreeCanvas3D canvas;
     
-    public Tree3DView() {
+    public Tree3DView(Composite parent, CodeForestFrame frame) {
+        createPane(parent, frame);
     }
     
-    public void createPane(Composite parent, CodeForestFrame frame) {
+    private void createPane(Composite parent, CodeForestFrame frame) {
         parent.setLayout(new FillLayout());
         
         // SWT_AWT.embeddedFrameClass = "sun.lwawt.macosx.CViewEmbeddedFrame";

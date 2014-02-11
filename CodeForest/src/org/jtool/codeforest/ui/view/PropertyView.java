@@ -36,7 +36,7 @@ public class PropertyView {
     
     private Font font11;
     
-    private Table propertyTable;
+    private Table table;
     
     private List<PropertyData> propertyList = new ArrayList<PropertyData>();
     
@@ -50,10 +50,10 @@ public class PropertyView {
     }
     
     public void dispose() {
-        font11 = null;
-        propertyTable = null;
+        font11.dispose();
+        table.dispose();
+        
         propertyList.clear();
-        propertyList = null;
     }
     
     private void createPane(Composite parent) {
@@ -61,17 +61,17 @@ public class PropertyView {
         
         parent.setLayout(new FillLayout());
         
-        propertyTable = new Table(parent, SWT.BORDER | SWT.SINGLE);
-        propertyTable.setLinesVisible(true);
-        propertyTable.setHeaderVisible(true);
-        propertyTable.setFont(font11);
+        table = new Table(parent, SWT.BORDER | SWT.SINGLE);
+        table.setLinesVisible(true);
+        table.setHeaderVisible(true);
+        table.setFont(font11);
         
-        TableColumn nameColumn = new TableColumn(propertyTable, SWT.LEFT);
+        TableColumn nameColumn = new TableColumn(table, SWT.LEFT);
         nameColumn.setText("Name");
         nameColumn.setWidth(250);
         nameColumn.setResizable(true);
         
-        TableColumn valueColumn = new TableColumn(propertyTable, SWT.RIGHT);
+        TableColumn valueColumn = new TableColumn(table, SWT.RIGHT);
         valueColumn.setText("Value");
         valueColumn.setWidth(60);
         valueColumn.setResizable(true);
@@ -79,7 +79,7 @@ public class PropertyView {
         for (int i = 0; i < propertyList.size(); i++) {
             PropertyData data = propertyList.get(i);
             
-            TableItem item = new TableItem(propertyTable, SWT.NONE);
+            TableItem item = new TableItem(table, SWT.NONE);
             if (data.getImage() != null) {
                 item.setImage(data.getImage());
                 item.setText(0, data.getName());
@@ -281,14 +281,13 @@ public class PropertyView {
     }
     
     private void changeSelection(final int index) {
-        if (propertyTable != null && !(propertyTable.isDisposed())) {
-            propertyTable.getDisplay().syncExec(new Runnable() {
+        if (table != null && !(table.isDisposed())) {
+            table.getDisplay().syncExec(new Runnable() {
                 
                 public void run() {
                     try {
-                        propertyTable.select(index);
-                        propertyTable.setTopIndex(index);
-                        // reveal(index);
+                        table.select(index);
+                        table.setTopIndex(index);
                     } catch (Exception e) { /* empty */ }
                 }
             });

@@ -32,21 +32,16 @@ public class SettingView {
     
     private Combo theightSel, tradiusSel, tcolorSel, fheightSel, fradiusSel, fcolorSel;
     
-    private Combo blengthSel, lnumberSel, lsizeSel, lcolorSel;
-    
     public SettingView(Composite parent, CodeForestFrame frame) {
         this.frame = frame;
-        settingData = new SettingData();
+        settingData = frame.getSettingData();
         createPane(parent);
     }
     
-    public SettingData getSettingData() {
-        return settingData;
-    }
-    
     public void dispose() {
-        font11 = null;
-        frame = null;
+        font11.dispose();
+        frame.dispose();
+        
         settingData = null;
     }
     
@@ -58,65 +53,43 @@ public class SettingView {
         glayout.marginHeight = 0;
         parent.setLayout(glayout);
         
-        Group setting = new Group(parent, SWT.NONE);
+        Group settings = new Group(parent, SWT.NONE);
         GridLayout flayout = new GridLayout(2, true);
         flayout.horizontalSpacing = 0;
         flayout.verticalSpacing = 0;
         glayout.marginHeight = 0;
-        setting.setLayout(flayout);
-        setting.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        settings.setLayout(flayout);
+        settings.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         
-        theightSel = createMetricSelection(setting, SettingData.TRUNK_HEIGHT, settingData.getHeightItems(false));
+        theightSel = createMetricSelection(settings, SettingData.TRUNK_HEIGHT, settingData.getHeightItems(false));
         theightSel.select(0);
         settingData.setTrunkHeight(theightSel.getItem(0));
         theightSel.addSelectionListener(new TrunkHeightSelectionListener());
         
-        tradiusSel = createMetricSelection(setting, SettingData.TRUNK_RADIUS, settingData.getWidthItems(false));
+        tradiusSel = createMetricSelection(settings, SettingData.TRUNK_RADIUS, settingData.getWidthItems(false));
         tradiusSel.select(0);
         settingData.setTrunkRadius(tradiusSel.getItem(0));
         tradiusSel.addSelectionListener(new TrunkRadiusSelectionListener());
         
-        tcolorSel = createMetricSelection(setting, SettingData.TRUNK_COLOR, settingData.getClassItems(true));
+        tcolorSel = createMetricSelection(settings, SettingData.TRUNK_COLOR, settingData.getClassItems(true));
         tcolorSel.select(0);
         settingData.setTrunkColor(tcolorSel.getItem(0));
         tcolorSel.addSelectionListener(new TrunkColorSelectionListener());
         
-        fheightSel = createMetricSelection(setting, SettingData.FOLIAGE_HEIGHT, settingData.getClassItems(true));
+        fheightSel = createMetricSelection(settings, SettingData.FOLIAGE_HEIGHT, settingData.getClassItems(true));
         fheightSel.select(0);
         settingData.setFoliageHeight(fheightSel.getItem(0));
         fheightSel.addSelectionListener(new FoliageHeightSelectionListener());
         
-        fradiusSel = createMetricSelection(setting, SettingData.FOLIAGE_RADIUS, settingData.getClassItems(true));
+        fradiusSel = createMetricSelection(settings, SettingData.FOLIAGE_RADIUS, settingData.getClassItems(true));
         fradiusSel.select(0);
         settingData.setFoliageRadius(fradiusSel.getItem(0));
         fradiusSel.addSelectionListener(new FoliageRadiusSelectionListener());
         
-        fcolorSel = createMetricSelection(setting, SettingData.FOLIAGE_COLOR, settingData.getClassItems(true));
+        fcolorSel = createMetricSelection(settings, SettingData.FOLIAGE_COLOR, settingData.getClassItems(true));
         fcolorSel.select(0);
         settingData.setFoliageColor(fcolorSel.getItem(0));
         fcolorSel.addSelectionListener(new FoliageColorSelectionListener());
-        
-        // createSeparator(setting);
-        
-        blengthSel = createMetricSelection(setting, SettingData.BRANCH_LENGTH, settingData.getHeightItems(false));
-        blengthSel.select(0);
-        settingData.setBranchLength(blengthSel.getItem(0));
-        blengthSel.addSelectionListener(new BranchLengthSelectionListener());
-        
-        lnumberSel = createMetricSelection(setting, SettingData.LEAF_NUMBER, settingData.getMethodItems(true));
-        lnumberSel.select(0);
-        settingData.setLeafNumber(lnumberSel.getItem(0));
-        lnumberSel.addSelectionListener(new LeafNumberSelectionListener());
-        
-        lsizeSel = createMetricSelection(setting, SettingData.LEAF_SIZE, settingData.getMethodItems(true));
-        lsizeSel.select(0);
-        settingData.setLeafSize(lsizeSel.getItem(0));
-        lsizeSel.addSelectionListener(new LeafSizeSelectionListener());
-        
-        lcolorSel = createMetricSelection(setting, SettingData.LEAF_COLOR, settingData.getMethodItems(true));
-        lcolorSel.select(0);
-        settingData.setLeafColor(lcolorSel.getItem(0));
-        lcolorSel.addSelectionListener(new LeafColorSelectionListener());
         
         createButtons(parent);
         
@@ -192,10 +165,6 @@ public class SettingView {
             frame.getForestView().update(fdata);
             
             System.out.println("Forest update");
-        }
-        
-        if (settingData.needsUpdateTreeView()) {
-            System.out.println("Tree update");
         }
     }
     
@@ -283,62 +252,6 @@ public class SettingView {
         }
     }
     
-    class BranchLengthSelectionListener implements SelectionListener {
-        
-        public void widgetSelected(SelectionEvent e) {
-            Combo combo = (Combo)e.getSource();
-            String name = combo.getItem(combo.getSelectionIndex());
-            settingData.setBranchLength(name);
-            
-            update();
-        }
-        
-        public void widgetDefaultSelected(SelectionEvent e) {
-        }
-    }
-    
-    class LeafNumberSelectionListener implements SelectionListener {
-        
-        public void widgetSelected(SelectionEvent e) {
-            Combo combo = (Combo)e.getSource();
-            String name = combo.getItem(combo.getSelectionIndex());
-            settingData.setLeafNumber(name);
-            
-            update();
-        }
-        
-        public void widgetDefaultSelected(SelectionEvent e) {
-        }
-    }
-    
-    class LeafSizeSelectionListener implements SelectionListener {
-        
-        public void widgetSelected(SelectionEvent e) {
-            Combo combo = (Combo)e.getSource();
-            String name = combo.getItem(combo.getSelectionIndex());
-            settingData.setLeafSize(name);
-            
-            update();
-        }
-        
-        public void widgetDefaultSelected(SelectionEvent e) {
-        }
-    }
-    
-    class LeafColorSelectionListener implements SelectionListener {
-        
-        public void widgetSelected(SelectionEvent e) {
-            Combo combo = (Combo)e.getSource();
-            String name = combo.getItem(combo.getSelectionIndex());
-            settingData.setLeafColor(name);
-            
-            update();
-        }
-        
-        public void widgetDefaultSelected(SelectionEvent e) {
-        }
-    }
-    
     class LockButtonListener implements SelectionListener {
         
         public void widgetSelected(SelectionEvent e) {
@@ -350,10 +263,6 @@ public class SettingView {
                 fheightSel.setEnabled(false);
                 fradiusSel.setEnabled(false);
                 fcolorSel.setEnabled(false);
-                blengthSel.setEnabled(false);
-                lnumberSel.setEnabled(false);
-                lsizeSel.setEnabled(false);
-                lcolorSel.setEnabled(false);
             } else {
                 theightSel.setEnabled(true);
                 tradiusSel.setEnabled(true);
@@ -361,10 +270,6 @@ public class SettingView {
                 fheightSel.setEnabled(true);
                 fradiusSel.setEnabled(true);
                 fcolorSel.setEnabled(true);
-                blengthSel.setEnabled(true);
-                lnumberSel.setEnabled(true);
-                lsizeSel.setEnabled(true);
-                lcolorSel.setEnabled(true);
             }
         }
         
