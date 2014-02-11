@@ -1,12 +1,11 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.view.forest;
 
 import org.jtool.codeforest.metrics.MetricSort;
 import org.jtool.codeforest.metrics.java.ProjectMetrics;
-
 import javax.media.j3d.Background;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
@@ -15,7 +14,6 @@ import javax.media.j3d.TransformGroup;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
-
 import java.util.ArrayList;
 import java.util.List;
 

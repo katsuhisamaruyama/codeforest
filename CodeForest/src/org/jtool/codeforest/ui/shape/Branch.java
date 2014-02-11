@@ -1,13 +1,11 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.shape;
 
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
-import javax.vecmath.Color3f;
-import javax.vecmath.Vector3f;
 
 /**
  * Represents a branch of a tree on a tree view.

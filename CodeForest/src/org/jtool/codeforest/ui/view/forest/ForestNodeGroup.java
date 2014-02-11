@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.view.forest;
@@ -8,9 +8,7 @@ import org.jtool.codeforest.ui.layout.IMapModel;
 import org.jtool.codeforest.ui.layout.IMappable;
 import org.jtool.codeforest.ui.shape.Ground;
 import org.jtool.codeforest.metrics.java.PackageMetrics;
-
 import javax.media.j3d.TransformGroup;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +18,7 @@ import java.util.List;
  * @author Katsuhisa Maruyama
  */
 public class ForestNodeGroup extends ForestNode implements IMapModel {
+    
     private boolean layoutValid;
     
     protected boolean contentVisible = true;
@@ -56,7 +55,7 @@ public class ForestNodeGroup extends ForestNode implements IMapModel {
     protected void checkLayout() {
         if (!layoutValid) {
             if (nodes.size() != 0) {
-                layout(this, getBounds());
+                setLayout(this, getBounds());
             }
             layoutValid = true;
         }

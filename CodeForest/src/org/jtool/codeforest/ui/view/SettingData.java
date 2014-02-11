@@ -1,12 +1,11 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.view;
 
 import org.jtool.codeforest.metrics.IMetric;
 import org.jtool.codeforest.metrics.MetricSort;
-import org.jtool.codeforest.ui.layout.LayoutAlgorithm;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +27,6 @@ public class SettingData {
     static final String LEAF_SIZE = "Leaf size";
     static final String LEAF_COLOR = "Leaf color";
     
-    static final String LAYOUT = "Layout";
-    
     private IMetric trunkHeight = null;
     private IMetric trunkRadius = null;
     private IMetric trunkColor = null;
@@ -41,8 +38,6 @@ public class SettingData {
     private IMetric leafNumber = null;
     private IMetric leafSize = null;
     private IMetric leafColor = null;
-    
-    private String layoutName = "";
     
     private boolean needsUpdateForestView = false;
     
@@ -141,17 +136,6 @@ public class SettingData {
         needsUpdateForestView = false;
     }
     
-    void setLayoutName(String name) {
-        if (layoutName == null) {
-            needsUpdateForestView = true;
-        } else {
-            needsUpdateForestView = (layoutName.compareTo(name) != 0);
-        }
-        layoutName = name;
-        
-        needsUpdateTreeView = false;
-    }
-    
     public IMetric getTrunkHeight() {
         return trunkHeight;
     }
@@ -190,10 +174,6 @@ public class SettingData {
     
     public IMetric getLeafColor() {
         return leafColor;
-    }
-    
-    public String getLayoutName() {
-        return layoutName;
     }
     
     public boolean needsUpdateForestView() {
@@ -287,10 +267,6 @@ public class SettingData {
         return (String[])items.toArray(new String[0]);
     }
     
-    String[] getLayoutItems() {
-        return LayoutAlgorithm.LAYOUTS;
-    }
-    
     public void print() {
         System.out.println("Trunk height       = " + trunkHeight.getName());
         System.out.println("Trunk radius       = " + trunkRadius.getName());
@@ -303,8 +279,6 @@ public class SettingData {
         System.out.println("Leaf number        = " + leafNumber.getName());
         System.out.println("Leaf size          = " + leafSize.getName());
         System.out.println("Leaf color         = " + leafColor.getName());
-        
-        System.out.println("layout name        = " + layoutName);
         
         System.out.println("Update forest view = " + needsUpdateForestView);
         System.out.println("Update tree view   = " + needsUpdateTreeView);

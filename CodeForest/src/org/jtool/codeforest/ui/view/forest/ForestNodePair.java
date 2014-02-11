@@ -1,12 +1,11 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.view.forest;
 
 /**
  * Represents a pair of nodes for constructing a forest.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
 public class ForestNodePair {

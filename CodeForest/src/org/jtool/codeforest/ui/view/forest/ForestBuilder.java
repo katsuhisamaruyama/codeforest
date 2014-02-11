@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.view.forest;
@@ -7,7 +7,6 @@ package org.jtool.codeforest.ui.view.forest;
 import org.jtool.codeforest.metrics.java.ClassMetrics;
 import org.jtool.codeforest.metrics.java.PackageMetrics;
 import org.jtool.codeforest.metrics.java.ProjectMetrics;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,8 +19,6 @@ public class ForestBuilder {
     
     private ProjectMetrics projectMetrics;
     
-    private String layoutName;
-    
     public ForestBuilder() {
     }
     
@@ -29,14 +26,9 @@ public class ForestBuilder {
         projectMetrics = mproject;
     }
     
-    public void setLayout(String name) {
-        layoutName = name;
-    }
-    
     public Forest build(ForestData fdata) {
         Forest forest = new Forest(fdata);
         forest.setData(projectMetrics);
-        forest.setLayout(layoutName);
         
         setHierarchy(forest, createHierarchyNode(forest, fdata));
         forest.setLayoutPosition(projectMetrics);

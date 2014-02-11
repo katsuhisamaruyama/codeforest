@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.metrics.java;
@@ -58,7 +58,7 @@ import org.eclipse.jdt.core.dom.WhileStatement;
  * @see org.eclipse.jdt.core.dom.Statement
  * @author Katsuhisa Maruyama
  */
-public class StatementInfoCollector extends ASTVisitor {
+public class CFStatementInfoCollector extends ASTVisitor {
     
     /**
      * The number of statements enclosed a method or field.
@@ -83,7 +83,7 @@ public class StatementInfoCollector extends ASTVisitor {
     /**
      * Creates a new object for collecting information on statements enclosed a method.
      */
-    public StatementInfoCollector() {
+    public CFStatementInfoCollector() {
         super();
         
         numberOfStatements = 0;

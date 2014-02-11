@@ -1,12 +1,12 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.metrics.java;
 
+import org.jtool.codeforest.metrics.MetricSort;
 import org.jtool.eclipse.model.java.JavaClass;
 import org.jtool.eclipse.model.java.JavaMethod;
-import org.jtool.codeforest.metrics.MetricSort;
 
 /**
  * An object storing metric information on a method, a constructor, or an initializer.
@@ -22,7 +22,7 @@ public class MethodMetrics extends CommonMetrics {
     /**
      * An object representing a method, a constructor, or an initializer.
      */
-    private JavaMethod jmethod;
+    private CFJavaMethod jmethod;
     
     /**
      * A metrics object for a class containing this method.
@@ -43,8 +43,21 @@ public class MethodMetrics extends CommonMetrics {
         super();
         
         JavaClass jc = cm.getJavaClass();
-        jmethod = new JavaMethod(name, sig, type, modifiers, isConstructor, isInitializer, jc);
+        jmethod = new CFJavaMethod(name, sig, type, modifiers, isConstructor, isInitializer, jc);
         this.classMetrics = cm;
+    }
+    
+    /**
+     * Creates a new object representing a method, a constructor, or an initializer.
+     * @param node an AST node for this method or initializer
+     * @param cm a metrics object for a class containing this method
+     */
+    protected MethodMetrics(CFJavaMethod jmethod, ClassMetrics cm) {
+        super();
+        
+        this.jmethod = jmethod;
+        classMetrics = cm;
+        collectMetricInfo();
     }
     
     /**
@@ -56,20 +69,6 @@ public class MethodMetrics extends CommonMetrics {
      */
     protected void setCodeProperties(int start, int len, int upper, int bottom) {
         jmethod.setCodeProperties(start, len, upper, bottom);
-    }
-    
-    /**
-     * Creates a new object representing a method, a constructor, or an initializer.
-     * @param node an AST node for this method or initializer
-     * @param cm a metrics object for a class containing this method
-     */
-    protected MethodMetrics(JavaMethod jmethod, ClassMetrics cm) {
-        super();
-        
-        this.jmethod = jmethod;
-        classMetrics = cm;
-        
-        collectMetricInfo();
     }
     
     /**
@@ -116,8 +115,8 @@ public class MethodMetrics extends CommonMetrics {
      * Returns the return type of this method.
      * @return the return type
      */
-    public String getType() {
-        return jmethod.getType();
+    public String getReturnType() {
+        return jmethod.getReturnType();
     }
     
     /**
@@ -169,13 +168,10 @@ public class MethodMetrics extends CommonMetrics {
         metrics.put(MetricSort.NUMBER_OF_EFFERENT_METHODS, new Double(jmethod.getCalledJavaMethods().size()));
         metrics.put(MetricSort.NUMBER_OF_AFFERENT_FIELDS, new Double(jmethod.getAccessingJavaFields().size()));
         metrics.put(MetricSort.NUMBER_OF_EFFERENT_FIELDS, new Double(jmethod.getAccessedJavaFields().size()));
-        metrics.put(MetricSort.NUMBER_OF_PARAMETERS, new Double(jmethod.getParameters().size()));
         
-        StatementInfoCollector mvisitor = new StatementInfoCollector();
-        jmethod.getASTNode().accept(mvisitor);
-        
-        metrics.put(MetricSort.NUMBER_OF_STATEMENTS, new Double(mvisitor.getNumberOfStatements()));
-        metrics.put(MetricSort.CYCLOMATIC_COMPLEXITY, new Double(mvisitor.getCyclomaticNumber()));
-        metrics.put(MetricSort.MAX_NUMBER_OF_NESTING, new Double(mvisitor.getMaximumNuberOfNesting()));
+        metrics.put(MetricSort.NUMBER_OF_PARAMETERS, new Double(jmethod.getNumberOfParameters()));
+        metrics.put(MetricSort.NUMBER_OF_STATEMENTS, new Double(jmethod.getNumberOfStatements()));
+        metrics.put(MetricSort.CYCLOMATIC_COMPLEXITY, new Double(jmethod.getCyclomaticNumber()));
+        metrics.put(MetricSort.MAX_NUMBER_OF_NESTING, new Double(jmethod.getMaximumNuberOfNesting()));
     }
 }

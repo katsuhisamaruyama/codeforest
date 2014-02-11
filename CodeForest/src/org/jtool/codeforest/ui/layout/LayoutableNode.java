@@ -1,34 +1,24 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
-package org.jtool.codeforest.ui.view.forest;
-
-import org.jtool.codeforest.ui.layout.LayoutAlgorithm;
-import org.jtool.codeforest.ui.layout.IMapModel;
-import org.jtool.codeforest.ui.layout.SimpleMappableItem;
-import org.jtool.codeforest.ui.layout.Rect;
+package org.jtool.codeforest.ui.layout;
 
 /**
  * Represents a layoutable node.
  * @author Daiki Todoroki
  * @author Katsuhisa Maruyama 
  */
-public class LayoutableNode extends SimpleMappableItem {
-    
-    private static final LayoutAlgorithm layoutAlgorithm = new LayoutAlgorithm();
+public class LayoutableNode extends MappableItem {
     
     protected double boxLeft, boxTop, boxRight, boxBottom;
     
     public LayoutableNode() {
     }
     
-    public void setLayout(String name){
-        layoutAlgorithm.setLayout(name);
-    }
-    
-    public void layout(IMapModel model, Rect bounds) {
-        layoutAlgorithm.layout(model, bounds);
+    public void setLayout(IMapModel model, Rect bounds) {
+        MapLayout layout = new Squarified();
+        layout.layout(model, bounds);
     }
     
     public void calculateBox() {

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.view.forest;
@@ -27,8 +27,6 @@ public class ForestData {
     private IMetric leafSize;
     private IMetric leafColor;
     
-    private String layoutName = "";
-    
     public ForestData(SettingData data) {
         settingData = data;
         
@@ -49,8 +47,6 @@ public class ForestData {
         leafNumber = fdata.getLeafNumber();
         leafSize = fdata.getLeafNumber();
         leafColor = fdata.getLeafColor();
-        
-        layoutName = fdata.getLayoutName();
     }
     
     public void update() {
@@ -65,8 +61,6 @@ public class ForestData {
         leafNumber = settingData.getLeafNumber();
         leafSize = settingData.getLeafNumber();
         leafColor = settingData.getLeafColor();
-        
-        layoutName = settingData.getLayoutName();
     }
     
     public IMetric getTrunkHeight() {
@@ -109,10 +103,6 @@ public class ForestData {
         return leafColor;
     }
     
-    public String getLayoutName() {
-        return layoutName;
-    }
-    
     public void print() {
         System.out.println("Trunk height       = " + trunkHeight.getName());
         System.out.println("Trunk radius       = " + trunkRadius.getName());
@@ -125,7 +115,5 @@ public class ForestData {
         System.out.println("Leaf number        = " + leafNumber.getName());
         System.out.println("Leaf size          = " + leafSize.getName());
         System.out.println("Leaf color         = " + leafColor.getName());
-        
-        System.out.println("layout name        = " + layoutName);
     }
 }

@@ -1,19 +1,17 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.view.forest;
 
 import org.jtool.codeforest.metrics.MetricSort;
-import org.jtool.codeforest.metrics.IMetric;
-import org.jtool.codeforest.metrics.UnsupportedMetricsException;
 import org.jtool.codeforest.metrics.java.ClassMetrics;
 import org.jtool.codeforest.metrics.java.CommonMetrics;
 import org.jtool.codeforest.metrics.java.PackageMetrics;
 import org.jtool.codeforest.metrics.java.ProjectMetrics;
+import org.jtool.codeforest.ui.layout.LayoutableNode;
 import org.jtool.codeforest.ui.shape.ForestTree;
 import org.jtool.codeforest.ui.shape.FractalTree;
-
 import javax.media.j3d.TransformGroup;
 
 /**
@@ -73,7 +71,6 @@ public class ForestNode extends LayoutableNode {
         return tree;
     }
     
-    // TODO
     protected void setBaseSize() {
         String parameter = "";
         double baseSize = 1;

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.layout;
@@ -9,7 +9,7 @@ package org.jtool.codeforest.ui.layout;
  * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
-public class Squarified extends AbstractMapLayout {
+public class Squarified extends MapLayout {
     
     public static final String Name = "Squarified";
     
@@ -22,7 +22,7 @@ public class Squarified extends AbstractMapLayout {
     }
     
     public void layout(IMapModel model, double x, double y, double w, double h) {
-        layout(sortDescending(model.getItems()), 0, model.getItems().length-1, new Rect(x, y, w, h));
+        layout(sortDescending(model.getItems()), 0, model.getItems().length - 1, new Rect(x, y, w, h));
     }
     
     public String getName() {
@@ -41,7 +41,7 @@ public class Squarified extends AbstractMapLayout {
         }
         
         if (end - start < 2) {
-            SliceDice.layoutBest(items,start,end,bounds);
+            sliceDiceLayoutBest(items,start,end,bounds);
             return;
         }
         
@@ -65,7 +65,8 @@ public class Squarified extends AbstractMapLayout {
                 mid++;
                 b = b + q;
             }
-            SliceDice.layoutBest(items, start, mid, new Rect(x, y, w, h * b));
+            
+            sliceDiceLayoutBest(items, start, mid, new Rect(x, y, w, h * b));
             layout(items, mid + 1, end, new Rect(x, y + h * b, w, h * (1 - b)));
         
         } else {
@@ -78,7 +79,8 @@ public class Squarified extends AbstractMapLayout {
                 mid++;
                 b = b + q;
             }
-            SliceDice.layoutBest(items, start, mid, new Rect(x, y, w * b, h));
+            
+            sliceDiceLayoutBest(items, start, mid, new Rect(x, y, w * b, h));
             layout(items, mid + 1, end, new Rect(x + w * b, y, w * (1 - b), h));
         }
     }
@@ -101,5 +103,43 @@ public class Squarified extends AbstractMapLayout {
             sum = sum + items[i].getBaseSize();
         }
         return sum;
+    }
+    
+    private void sliceDiceLayoutBest(IMappable[] items, int start, int end, Rect bounds) {
+        int orient = bounds.w > bounds.h ? HORIZONTAL : VERTICAL;
+        sliceDiceLayout(items, start, end, bounds, orient, ASCENDING);
+    }
+    
+    private void sliceDiceLayout(IMappable[] items, int start, int end, Rect bounds, int orient, int order) {
+        double total = totalSize(items, start, end);
+        double a = 0;
+        boolean vertical = (orient == VERTICAL);
+        
+        for (int i = start; i <= end; i++) {
+            Rect rect = new Rect();
+            double b = items[i].getBaseSize() / total;
+            if (vertical) {
+                rect.x = bounds.x;
+                rect.w = bounds.w;
+                if (order == ASCENDING) {
+                    rect.y = bounds.y + bounds.h * a;
+                } else {
+                    rect.y = bounds.y + bounds.h * (1 - a - b);
+                }
+                rect.h = bounds.h * b;
+                
+            } else {
+                if (order == ASCENDING) {
+                    rect.x = bounds.x + bounds.w * a;
+                } else {
+                    rect.x = bounds.x + bounds.w * (1-a-b);
+                }
+                rect.w = bounds.w * b;
+                rect.y = bounds.y;
+                rect.h = bounds.h;
+            }
+            items[i].setBounds(rect);
+            a = a + b;
+        }
     }
 }

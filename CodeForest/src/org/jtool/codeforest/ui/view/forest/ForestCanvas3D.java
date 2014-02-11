@@ -1,16 +1,14 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.view.forest;
 
 import org.jtool.codeforest.ui.CodeForestFrame;
-
 import java.awt.GraphicsConfiguration;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.TransformGroup;
 import javax.media.j3d.Transform3D;
@@ -51,6 +49,7 @@ public class ForestCanvas3D extends Canvas3D implements MouseListener, MouseMoti
     public void mouseClicked(MouseEvent evt) {
         if (evt.isShiftDown()) {
             TransformGroup camera = universe.getViewingPlatform().getViewPlatformTransform();
+            
             Transform3D view_pos = new Transform3D();
             view_pos.setTranslation(new Vector3f(0.0f, 0.0f, 0.0f));
             camera.setTransform(view_pos);

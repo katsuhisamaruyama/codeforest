@@ -1,11 +1,14 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.metrics.java;
 
 import org.jtool.codeforest.metrics.UnsupportedMetricsException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -77,5 +80,18 @@ public class CommonMetrics {
      * @param bottom the bottom line number of code fragment for this element
      */
     protected void setCodeProperties(int start, int len, int upper, int bottom) {
+    }
+    
+    /**
+     * Sorts the names in dictionary order.
+     * @param names the names to be sorted
+     */
+    public void sort(List<String> names) {
+        Collections.sort(names, new Comparator<String>() {
+            
+            public int compare(String s1, String s2) {
+                return s1.compareTo(s2);
+            }
+        });
     }
 }

@@ -1,15 +1,22 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.metrics.java;
 
-import org.jtool.eclipse.model.java.JavaPackage;
-import org.jtool.eclipse.model.java.JavaProject;
+import org.jtool.codeforest.Activator;
 import org.jtool.codeforest.metrics.MetricSort;
 import org.jtool.codeforest.metrics.UnsupportedMetricsException;
-import java.util.HashSet;
-import java.util.Set;
+import org.jtool.eclipse.model.java.JavaPackage;
+import org.jtool.eclipse.model.java.JavaProject;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.ui.IWorkbenchWindow;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * An object storing information on a project.
@@ -30,7 +37,7 @@ public class ProjectMetrics extends CommonMetrics {
     /**
      * The collection of all package metrics for this project.
      */
-    protected Set<PackageMetrics> packageMetrics = new HashSet<PackageMetrics>();
+    protected List<PackageMetrics> packageMetrics = new ArrayList<PackageMetrics>();
     
     /**
      * Creates a new object storing project metrics.
@@ -52,14 +59,60 @@ public class ProjectMetrics extends CommonMetrics {
         
         this.jproject = jproject;
         
-        for (JavaPackage jp : jproject.getJavaPackages()) {
-            PackageMetrics pm = new PackageMetrics(jp, this);
-            packageMetrics.add(pm);
-        }
+        calculatePackageMetrics(this);
         
         collectMetricInfo();
         collectMetricInfoForTotal();
         collectMetricInfoForMax();
+    }
+    
+    /**
+     * Calculates package metrics and class metrics.
+     * @param projectMetrics the project metrics that stores the calculated metrics
+     */
+    private void calculatePackageMetrics(final ProjectMetrics projectMetrics) {
+        try {
+            IWorkbenchWindow workbenchWindow = Activator.getWorkbenchWindow();
+            workbenchWindow.run(true, true, new IRunnableWithProgress() {
+                
+                /**
+                 * Creates a model by parsing Java files.
+                 * @param monitor the progress monitor to use to display progress and receive requests for cancellation
+                 * @exception InvocationTargetException if the run method must propagate a checked exception
+                 * @exception InterruptedException if the operation detects a request to cancel
+                 */
+                @Override
+                public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+                    monitor.beginTask("Calculating metrics ... ", jproject.getJavaPackages().size());
+                    
+                    int idx = 1;
+                    for (JavaPackage jp : jproject.getJavaPackages()) {
+                        monitor.subTask(idx + "/" + jproject.getJavaPackages().size() + " - " + jp.getName());
+                        
+                        PackageMetrics pm = new PackageMetrics(jp, projectMetrics);
+                        packageMetrics.add(pm);
+                        
+                        if (monitor.isCanceled()) {
+                            monitor.done();
+                            throw new InterruptedException();
+                        }
+                        monitor.worked(1);
+                        idx++;
+                    }
+                    monitor.done();
+                }
+                
+            });
+            
+        } catch (InvocationTargetException e) {
+            Throwable cause = e.getCause();
+            System.out.println("# InvocationTargetException because " + cause);
+            for (StackTraceElement elem : e.getStackTrace()) {
+                System.err.println(elem.toString());
+            }
+        } catch (InterruptedException e) {
+            return;
+        }
     }
     
     /**
@@ -74,7 +127,7 @@ public class ProjectMetrics extends CommonMetrics {
      * Obtains the collection of all package metrics for this project.
      * @return the collection of the package metrics
      */
-    public Set<PackageMetrics> getPackageMetrics() {
+    public List<PackageMetrics> getPackageMetrics() {
         return packageMetrics;
     }
     
@@ -83,15 +136,17 @@ public class ProjectMetrics extends CommonMetrics {
      * @param pm the package metrics
      */
     protected void add(PackageMetrics pm) {
-        packageMetrics.add(pm);
+        if (!packageMetrics.contains(pm)) {
+            packageMetrics.add(pm);
+        }
     }
     
     /**
      * Obtains the collection of all class metrics for this project.
      * @return the collection of the class metrics
      */
-    protected Set<ClassMetrics> getClassMetrics() {
-        Set<ClassMetrics> classes = new HashSet<ClassMetrics>();
+    protected List<ClassMetrics> getClassMetrics() {
+        List<ClassMetrics> classes = new ArrayList<ClassMetrics>();
         for (PackageMetrics pm : packageMetrics) {
             classes.addAll(pm.getClassMetrics());
         }
@@ -126,16 +181,17 @@ public class ProjectMetrics extends CommonMetrics {
      * Collects information on this project.
      */
     private void collectMetricInfo() {
-        metrics.put(MetricSort.NUMBER_OF_FILES, new Double(jproject.getJavaFiles().size()));
-        metrics.put(MetricSort.NUMBER_OF_PACKAGES, new Double(jproject.getJavaPackages().size()));
-        metrics.put(MetricSort.NUMBER_OF_CLASSES, new Double(jproject.getJavaClasses().size()));
-        
         try {
+            metrics.put(MetricSort.NUMBER_OF_FILES, new Double(jproject.getJavaFiles().size()));
+            metrics.put(MetricSort.NUMBER_OF_PACKAGES, new Double(jproject.getJavaPackages().size()));
+            metrics.put(MetricSort.NUMBER_OF_CLASSES, new Double(jproject.getJavaClasses().size()));
+            
             metrics.put(MetricSort.LINES_OF_CODE, sum(MetricSort.LINES_OF_CODE));
             metrics.put(MetricSort.NUMBER_OF_METHODS, sum(MetricSort.NUMBER_OF_METHODS));
             metrics.put(MetricSort.NUMBER_OF_FIELDS, sum(MetricSort.NUMBER_OF_FIELDS));
             metrics.put(MetricSort.NUMBER_OF_METHODS_AND_FIELDS, sum(MetricSort.NUMBER_OF_METHODS_AND_FIELDS));
             metrics.put(MetricSort.NUMBER_OF_STATEMENTS, sum(MetricSort.NUMBER_OF_STATEMENTS));
+            
         } catch (UnsupportedMetricsException e) {
             System.out.println(e.getMessage() + " in the project: " + getName());
         }
@@ -176,9 +232,9 @@ public class ProjectMetrics extends CommonMetrics {
         double totalLCOM = 0;
         double totalWMC = 0;
         
-        Set<ClassMetrics> classes = getClassMetrics();
-        try {
-            for (ClassMetrics cm : classes) {
+        List<ClassMetrics> classes = getClassMetrics();
+        for (ClassMetrics cm : classes) {
+            try {
                 totalLOC = totalLOC + cm.getMetricValueWithException(MetricSort.LINES_OF_CODE);
                 totalNOST = totalNOST + cm.getMetricValueWithException(MetricSort.NUMBER_OF_STATEMENTS);
                 totalNOMD = totalNOMD + cm.getMetricValueWithException(MetricSort.NUMBER_OF_METHODS);
@@ -195,9 +251,9 @@ public class ProjectMetrics extends CommonMetrics {
                 totalCBO = totalCBO + cm.getMetricValueWithException(MetricSort.COUPLING_BETWEEN_OBJECTS);
                 totalLCOM = totalLCOM + cm.getMetricValueWithException(MetricSort.LACK_OF_COHESION_OF_METHODS);
                 totalWMC = totalWMC + cm.getMetricValueWithException(MetricSort.WEIGHTED_METHODS_PER_CLASS);
+            } catch (UnsupportedMetricsException e) {
+                System.out.println(e.getMessage() + " in the project: " + getName());
             }
-        } catch (UnsupportedMetricsException e) {
-            System.out.println(e.getMessage() + "in the class: " + getName());
         }
         
         putMetricValue(MetricSort.TOTAL_LINE_OF_CODE, totalLOC);
@@ -243,9 +299,9 @@ public class ProjectMetrics extends CommonMetrics {
         double maxLCOM = 0;
         double maxWMC = 0;
         
-        Set<ClassMetrics> classes = getClassMetrics();
-        try {
-            for (ClassMetrics cm : classes) {
+        List<ClassMetrics> classes = getClassMetrics();
+        for (ClassMetrics cm : classes) {
+            try {
                 maxLOC = Math.max(maxLOC, cm.getMetricValueWithException(MetricSort.LINES_OF_CODE));
                 maxNOST = Math.max(maxNOST, cm.getMetricValueWithException(MetricSort.NUMBER_OF_STATEMENTS));
                 maxNOMD = Math.max(maxNOMD, cm.getMetricValueWithException(MetricSort.NUMBER_OF_METHODS));
@@ -262,9 +318,9 @@ public class ProjectMetrics extends CommonMetrics {
                 maxCBO = Math.max(maxCBO, cm.getMetricValueWithException(MetricSort.COUPLING_BETWEEN_OBJECTS));
                 maxLCOM = Math.max(maxLCOM, cm.getMetricValueWithException(MetricSort.LACK_OF_COHESION_OF_METHODS));
                 maxWMC = Math.max(maxWMC, cm.getMetricValueWithException(MetricSort.WEIGHTED_METHODS_PER_CLASS));
+            } catch (UnsupportedMetricsException e) {
+                System.out.println(e.getMessage() + " in the project: " + getName());
             }
-        } catch (UnsupportedMetricsException e) {
-            System.out.println(e.getMessage() + "in the class: " + getName());
         }
         
         putMetricValue(MetricSort.MAX_LINE_OF_CODE, maxLOC);
@@ -295,5 +351,17 @@ public class ProjectMetrics extends CommonMetrics {
     public void collectMetricsInfoAfterXMLImport() {
         collectMetricInfoForTotal();
         collectMetricInfoForMax();
+    }
+    
+    /**
+     * Sorts the package metrics in dictionary order of their names.
+     */
+    public void sortPackages() {
+        Collections.sort(packageMetrics, new Comparator<PackageMetrics>() {
+            
+            public int compare(PackageMetrics m1, PackageMetrics m2) {
+                return m1.getName().compareTo(m2.getName());
+            }
+        });
     }
 }

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.view;
@@ -7,13 +7,11 @@ package org.jtool.codeforest.ui.view;
 import org.jtool.codeforest.Activator;
 import org.jtool.codeforest.ui.CodeForestFrame;
 import org.eclipse.swt.graphics.ImageData;
-
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
-
 import javax.media.j3d.AmbientLight;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.Bounds;
@@ -26,7 +24,6 @@ import javax.media.j3d.TransformGroup;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3f;
-
 import com.sun.j3d.utils.behaviors.keyboard.KeyNavigatorBehavior;
 import com.sun.j3d.utils.behaviors.vp.OrbitBehavior;
 import com.sun.j3d.utils.universe.PlatformGeometry;

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.metrics.java;
@@ -68,6 +68,7 @@ public class XMLExporter {
         contents.append("     ");
         contents.append(getMetricAttributes(mproject.getMetricValues()));
         
+        mproject.sortPackages();
         for (PackageMetrics pm : mproject.getPackageMetrics()) {
             export(pm);
         }
@@ -86,10 +87,12 @@ public class XMLExporter {
         contents.append(" " + MetricsManager.NameAttr + "=\"" + convert(mpackage.getName()) + "\"");
         contents.append(">\n");
         
+        mpackage.sort(mpackage.getAfferentPackageNames());
         for (String name : mpackage.getAfferentPackageNames()) {
             contents.append("         <" + MetricsManager.AfferentElem);
             contents.append(" " + MetricsManager.FqnAttr + "=\"" + convert(name) + "\"/>\n");
         }
+        mpackage.sort(mpackage.getEfferentPackageNames());
         for (String name : mpackage.getEfferentPackageNames()) {
             contents.append("         <" + MetricsManager.EfferentElem);
             contents.append(" " + MetricsManager.FqnAttr + "=\"" + convert(name) + "\"/>\n");
@@ -98,6 +101,7 @@ public class XMLExporter {
         contents.append("       ");
         contents.append(getMetricAttributes(mpackage.getMetricValues()));
         
+        mpackage.sortClasses();
         for (ClassMetrics cm : mpackage.getClassMetrics()) {
             export(cm);
         }
@@ -130,10 +134,12 @@ public class XMLExporter {
             contents.append(" " + MetricsManager.FqnAttr + "=\"" + convert(name) + "\"/>\n");
         }
         
+        mclass.sort(mclass.getAfferentClassNames());
         for (String name : mclass.getAfferentClassNames()) {
             contents.append("         <" + MetricsManager.AfferentElem);
             contents.append(" " + MetricsManager.FqnAttr + "=\"" + convert(name) + "\"/>\n");
         }
+        mclass.sort(mclass.getEfferentClassNames());
         for (String name : mclass.getEfferentClassNames()) {
             contents.append("         <" + MetricsManager.EfferentElem);
             contents.append(" " + MetricsManager.FqnAttr + "=\"" + convert(name) + "\"/>\n");
@@ -142,9 +148,11 @@ public class XMLExporter {
         contents.append("         ");
         contents.append(getMetricAttributes(mclass.getMetricValues()));
         
+        mclass.sortMethods();
         for (MethodMetrics mm : mclass.getMethodMetrics()) {
             export(mm);
         }
+        mclass.sortFields();
         for (FieldMetrics fm : mclass.getFieldMetrics()) {
             export(fm);
         }
@@ -161,7 +169,7 @@ public class XMLExporter {
         
         contents.append(" " + MetricsManager.NameAttr + "=\"" + convert(mmethod.getName()) + "\"");
         contents.append(" " + MetricsManager.SignatureAttr + "=\"" + convert(mmethod.getSignature()) + "\"");
-        contents.append(" " + MetricsManager.TypeAttr + "=\"" + convert(mmethod.getType()) + "\"");
+        contents.append(" " + MetricsManager.TypeAttr + "=\"" + convert(mmethod.getReturnType()) + "\"");
         contents.append(" " + MetricsManager.ModifiersAttr + "=\"" + String.valueOf(mmethod.getModifiers()) + "\"");
         contents.append(" " + MetricsManager.isConstructorAttr + "=\"" + getBoolean(mmethod.isConstructor()) + "\"");
         contents.append(" " + MetricsManager.isInitializerAttr + "=\"" + getBoolean(mmethod.isInitializer()) + "\"");
@@ -207,9 +215,13 @@ public class XMLExporter {
         StringBuffer buf = new StringBuffer();
         buf.append("<" + MetricsManager.CodeElem);
         buf.append(" " + MetricsManager.StartPositionAttr + "=\"" + String.valueOf(jelem.getStartPosition()) + "\"");
+        // buf.append(" " + MetricsManager.ExtendedStartPositionAttr + "=\"" + String.valueOf(jelem.getExtendedStartPosition()) + "\"");
         buf.append(" " + MetricsManager.CodeLengthAttr + "=\"" + String.valueOf(jelem.getCodeLength()) + "\"");
+        // buf.append(" " + MetricsManager.ExtendedCodeLengthAttr + "=\"" + String.valueOf(jelem.getExtendedCodeLength()) + "\"");
         buf.append(" " + MetricsManager.UpperLineNumberAttr + "=\"" + String.valueOf(jelem.getUpperLineNumber()) + "\"");
+        // buf.append(" " + MetricsManager.ExtendedUpperLineNumberAttr + "=\"" + String.valueOf(jelem.getUpperLineNumber()) + "\"");
         buf.append(" " + MetricsManager.BottomLineNumberAttr+ "=\"" + String.valueOf(jelem.getBottomLineNumber()) + "\"");
+        // buf.append(" " + MetricsManager.ExtendedBottomLineNumberAttr+ "=\"" + String.valueOf(jelem.getBottomLineNumber()) + "\"");
         buf.append("/>\n");
         return buf;
     }

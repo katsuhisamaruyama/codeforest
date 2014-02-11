@@ -1,11 +1,10 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.shape;
 
 import java.awt.Image;
-
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Material;
 import javax.media.j3d.TexCoordGeneration;
@@ -16,7 +15,6 @@ import javax.media.j3d.TransparencyAttributes;
 import javax.vecmath.Color3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector4f;
-
 import com.sun.j3d.utils.geometry.Box;
 
 public class Ground extends AbstractShape {

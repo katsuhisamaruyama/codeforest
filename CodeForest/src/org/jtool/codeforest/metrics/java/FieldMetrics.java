@@ -1,12 +1,12 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.metrics.java;
 
+import org.jtool.codeforest.metrics.MetricSort;
 import org.jtool.eclipse.model.java.JavaClass;
 import org.jtool.eclipse.model.java.JavaField;
-import org.jtool.codeforest.metrics.MetricSort;
 
 /**
  * An object storing metric information on a field.
@@ -22,7 +22,7 @@ public class FieldMetrics extends CommonMetrics {
     /**
      * An object representing a field.
      */
-    private JavaField jfield;
+    private CFJavaField jfield;
     
     /**
      * A metrics object for a class containing this class.
@@ -41,8 +41,22 @@ public class FieldMetrics extends CommonMetrics {
         super();
         
         JavaClass jclass = cm.getJavaClass();
-        jfield = new JavaField(name, type, modifiers, isEnumConstant, jclass);
+        jfield = new CFJavaField(name, type, modifiers, isEnumConstant, jclass);
         this.classMetrics = cm;
+    }
+    
+    /**
+     * Creates a new object representing a field.
+     * @param node an AST node for this field
+     * @param cm a metrics object for a class containing this field
+     */
+    protected FieldMetrics(CFJavaField jfield, ClassMetrics cm) {
+        super();
+        
+        this.jfield = jfield;
+        classMetrics = cm;
+        
+        collectMetricInfo();
     }
     
     /**
@@ -54,20 +68,6 @@ public class FieldMetrics extends CommonMetrics {
      */
     protected void setCodeProperties(int start, int len, int upper, int bottom) {
         jfield.setCodeProperties(start, len, upper, bottom);
-    }
-    
-    /**
-     * Creates a new object representing a field.
-     * @param node an AST node for this field
-     * @param cm a metrics object for a class containing this field
-     */
-    protected FieldMetrics(JavaField jfield, ClassMetrics cm) {
-        super();
-        
-        this.jfield = jfield;
-        classMetrics = cm;
-        
-        collectMetricInfo();
     }
     
     /**

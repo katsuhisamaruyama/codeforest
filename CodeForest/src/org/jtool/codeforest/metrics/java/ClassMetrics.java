@@ -1,20 +1,22 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.metrics.java;
 
+import org.jtool.codeforest.metrics.MetricSort;
+import org.jtool.codeforest.metrics.UnsupportedMetricsException;
 import org.jtool.eclipse.model.java.JavaClass;
 import org.jtool.eclipse.model.java.JavaField;
 import org.jtool.eclipse.model.java.JavaFile;
 import org.jtool.eclipse.model.java.JavaMethod;
 import org.jtool.eclipse.model.java.JavaPackage;
 import org.jtool.eclipse.model.java.JavaProject;
-import org.jtool.codeforest.metrics.MetricSort;
-import org.jtool.codeforest.metrics.UnsupportedMetricsException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * An object storing metric information on a class, an interface, or an enum.
@@ -40,22 +42,22 @@ public class ClassMetrics extends CommonMetrics {
     /**
      * The collection of all method metrics for this class.
      */
-    protected Set<MethodMetrics> methodMetrics = new HashSet<MethodMetrics>();
+    protected List<MethodMetrics> methodMetrics = new ArrayList<MethodMetrics>();
     
     /**
      * The collection of all field metrics for this class.
      */
-    protected Set<FieldMetrics> fieldMetrics = new HashSet<FieldMetrics>();
+    protected List<FieldMetrics> fieldMetrics = new ArrayList<FieldMetrics>();
     
     /**
      * The collection of names of afferent classes for this class.
      */
-    protected Set<String> afferentClassNames = new HashSet<String>();
+    protected List<String> afferentClassNames = new ArrayList<String>();
     
     /**
      * The collection of names of afferent classes for this class.
      */
-    protected Set<String> efferentClassNames = new HashSet<String>();
+    protected List<String> efferentClassNames = new ArrayList<String>();
     
     /**
      * Creates a new object representing a class, an interface, or an enum.
@@ -77,6 +79,40 @@ public class ClassMetrics extends CommonMetrics {
         
         jclass = JavaClass.create(name, fqn, modifiers, isInterface, isEnum, jfile, jpackage);
         this.packageMetrics = pm;
+    }
+    
+    /**
+     * Creates a new object representing a class, an interface, or an enum.
+     * @param node an AST node for this class, interface, or enum
+     * @param pm a metrics object for a package containing this class, interface, or enum
+     */
+    protected ClassMetrics(JavaClass jclass, PackageMetrics pm) {
+        super();
+        
+        this.jclass = jclass;
+        packageMetrics = pm;
+        
+        for (JavaMethod jm : jclass.getJavaMethods()) {
+            if (jm instanceof CFJavaMethod) {
+                MethodMetrics mm = new MethodMetrics((CFJavaMethod)jm, this);
+                methodMetrics.add(mm);
+            }
+        }
+        for (JavaField jf : jclass.getJavaFields()) {
+            if (jf instanceof CFJavaField) {
+                FieldMetrics fm = new FieldMetrics((CFJavaField)jf, this);
+                fieldMetrics.add(fm);
+            }
+        }
+        
+        for (JavaClass jc : jclass.getAfferentJavaClasses()) {
+            afferentClassNames.add(jc.getQualifiedName());
+        }
+        for (JavaClass jc : jclass.getEfferentJavaClasses()) {
+            efferentClassNames.add(jc.getQualifiedName());
+        }
+        
+        collectMetricInfo();
     }
     
     /**
@@ -127,14 +163,16 @@ public class ClassMetrics extends CommonMetrics {
      * @param name the afferent class name
      */
     public void addAfferentClassName(String name) {
-        afferentClassNames.add(name);
+        if (!afferentClassNames.contains(name)) {
+            afferentClassNames.add(name);
+        }
     }
     
     /**
      * Returns the names of afferent classes for this class.
      * @return the collection of the afferent class names
      */
-    public Set<String> getAfferentClassNames() {
+    public List<String> getAfferentClassNames() {
         return afferentClassNames;
     }
     
@@ -143,45 +181,17 @@ public class ClassMetrics extends CommonMetrics {
      * @param name the efferent class name
      */
     public void addEfferentClassName(String name) {
-        efferentClassNames.add(name);
+        if (!efferentClassNames.contains(name)) {
+            efferentClassNames.add(name);
+        }
     }
     
     /**
      * Returns the names of efferent classes for this class.
      * @return the collection of the efferent class names
      */
-    public Set<String> getEfferentClassNames() {
+    public List<String> getEfferentClassNames() {
         return efferentClassNames;
-    }
-    
-    /**
-     * Creates a new object representing a class, an interface, or an enum.
-     * @param node an AST node for this class, interface, or enum
-     * @param pm a metrics object for a package containing this class, interface, or enum
-     */
-    protected ClassMetrics(JavaClass jclass, PackageMetrics pm) {
-        super();
-        
-        this.jclass = jclass;
-        packageMetrics = pm;
-        
-        for (JavaMethod jm : jclass.getJavaMethods()) {
-            MethodMetrics mm = new MethodMetrics(jm, this);
-            methodMetrics.add(mm);
-        }
-        for (JavaField jf : jclass.getJavaFields()) {
-            FieldMetrics fm = new FieldMetrics(jf, this);
-            fieldMetrics.add(fm);
-        }
-        
-        for (JavaClass jc : jclass.getAfferentJavaClasses()) {
-            afferentClassNames.add(jc.getQualifiedName());
-        }
-        for (JavaClass jc : jclass.getEfferentJavaClasses()) {
-            efferentClassNames.add(jc.getQualifiedName());
-        }
-        
-        collectMetricInfo();
     }
     
     /**
@@ -196,7 +206,7 @@ public class ClassMetrics extends CommonMetrics {
      * Obtains the collection of method metrics for this class.
      * @return the collection of method metrics
      */
-    public Set<MethodMetrics> getMethodMetrics() {
+    public List<MethodMetrics> getMethodMetrics() {
         return methodMetrics;
     }
     
@@ -205,14 +215,16 @@ public class ClassMetrics extends CommonMetrics {
      * @param pm the method metrics
      */
     protected void add(MethodMetrics mm) {
-        methodMetrics.add(mm);
+        if (!methodMetrics.contains(mm)) {
+            methodMetrics.add(mm);
+        }
     }
     
     /**
      * Obtains the collection of field metrics for this class.
      * @return the collection of field metrics
      */
-    public Set<FieldMetrics> getFieldMetrics() {
+    public List<FieldMetrics> getFieldMetrics() {
         return fieldMetrics;
     }
     
@@ -221,7 +233,9 @@ public class ClassMetrics extends CommonMetrics {
      * @param pm the field metrics
      */
     protected void add(FieldMetrics fm) {
-        fieldMetrics.add(fm);
+        if (!fieldMetrics.contains(fm)) {
+            fieldMetrics.add(fm);
+        }
     }
     
     /**
@@ -300,18 +314,16 @@ public class ClassMetrics extends CommonMetrics {
      * Collects information on this class.
      */
     private void collectMetricInfo() {
-        metrics.put(MetricSort.LINES_OF_CODE, new Double(jclass.getLoc()));
-        metrics.put(MetricSort.NUMBER_OF_METHODS, new Double(jclass.getJavaMethods().size()));
-        metrics.put(MetricSort.NUMBER_OF_FIELDS, new Double(jclass.getJavaFields().size()));
-        metrics.put(MetricSort.NUMBER_OF_METHODS_AND_FIELDS, new Double(jclass.getJavaMethods().size() + jclass.getJavaFields().size()));
-        metrics.put(MetricSort.NUMBER_OF_AFFERENT_CLASSES, new Double(jclass.getAfferentJavaClassesInProject().size()));
-        metrics.put(MetricSort.NUMBER_OF_EFFERENT_CLASSES, new Double(jclass.getEfferentJavaClassesInProject().size()));
-        
         try {
+            metrics.put(MetricSort.LINES_OF_CODE, new Double(jclass.getLoc()));
+            metrics.put(MetricSort.NUMBER_OF_METHODS, new Double(jclass.getJavaMethods().size()));
+            metrics.put(MetricSort.NUMBER_OF_FIELDS, new Double(jclass.getJavaFields().size()));
+            metrics.put(MetricSort.NUMBER_OF_METHODS_AND_FIELDS, new Double(jclass.getJavaMethods().size() + jclass.getJavaFields().size()));
+            metrics.put(MetricSort.NUMBER_OF_AFFERENT_CLASSES, new Double(jclass.getAfferentJavaClassesInProject().size()));
+            metrics.put(MetricSort.NUMBER_OF_EFFERENT_CLASSES, new Double(jclass.getEfferentJavaClassesInProject().size()));
+            
             metrics.put(MetricSort.NUMBER_OF_STATEMENTS, sum(MetricSort.NUMBER_OF_STATEMENTS));
-            
             metrics.put(MetricSort.NUMBER_OF_CHILDREN, new Double(jclass.getChildren().size()));
-            
             metrics.put(MetricSort.DEPTH_OF_INHERITANCE_TREE, new Double(jclass.getAllSuperClasses().size()));
             
             double nopm = 0;
@@ -322,7 +334,7 @@ public class ClassMetrics extends CommonMetrics {
             }
             metrics.put(MetricSort.NUMBER_OF_PUBLIC_METHODS, new Double(nopm));
             
-            Set<JavaMethod> calledMethods = new HashSet<JavaMethod>();
+            List<JavaMethod> calledMethods = new ArrayList<JavaMethod>();
             for (JavaMethod jm : jclass.getJavaMethods()) {
                 for (JavaMethod m : jm.getCalledJavaMethodsInProject()) {
                     calledMethods.add(m);
@@ -331,11 +343,11 @@ public class ClassMetrics extends CommonMetrics {
             double rfc = jclass.getJavaMethods().size() + calledMethods.size();
             metrics.put(MetricSort.RESPONSE_FOR_CLASS, new Double(rfc));
             
-            Set<JavaClass> classes = new HashSet<JavaClass>();
+            List<JavaClass> classes = new ArrayList<JavaClass>();
             collectCoupledClasses(jclass, classes);
             metrics.put(MetricSort.COUPLING_BETWEEN_OBJECTS, new Double(classes.size()));
             
-            double lcom = getNumOfFieldAccessedMethods() - getNumOfCohesiveMethods();
+            double lcom = getLCOM();
             metrics.put(MetricSort.LACK_OF_COHESION_OF_METHODS, new Double(lcom));
             
             double wmc  = 0;
@@ -350,25 +362,12 @@ public class ClassMetrics extends CommonMetrics {
     }
     
     /**
-     * Obtains the number of methods accessing any field.
-     * @return the number of the methods
+     * Obtains the difference value between methods accessing disjoint sets of fields and methods sharing the same one.
+     * @return the difference value (the value of LCOM) 
      */
-    private int getNumOfFieldAccessedMethods() {
-        int methodNum = 0;
-        for (JavaMethod jm : jclass.getJavaMethods()) {
-            if (jm.getAccessedJavaFieldsInProject().size() != 0) {
-                methodNum++;
-            }
-        }
-        return methodNum;
-    }
-    
-    /**
-     * Obtains the number of methods sharing the same field.
-     * @return the number of the methods
-     */
-    private int getNumOfCohesiveMethods() {
-        int methodNum = 0;
+    private int getLCOM() {
+        int accessedMethods = 0;
+        int cohesiveMethods = 0;
         
         ArrayList<JavaMethod> jmethods = new ArrayList<JavaMethod>(jclass.getJavaMethods());
         for (int i = 0; i < jmethods.size(); i++) {
@@ -379,14 +378,19 @@ public class ClassMetrics extends CommonMetrics {
                 for (JavaField jf1 : jm1.getAccessedJavaFieldsInProject()) {
                     for (JavaField jf2 : jm2.getAccessedJavaFieldsInProject()) {
                         if (jf1.equals(jf2)) {
-                            methodNum = methodNum + 1;
+                            cohesiveMethods++;
+                        } else {
+                            accessedMethods++;
                         }
                     }
                 }
             }
         }
         
-        return methodNum;
+        if (accessedMethods > cohesiveMethods) {
+            return accessedMethods - cohesiveMethods;
+        }
+        return 0;
     }
     
     /**
@@ -394,7 +398,7 @@ public class ClassMetrics extends CommonMetrics {
      * @param jc the originating class
      * @param classes the collection of the coupled classes
      */
-    private void collectCoupledClasses(JavaClass jc, Set<JavaClass> classes) {
+    private void collectCoupledClasses(JavaClass jc, List<JavaClass> classes) {
         for (JavaClass c : jc.getAfferentJavaClassesInProject()) {
             if (!classes.contains(c)) {
                 classes.add(c);
@@ -432,8 +436,8 @@ public class ClassMetrics extends CommonMetrics {
         double totalNOAMD = 0;
         double totalNOEMD = 0;
         
-        try {
-            for (MethodMetrics mm : getMethodMetrics()) {
+        for (MethodMetrics mm : getMethodMetrics()) {
+            try {
                 totalLOC = totalLOC + mm.getMetricValueWithException(MetricSort.LINES_OF_CODE);
                 totalNOST = totalNOST + mm.getMetricValueWithException(MetricSort.NUMBER_OF_STATEMENTS);
                 totalNOPT = totalNOPT + mm.getMetricValueWithException(MetricSort.NUMBER_OF_PARAMETERS);
@@ -441,9 +445,9 @@ public class ClassMetrics extends CommonMetrics {
                 totalMNON = totalMNON + mm.getMetricValueWithException(MetricSort.MAX_NUMBER_OF_NESTING);
                 totalNOAMD = totalNOAMD + mm.getMetricValueWithException(MetricSort.NUMBER_OF_AFFERENT_METHODS);
                 totalNOEMD = totalNOEMD + mm.getMetricValueWithException(MetricSort.NUMBER_OF_EFFERENT_METHODS);
+            } catch (UnsupportedMetricsException e) {
+                System.out.println(e.getMessage() + " in the class: " + getName());
             }
-        } catch (UnsupportedMetricsException e) {
-            System.out.println(e.getMessage() + "in the class: " + getName());
         }
         
         putMetricValue(MetricSort.TOTAL_LINE_OF_CODE, totalLOC);
@@ -467,8 +471,8 @@ public class ClassMetrics extends CommonMetrics {
         double maxNOAMD = 0;
         double maxNOEMD = 0;
         
-        try {
-            for (MethodMetrics mm : getMethodMetrics()) {
+        for (MethodMetrics mm : getMethodMetrics()) {
+            try {
                 maxLOC = Math.max(maxLOC, mm.getMetricValueWithException(MetricSort.LINES_OF_CODE));
                 maxNOST = Math.max(maxNOST, mm.getMetricValueWithException(MetricSort.NUMBER_OF_STATEMENTS));
                 maxNOPT = Math.max(maxNOPT, mm.getMetricValueWithException(MetricSort.NUMBER_OF_PARAMETERS));
@@ -476,9 +480,9 @@ public class ClassMetrics extends CommonMetrics {
                 maxMNON = Math.max(maxMNON, mm.getMetricValueWithException(MetricSort.MAX_NUMBER_OF_NESTING));
                 maxNOAMD = Math.max(maxNOAMD, mm.getMetricValueWithException(MetricSort.NUMBER_OF_AFFERENT_METHODS));
                 maxNOEMD = Math.max(maxNOEMD, mm.getMetricValueWithException(MetricSort.NUMBER_OF_EFFERENT_METHODS));
+            } catch (UnsupportedMetricsException e) {
+                System.out.println(e.getMessage() + " in the class: " + getName());
             }
-        } catch (UnsupportedMetricsException e) {
-            System.out.println(e.getMessage() + "in the class: " + getName());
         }
         
         putMetricValue(MetricSort.MAX_LINE_OF_CODE, maxLOC);
@@ -488,5 +492,29 @@ public class ClassMetrics extends CommonMetrics {
         putMetricValue(MetricSort.MAX_MAX_NUMBER_OF_NESTING, maxMNON);
         putMetricValue(MetricSort.MAX_NUMBER_OF_AFFERENT_METHODS, maxNOAMD);
         putMetricValue(MetricSort.MAX_NUMBER_OF_EFFERENT_METHODS, maxNOEMD);
+    }
+    
+    /**
+     * Sorts the method metrics in dictionary order of their names.
+     */
+    public void sortMethods() {
+        Collections.sort(methodMetrics, new Comparator<MethodMetrics>() {
+            
+            public int compare(MethodMetrics m1, MethodMetrics m2) {
+                return m1.getSignature().compareTo(m2.getSignature());
+            }
+        });
+    }
+    
+    /**
+     * Sorts the field metrics in dictionary order of their names.
+     */
+    public void sortFields() {
+        Collections.sort(fieldMetrics, new Comparator<FieldMetrics>() {
+            
+            public int compare(FieldMetrics m1, FieldMetrics m2) {
+                return m1.getName().compareTo(m2.getName());
+            }
+        });
     }
 }

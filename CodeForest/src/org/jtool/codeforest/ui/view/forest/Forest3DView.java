@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.view.forest;
@@ -11,14 +11,12 @@ import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 
 /**
  * Displays a forest on the screen.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
 public class Forest3DView {
@@ -49,13 +47,10 @@ public class Forest3DView {
     public void build(ProjectMetrics projectMetrics, ForestData fdata) {
         builder = new ForestBuilder();
         builder.setProjectMetrics(projectMetrics);
-        
-        builder.setLayout(fdata.getLayoutName());
         canvas.setForest(builder.build(fdata));
     }
     
     public void update(ForestData fdata) {
-        builder.setLayout(fdata.getLayoutName());
         canvas.setForest(builder.build(fdata));
     }
     

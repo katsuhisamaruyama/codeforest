@@ -1,27 +1,23 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
- 
+
 package org.jtool.codeforest.handlers;
 
-import org.jtool.eclipse.model.java.JavaModelFactory;
-import org.jtool.eclipse.model.java.JavaProject;
+import org.jtool.codeforest.Activator;
 import org.jtool.codeforest.metrics.java.MetricsManager;
 import org.jtool.codeforest.metrics.java.ProjectMetrics;
 import org.jtool.codeforest.ui.CodeForestFrame;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
+import java.io.File;
 
 /**
  * Performs an action for a project.
@@ -40,16 +36,6 @@ public class OpenAction extends AbstractHandler {
     protected IWorkbenchPart part;
     
     /**
-     * An active menu selection.
-     */
-    protected ISelection selection;
-    
-    /**
-     * The a factory object that creates models of Java programs.
-     */
-    private JavaModelFactory factory;
-    
-    /**
      * Creates a new, empty object.
      */
     public OpenAction() {
@@ -65,44 +51,45 @@ public class OpenAction extends AbstractHandler {
         part = HandlerUtil.getActivePart(event);
         window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
         
-        selection = HandlerUtil.getActiveMenuSelection(event);
+        // String path = "/Users/maru/Desktop/eclipse-4.3.1-CodeForest/runtime-EclipseApplication/CodeForest";
+        // String path = "/Users/maru/Desktop/eclipse-4.3.1-CodeForest/runtime-EclipseApplication/org.jtool.eclipse";
+        // String path = "/Users/maru/Desktop/eclipse-4.3.1-CodeForest/runtime-EclipseApplication/sample";
+        String path = open();
         
-        if (selection instanceof IStructuredSelection) {
-            IStructuredSelection structured = (IStructuredSelection)selection;
-            
-            IJavaProject project = null;
-            Object elem = structured.getFirstElement();
-            if (elem instanceof IJavaProject) {
-            	project = (IJavaProject)elem;
-            } else if (elem instanceof IProject) {
-            	project = (IJavaProject)JavaCore.create((IProject)elem);
-            }
-            
-            if (project != null) {
-                factory = new JavaModelFactory(project);
-                JavaProject jproject = factory.create();
-                
-                MetricsManager manager = new MetricsManager();
-                ProjectMetrics mproject = manager.create(jproject);
-                manager.writeXML(jproject, mproject);
-                
-                CodeForestFrame frame = new CodeForestFrame(window.getShell(), mproject);
-                frame.createPane();
-                frame.dispose();
-                
-                System.out.println("Code Forest fin.");
-            }
+        MetricsManager manager = new MetricsManager();
+        ProjectMetrics mproject = manager.readXML(path);
+        
+        if (mproject == null) {
+            System.out.println("Cannot read: " + path);
+            return null;
         }
+        
+        CodeForestFrame frame = new CodeForestFrame(window.getShell(), mproject);
+        frame.createPane();
+        frame.dispose();
+        
+        System.out.println("Code Forest fin.");
+        
         return null;
     }
     
-    /**
-     * Returns the shell in which the workbench of this editor site resides.
-     * @param part the workbench part
-     * @return the corresponding shell
-     */
-    protected Shell getShell(IWorkbenchPart part) {
-        IWorkbenchSite ws = part.getSite();
-        return ws.getShell();
+    public String open() {
+        FileDialog dialog = new FileDialog(window.getShell(), SWT.NULL);
+        String path = dialog.open();
+        
+        if (path != null) {
+            File file = new File(path);
+            while (!file.isFile()) {
+                MessageDialog.openError(null, Activator.PLUGIN_ID, "Please specify a file.");
+                dialog.setFilterPath(path);
+                path = dialog.open();
+                if (path == null) {
+                    return null;
+                }
+                file = new File(path);
+            }
+        }
+        
+        return path;
     }
 }

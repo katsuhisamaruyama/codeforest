@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.layout;
@@ -8,10 +8,11 @@ import java.util.Comparator;
 import java.util.Arrays;
 
 /**
- * Abstract class for a map layout.
- * @author Katsuhisa Maruyama & Daiki Todoroki
+ * A class for a map layout.
+ * @author Daiki Todoroki
+ * @author Katsuhisa Maruyama
  */
-public abstract class AbstractMapLayout implements IMapLayout {
+public abstract class MapLayout {
     
     public static final int VERTICAL = 0;
     

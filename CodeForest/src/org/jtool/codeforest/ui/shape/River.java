@@ -5,7 +5,6 @@
 package org.jtool.codeforest.ui.shape;
 
 import java.awt.Image;
-
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Geometry;
 import javax.media.j3d.GeometryArray;
@@ -18,6 +17,11 @@ import javax.media.j3d.TransformGroup;
 import javax.vecmath.Point3d;
 import javax.vecmath.TexCoord2f;
 
+/**
+ * Represents a river.
+ * @author Daiki Todoroki
+ * @author Katsuhisa Maruyama
+ */
 public class River extends AbstractShape {
     
     private static Texture2D texture;

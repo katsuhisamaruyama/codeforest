@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.layout;
@@ -9,7 +9,7 @@ package org.jtool.codeforest.ui.layout;
  * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
-public class SimpleMappableItem implements IMappable {
+public class MappableItem implements IMappable {
     
     protected double baseSize;
     
@@ -23,11 +23,11 @@ public class SimpleMappableItem implements IMappable {
     
     protected float w, h;
     
-    public SimpleMappableItem() {
+    public MappableItem() {
         this(1, 0);
     }
     
-    public SimpleMappableItem(double baseSize, int order) {
+    public MappableItem(double baseSize, int order) {
         this.baseSize = baseSize;
         this.order = order;
         bounds = new Rect();

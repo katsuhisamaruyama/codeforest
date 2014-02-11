@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.view;
@@ -33,8 +33,6 @@ public class SettingView {
     private Combo theightSel, tradiusSel, tcolorSel, fheightSel, fradiusSel, fcolorSel;
     
     private Combo blengthSel, lnumberSel, lsizeSel, lcolorSel;
-    
-    private Combo layoutSel;
     
     public SettingView(Composite parent, CodeForestFrame frame) {
         this.frame = frame;
@@ -120,13 +118,6 @@ public class SettingView {
         settingData.setLeafColor(lcolorSel.getItem(0));
         lcolorSel.addSelectionListener(new LeafColorSelectionListener());
         
-        // createSeparator(setting);
-        
-        layoutSel = createLayoutSelection(setting, SettingData.LAYOUT, settingData.getLayoutItems());
-        layoutSel.select(0);
-        settingData.setLayoutName(layoutSel.getItem(0));
-        layoutSel.addSelectionListener(new LayoutSelectionListener());
-        
         createButtons(parent);
         
         parent.pack();
@@ -153,27 +144,6 @@ public class SettingView {
         combo.select(0);
         GridData cdata = new GridData(GridData.FILL_HORIZONTAL);
         combo.setLayoutData(cdata);
-        
-        return combo;
-    }
-    
-    private Combo createLayoutSelection(Composite parent, String title, String[] items) {
-        Composite panel = new Composite(parent, SWT.NONE);
-        GridLayout layout = new GridLayout(2, false);
-        layout.verticalSpacing = 0;
-        layout.marginHeight = 5;
-        panel.setLayout(layout);
-        GridData data = new GridData();
-        data.horizontalSpan = 2;
-        panel.setLayoutData(data);
-        
-        Label label = new Label(panel, SWT.NONE);
-        label.setFont(font11);
-        label.setText(title);
-        
-        Combo combo = new Combo(panel, SWT.READ_ONLY);
-        combo.setFont(font11);
-        combo.setItems(items);
         
         return combo;
     }
@@ -369,20 +339,6 @@ public class SettingView {
         }
     }
     
-    class LayoutSelectionListener implements SelectionListener {
-        
-        public void widgetSelected(SelectionEvent e) {
-            Combo combo = (Combo)e.getSource();
-            String name = combo.getItem(combo.getSelectionIndex());
-            settingData.setLayoutName(name);
-            
-            update();
-        }
-        
-        public void widgetDefaultSelected(SelectionEvent e) {
-        }
-    }
-    
     class LockButtonListener implements SelectionListener {
         
         public void widgetSelected(SelectionEvent e) {
@@ -398,7 +354,6 @@ public class SettingView {
                 lnumberSel.setEnabled(false);
                 lsizeSel.setEnabled(false);
                 lcolorSel.setEnabled(false);
-                layoutSel.setEnabled(false);
             } else {
                 theightSel.setEnabled(true);
                 tradiusSel.setEnabled(true);
@@ -410,7 +365,6 @@ public class SettingView {
                 lnumberSel.setEnabled(true);
                 lsizeSel.setEnabled(true);
                 lcolorSel.setEnabled(true);
-                layoutSel.setEnabled(true);
             }
         }
         

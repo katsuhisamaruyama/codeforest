@@ -1,15 +1,17 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.metrics.java;
 
-import org.jtool.eclipse.model.java.JavaClass;
-import org.jtool.eclipse.model.java.JavaPackage;
 import org.jtool.codeforest.metrics.MetricSort;
 import org.jtool.codeforest.metrics.UnsupportedMetricsException;
-import java.util.HashSet;
-import java.util.Set;
+import org.jtool.eclipse.model.java.JavaClass;
+import org.jtool.eclipse.model.java.JavaPackage;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * An object storing information on a package.
@@ -35,17 +37,17 @@ public class PackageMetrics extends CommonMetrics {
     /**
      * The collection of all class metrics for this package.
      */
-    protected Set<ClassMetrics> classMetrics = new HashSet<ClassMetrics>();
+    protected List<ClassMetrics> classMetrics = new ArrayList<ClassMetrics>();
     
     /**
      * The collection of names of afferent packages for this package.
      */
-    protected Set<String> afferentPackageNames = new HashSet<String>();
+    protected List<String> afferentPackageNames = new ArrayList<String>();
     
     /**
      * The collection of names of afferent packages for this package.
      */
-    protected Set<String> efferentPackageNames = new HashSet<String>();
+    protected List<String> efferentPackageNames = new ArrayList<String>();
     
     /**
      * Creates a new object representing a package.
@@ -97,7 +99,7 @@ public class PackageMetrics extends CommonMetrics {
      * Obtains the collection of class metrics for this package.
      * @return the collection of class metrics
      */
-    public Set<ClassMetrics> getClassMetrics() {
+    public List<ClassMetrics> getClassMetrics() {
         return classMetrics;
     }
     
@@ -106,7 +108,9 @@ public class PackageMetrics extends CommonMetrics {
      * @param pm the class metrics
      */
     protected void add(ClassMetrics cm) {
-        classMetrics.add(cm);
+        if (!classMetrics.contains(cm)) {
+            classMetrics.add(cm);
+        }
     }
     
     /**
@@ -130,14 +134,16 @@ public class PackageMetrics extends CommonMetrics {
      * @param name the afferent package name
      */
     public void addAfferentPackageName(String name) {
-        afferentPackageNames.add(name);
+        if (!afferentPackageNames.contains(name)) {
+            afferentPackageNames.add(name);
+        }
     }
     
     /**
      * Returns the names of afferent packages for this package.
      * @return the collection of the afferent package names
      */
-    public Set<String> getAfferentPackageNames() {
+    public List<String> getAfferentPackageNames() {
         return afferentPackageNames;
     }
     
@@ -146,14 +152,16 @@ public class PackageMetrics extends CommonMetrics {
      * @param name the efferent package name
      */
     public void addEfferentPackageName(String name) {
-        efferentPackageNames.add(name);
+        if (!efferentPackageNames.contains(name)) {
+            efferentPackageNames.add(name);
+        }
     }
     
     /**
      * Returns the names of efferent packages for this package.
      * @return the collection of the efferent package names
      */
-    public Set<String> getEfferentPackageNames() {
+    public List<String> getEfferentPackageNames() {
         return efferentPackageNames;
     }
     
@@ -169,11 +177,11 @@ public class PackageMetrics extends CommonMetrics {
      * Collects information on this package.
      */
     private void collectMetricInfo() {
-        metrics.put(MetricSort.NUMBER_OF_CLASSES, new Double(jpackage.getJavaClasses().size()));
-        metrics.put(MetricSort.NUMBER_OF_AFFERENT_PACKAGES, new Double(jpackage.getAfferentJavaPackages().size()));
-        metrics.put(MetricSort.NUMBER_OF_EFFERENT_PACKAGES, new Double(jpackage.getEfferentJavaPackages().size()));
-        
         try {
+            metrics.put(MetricSort.NUMBER_OF_CLASSES, new Double(jpackage.getJavaClasses().size()));
+            metrics.put(MetricSort.NUMBER_OF_AFFERENT_PACKAGES, new Double(jpackage.getAfferentJavaPackages().size()));
+            metrics.put(MetricSort.NUMBER_OF_EFFERENT_PACKAGES, new Double(jpackage.getEfferentJavaPackages().size()));
+            
             metrics.put(MetricSort.NUMBER_OF_METHODS, sum(MetricSort.NUMBER_OF_METHODS));
             metrics.put(MetricSort.NUMBER_OF_FIELDS, sum(MetricSort.NUMBER_OF_FIELDS));
             metrics.put(MetricSort.NUMBER_OF_METHODS_AND_FIELDS, sum(MetricSort.NUMBER_OF_METHODS_AND_FIELDS));
@@ -196,5 +204,17 @@ public class PackageMetrics extends CommonMetrics {
             value = value + cm.getMetricValueWithException(sort);
         }
         return new Double(value);
+    }
+    
+    /**
+     * Sorts the class metrics in dictionary order of their names.
+     */
+    public void sortClasses() {
+        Collections.sort(classMetrics, new Comparator<ClassMetrics>() {
+            
+            public int compare(ClassMetrics m1, ClassMetrics m2) {
+                return m1.getName().compareTo(m2.getName());
+            }
+        });
     }
 }

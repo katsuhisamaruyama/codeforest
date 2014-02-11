@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.ui.view;
@@ -22,7 +22,6 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -217,7 +216,7 @@ public class PropertyView {
     }
     
     private void createMethodPropertyData(MethodMetrics mmethod) {
-        String sig = mmethod.getSignature() + " : " + mmethod.getType();
+        String sig = mmethod.getSignature() + " : " + mmethod.getReturnType();
         if (mmethod.isConstructor()) {
             Image image = Activator.getImage("method_pri");
             propertyList.add(new PropertyData(sig, "", false, image));

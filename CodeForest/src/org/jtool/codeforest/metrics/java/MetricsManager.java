@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013, Katsuhisa Maruyama (maru@jtool.org)
+ *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
 package org.jtool.codeforest.metrics.java;
@@ -53,9 +53,13 @@ public class MetricsManager {
     public static final String No = "no";
     
     public static final String StartPositionAttr = "start";
+    public static final String ExtendedStartPositionAttr = "exstart";
     public static final String CodeLengthAttr = "len";
+    public static final String ExtendedCodeLengthAttr = "exlen";
     public static final String UpperLineNumberAttr = "upper";
+    public static final String ExtendedUpperLineNumberAttr = "exupper";
     public static final String BottomLineNumberAttr = "bottom";
+    public static final String ExtendedBottomLineNumberAttr = "exbottom";
     
     /**
      * Creates a new, empty object.
@@ -86,11 +90,11 @@ public class MetricsManager {
     
     /**
      * Imports metric values within a project and returns an object storing these values.
-     * @param path the path of the project whose metric values are collected
+     * @param path the path of the file storing metric values
      * @return the project metric, or <code>null</code> if the creation fails
      */
     public ProjectMetrics readXML(String path) {
-        File file = new File(getFileName(path));
+        File file = new File(path);
         if (file.canRead()) {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             try {
@@ -121,11 +125,11 @@ public class MetricsManager {
     
     /**
      * Exports metric values within a project.
-     * @param path the path of the project
+     * @param topdir the path of the top directory for the project
      * @param mproject the project metrics
      */
-    public void writeXML(String path, ProjectMetrics mproject) {
-        File file = new File(getFileName(path));
+    public void writeXML(String topdir, ProjectMetrics mproject) {
+        File file = new File(topdir + File.separator + XmlFileName);
         
         if (file.exists()) {
             file.delete();
@@ -134,14 +138,5 @@ public class MetricsManager {
         XMLExporter exporter = new XMLExporter();
         exporter.export(file, mproject);
         System.out.println("- Export metric values to xml file: " + file.getAbsolutePath());
-    }
-    
-    /**
-     * Obtains the name of a file storing metric values within a project
-     * @param path the path of the project
-     * @return the file name
-     */
-    private String getFileName(String path) {
-        return path + "/" + XmlFileName;
     }
 }
