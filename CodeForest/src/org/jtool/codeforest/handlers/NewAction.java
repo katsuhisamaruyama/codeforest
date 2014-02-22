@@ -86,10 +86,9 @@ public class NewAction extends AbstractHandler {
                 
                 MetricsManager manager = new MetricsManager();
                 ProjectMetrics mproject = manager.create(jproject);
-                manager.writeXML(jproject, mproject);
+                manager.writeXML(mproject);
                 
                 CodeForestFrame frame = new CodeForestFrame(window.getShell(), mproject);
-                frame.createPane();
                 frame.dispose();
                 
                 System.out.println("Code Forest fin.");

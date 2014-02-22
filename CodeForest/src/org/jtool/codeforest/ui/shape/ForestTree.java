@@ -4,10 +4,9 @@
 
 package org.jtool.codeforest.ui.shape;
 
-import org.jtool.codeforest.ui.view.forest.ForestData;
+import org.jtool.codeforest.ui.view.SettingData;
 import org.jtool.codeforest.metrics.IMetric;
 import org.jtool.codeforest.metrics.java.ClassMetrics;
-import org.jtool.codeforest.metrics.java.ProjectMetrics;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Geometry;
 import javax.media.j3d.Material;
@@ -26,10 +25,9 @@ import com.sun.j3d.utils.geometry.Cylinder;
 
 /**
  * Represents a tree on a forest view.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
-public class ForestTree extends AbstractTree {
+public class ForestTree extends MetricsTree {
     
     private static Geometry trunkGeometry;
     
@@ -69,8 +67,8 @@ public class ForestTree extends AbstractTree {
     
     private static final Color3f SETECTED_COLOR = new Color3f(0.5f, 0.0f, 0.5f);
     
-    public ForestTree(ProjectMetrics mproject, ClassMetrics mclass, ForestData fdata) {
-        super(mproject, mclass, fdata);
+    public ForestTree(ClassMetrics mclass, SettingData data) {
+        super(mclass);
         
         trunkHeight = trunk_DEFAULT_HEIGHT;
         trunkRadius = trunk_DEFAULT_RADIUS;
@@ -101,7 +99,7 @@ public class ForestTree extends AbstractTree {
             foliageTexture = createTexture(AbstractShape.getAWTImage("leaf"));
         }
         
-        setMetricValues(forestData);
+        setMetricValues(data);
     }
     
     private void setCapability() {
@@ -191,41 +189,43 @@ public class ForestTree extends AbstractTree {
         }
     }
     
-    public void setMetricValues(ForestData forestData) {
-        IMetric metric = forestData.getTrunkHeight();
+    public void setMetricValues(SettingData data) {
+        IMetric metric;
+        
+        metric = data.getTrunkHeight();
         if (metric.isClassMetric()) {
             // System.out.println("TRUNK HEIGHT = " + metric.getName() + " : " + getMetricValuePerAverage(metric, classMetrics));
-            setTrunkHeight(adjust(getMetricValuePerAverage(metric, classMetrics) / 2));
+            setTrunkHeight(adjust(getMetricValuePerAverage(metric) / 2));
         }
         
-        metric = forestData.getTrunkRadius();
+        metric = data.getTrunkRadius();
         if (metric.isClassMetric()) {
             // System.out.println("TRUNK RADIUS = " + metric.getName() + " : " + getMetricValue(metric, classMetrics));
-            setTrunkRadius(adjust(getMetricValuePerAverage(metric, classMetrics) / 3));
+            setTrunkRadius(adjust(getMetricValuePerAverage(metric) / 3));
         }
         
-        metric = forestData.getTrunkColor();
+        metric = data.getTrunkColor();
         if (metric.isClassMetric()) {
             // System.out.println("TRUNK COLOR = " + metric.getName() + " : " + getMetricValuePerMax(metric, classMetrics));
-            setTrunkColorRate(getMetricValuePerMax(metric, classMetrics));
+            setTrunkColorRate(getMetricValuePerMax(metric));
         }
         
-        metric = forestData.getFoliageHeight();
+        metric = data.getFoliageHeight();
         if (metric.isClassMetric()) {
             // System.out.println("FOLIAGE HEIGHT = " + metric.getName() + " : " + getMetricValuePerMax(metric, classMetrics));
-            setFoliageHeightRate(getMetricValuePerMax(metric, classMetrics));
+            setFoliageHeightRate(getMetricValuePerMax(metric));
         }
         
-        metric = forestData.getFoliageRadius();
+        metric = data.getFoliageRadius();
         if (metric.isClassMetric()) {
             // System.out.println("FOLIAGE RADIUS = " + metric.getName() + " " + getMetricValuePerMax(metric, classMetrics));
-            setFoliageRadiusRate(getMetricValuePerMax(metric, classMetrics));
+            setFoliageRadiusRate(getMetricValuePerMax(metric));
         }
         
-        metric = forestData.getFoliageColor();
+        metric = data.getFoliageColor();
         if (metric.isClassMetric()) {
             // System.out.println("FOLIAGE COLOR = " + metric.getName() + " : " + getMetricValuePerMax(metric, classMetrics));
-            setFoliageColorRate(getMetricValuePerMax(metric, classMetrics));
+            setFoliageColorRate(getMetricValuePerMax(metric));
         }
     }
     

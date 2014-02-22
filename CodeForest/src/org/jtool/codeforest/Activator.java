@@ -14,8 +14,10 @@ import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.swt.graphics.Image;
+import org.jtool.codeforest.ui.view.control.WorkingSetStore;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
@@ -43,6 +45,11 @@ public class Activator extends AbstractUIPlugin {
     private Bundle bundle;
     
     /**
+     * A preference name for storing working sets of metrics.
+     */
+    private static final String WORKING_SETS = "WorkingSetPreference";
+    
+    /**
      * Creates a plug-in runtime object.
      */
     public Activator() {
@@ -58,6 +65,7 @@ public class Activator extends AbstractUIPlugin {
     public void start(BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
+        doLoad();
     }
     
     /**
@@ -67,6 +75,7 @@ public class Activator extends AbstractUIPlugin {
      * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
      */
     public void stop(BundleContext context) throws Exception {
+        doStore();
         plugin = null;
         super.stop(context);
     }
@@ -109,6 +118,43 @@ public class Activator extends AbstractUIPlugin {
         return null;
     }
     
+    private String[][] iconImages = {
+            { "projects.gif", "project" },
+            { "jcu_obj.gif", "javafile" },
+            { "package_obj.gif", "package" },
+            { "classes.gif", "class" },
+            { "enum_obj.gif", "enum" },
+            { "int_obj.gif", "interface" },
+            { "methpub_obj.gif", "method_pub" },
+            { "methpro_obj.gif", "method_pro" },
+            { "methdef_obj.gif", "method_def" },
+            { "methpri_obj.gif", "method_pri" },
+            { "constr_ovr.gif", "constructor" },
+            { "field_public_obj.gif", "field_pub" },
+            { "field_protected_obj.gif", "field_pro" },
+            { "field_default_obj.gif", "field_def" },
+            { "field_private_obj.gif", "field_pri" },
+            { "enum_tsk.gif", "enum_const" },
+            { "abstract_co.gif", "abstract" },
+            { "final_co.gif", "final" },
+            { "static_co.gif", "static" },
+            { "view_menu.gif", "menu" },
+            { "workset.gif", "workset" },
+            { "workingsets.gif", "workingset" },
+            { "container_obj.gif", "memo" },
+            { "tasks_tsk.gif", "task" },
+            { "editor.gif", "editor" },
+            { "det_pane_hide.gif", "setting" },
+            { "insp_sbook.gif", "inspect" },
+            { "find_obj", "find" },
+            { "properties.gif", "properties" },
+            { "undo_edit.gif", "undo" },
+            { "redo_edit.gif", "redo" },
+            { "tree1.png", "tree1" },
+            { "tree2.png", "tree2" },
+            { "tree3.png", "tree3" },
+    };
+    
     /**
      * Initializes an image registry with images which are frequently used by the plug-in.
      * @param reg the registry to initialize
@@ -132,42 +178,11 @@ public class Activator extends AbstractUIPlugin {
             desc = ImageDescriptor.createFromURL(new URL(images, "leaf1.png"));
             reg.put("leaf", desc);
             
-            desc = ImageDescriptor.createFromURL(new URL(icons, "projects.gif"));
-            reg.put("project", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "package_obj.gif"));
-            reg.put("package", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "classes.gif"));
-            reg.put("class", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "enum_obj.gif"));
-            reg.put("enum", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "int_obj.gif"));
-            reg.put("interface", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "methpub_obj.gif"));
-            reg.put("method_pub", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "methpro_obj.gif"));
-            reg.put("method_pro", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "methdef_obj.gif"));
-            reg.put("method_def", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "methpri_obj.gif"));
-            reg.put("method_pri", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "constr_ovr.gif"));
-            reg.put("constructor", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "field_public_obj.gif"));
-            reg.put("field_pub", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "field_protected_obj.gif"));
-            reg.put("field_pro", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "field_default_obj.gif"));
-            reg.put("field_def", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "field_private_obj.gif"));
-            reg.put("field_pri", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "enum_tsk.gif"));
-            reg.put("enum_const", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "abstract_co.gif"));
-            reg.put("abstract", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "final_co.gif"));
-            reg.put("final", desc);
-            desc = ImageDescriptor.createFromURL(new URL(icons, "static_co.gif"));
-            reg.put("static", desc);
+            for (int i = 0; i < iconImages.length; i++) {
+                desc = ImageDescriptor.createFromURL(new URL(icons, iconImages[i][0]));
+                reg.put(iconImages[i][1], desc);
+            }
+            
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -179,9 +194,11 @@ public class Activator extends AbstractUIPlugin {
      * @return the image object, or <code>null</code> if none
      */
     public static Image getImage(String name) {
-        ImageDescriptor desc = getDefault().getImageRegistry().getDescriptor(name);
-        if (desc != null) {
-            return desc.createImage();
+        if (getDefault() != null) {
+            ImageDescriptor desc = getDefault().getImageRegistry().getDescriptor(name);
+            if (desc != null) {
+                return desc.createImage();
+            }
         }
         return null;
     }
@@ -192,5 +209,22 @@ public class Activator extends AbstractUIPlugin {
      */
     public static IWorkbenchWindow getWorkbenchWindow() {
         return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+    }
+    
+    /**
+     * Loads working sets of metrics from this plugin's preferences.
+     */
+    public void doLoad() {
+        // Activator.getDefault().getPreferenceStore().setValue(WORKING_SETS, "");
+        String store = Activator.getDefault().getPreferenceStore().getString(WORKING_SETS);
+        WorkingSetStore.setPreference(store);
+    }
+    
+    /**
+     * Stores working sets of metrics from this plugin's preferences.
+     */
+    public void doStore() {
+        String store = WorkingSetStore.getPreference();
+        Activator.getDefault().getPreferenceStore().setValue(WORKING_SETS, store);
     }
 }

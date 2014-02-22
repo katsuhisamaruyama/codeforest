@@ -17,9 +17,13 @@ import javax.vecmath.Vector3d;
 import javax.vecmath.Vector4f;
 import com.sun.j3d.utils.geometry.Box;
 
+/**
+ * Represents a ground on a forest view.
+ * @author Katsuhisa Maruyama
+ */
 public class Ground extends AbstractShape {
     
-    private static Texture2D ground_texture;
+    private static Texture2D groundTexture;
     
     private Appearance appearance;
     
@@ -35,9 +39,10 @@ public class Ground extends AbstractShape {
         this.width = width;
         this.depth = depth;
         this.height = height;
-        if (ground_texture == null) {
+        
+        if (groundTexture == null) {
             Image image = AbstractShape.getAWTImage("grass");
-            ground_texture = AbstractShape.createTexture(image);
+            groundTexture = AbstractShape.createTexture(image);
         }
     }
     
@@ -47,7 +52,7 @@ public class Ground extends AbstractShape {
     
     protected void setAppearance() {
         appearance = new Appearance();
-        appearance.setTexture(ground_texture);
+        appearance.setTexture(groundTexture);
         
         TransparencyAttributes attr = new TransparencyAttributes();
         attr.setTransparency(0.9f);
@@ -74,10 +79,11 @@ public class Ground extends AbstractShape {
         TransformGroup trans = new TransformGroup();
         
         TransformGroup box = new TransformGroup();
-        Transform3D t3d = new Transform3D();
         box.addChild(new Box((float)width / 2, (float)height, (float)depth / 2, appearance));
-        t3d.setTranslation(new Vector3d(0.0d, height/2, 0.0d));
-        box.setTransform(t3d);
+        
+        Transform3D move = new Transform3D();
+        move.setTranslation(new Vector3d(0.0d, height / 2, 0.0d));
+        box.setTransform(move);
         
         trans.addChild(box);
         

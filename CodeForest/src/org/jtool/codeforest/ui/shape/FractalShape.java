@@ -11,7 +11,6 @@ import javax.media.j3d.TransformGroup;
 
 /**
  * Represents a fractal shape.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
 public class FractalShape extends TransformGroup {

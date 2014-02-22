@@ -5,7 +5,6 @@
 package org.jtool.codeforest.ui.view.forest;
 
 import org.jtool.codeforest.ui.CodeForestFrame;
-import org.jtool.codeforest.ui.view.CodeForestUniverse;
 import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 
@@ -25,6 +24,10 @@ public class ForestUniverse extends CodeForestUniverse {
         
         setCapability(forestBranchGroup);
         setConfigurations();
+    }
+    
+    protected void setConfigurations() {
+        super.setConfigurations();
     }
     
     public void repaint() {

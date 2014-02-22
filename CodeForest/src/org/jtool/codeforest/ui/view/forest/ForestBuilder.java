@@ -4,15 +4,16 @@
 
 package org.jtool.codeforest.ui.view.forest;
 
+import org.jtool.codeforest.ui.view.SettingData;
 import org.jtool.codeforest.metrics.java.ClassMetrics;
 import org.jtool.codeforest.metrics.java.PackageMetrics;
 import org.jtool.codeforest.metrics.java.ProjectMetrics;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Builds a forest displaying on the screen.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
 public class ForestBuilder {
@@ -26,26 +27,26 @@ public class ForestBuilder {
         projectMetrics = mproject;
     }
     
-    public Forest build(ForestData fdata) {
-        Forest forest = new Forest(fdata);
+    public Forest build(SettingData data) {
+        Forest forest = new Forest(data);
         forest.setData(projectMetrics);
         
-        setHierarchy(forest, createHierarchyNode(forest, fdata));
+        setHierarchy(forest, createHierarchyNode(forest, data));
         forest.setLayoutPosition(projectMetrics);
         return forest;
     }
     
     
-    private Map<String, ForestNodeGroup> createHierarchyNode(Forest forest, ForestData fdata) {
+    private Map<String, ForestNodeGroup> createHierarchyNode(Forest forest, SettingData data) {
         Map<String, ForestNodeGroup> group = new HashMap<String, ForestNodeGroup>();
         
         for (PackageMetrics mpackage : projectMetrics.getPackageMetrics()) {
-            ForestNodeGroup clump = new ForestNodeGroup(null, fdata);
+            ForestNodeGroup clump = new ForestNodeGroup(null, data);
             clump.setData(mpackage);
             group.put(mpackage.getName(), clump);
             
             for (ClassMetrics mclass : mpackage.getClassMetrics()) {
-                ForestNode shape = new ForestNode(clump, fdata);
+                ForestNode shape = new ForestNode(clump, data);
                 shape.setData(mclass);
                 clump.add(shape);
             }

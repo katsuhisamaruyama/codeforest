@@ -4,8 +4,9 @@
 
 package org.jtool.codeforest.ui.shape;
 
-import org.jtool.codeforest.ui.view.forest.ForestData;
+import org.jtool.codeforest.ui.view.SettingData;
 import org.jtool.codeforest.metrics.IMetric;
+import org.jtool.codeforest.metrics.java.MethodMetrics;
 import java.awt.Image;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Geometry;
@@ -14,17 +15,15 @@ import javax.media.j3d.PolygonAttributes;
 import javax.media.j3d.TexCoordGeneration;
 import javax.media.j3d.Texture2D;
 import javax.media.j3d.Transform3D;
-import javax.media.j3d.TransparencyAttributes;
 import javax.vecmath.Color3f;
 import javax.vecmath.Vector4f;
 import com.sun.j3d.utils.geometry.Sphere;
 
 /**
  * Represents leaves of a tree on a tree view.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
-public class Leaves {
+public class Leaves extends MetricsLeaf {
     
     Geometry leafGeometry;
     
@@ -44,7 +43,9 @@ public class Leaves {
     
     private final Color3f leaf_DEFAULT_COLOR;
     
-    public Leaves(FractalTree tree) {
+    public Leaves(FractalTree tree, MethodMetrics mmethod) {
+        super(mmethod);
+        
         leafNumber = leaf_DEFAULT_NUMBER;
         leafSize = leaf_DEFAULT_SIZE;
         
@@ -56,10 +57,9 @@ public class Leaves {
         leafNumber = leaf_DEFAULT_NUMBER;
         leafSize = leaf_DEFAULT_SIZE;
         
-        // setMetricValues(tree.forestData, branch.);
+        setMetricValues(tree.getSettingData());
         
         setLeafAppearance();
-        
     }
     
     void draw(FractalTree tree, Branch branch, Transform3D branchTransform) {
@@ -72,10 +72,10 @@ public class Leaves {
             Transform3D child2Transform =  new Transform3D();
             child2Transform.mul(branchTransform);
             
-            FractalShape child1 = new Leaf(tree, this, moveY);
+            Leaf child1 = new Leaf(tree, this, moveY);
             child1Transform.mul(tree.childTransform[0]);
             
-            FractalShape child2 = new Leaf(tree, this, moveY);
+            Leaf child2 = new Leaf(tree, this, moveY);
             child2Transform.mul(tree.childTransform[1]);
             
             child1.setTransform(child1Transform);
@@ -118,24 +118,24 @@ public class Leaves {
         }
     }
     
-    public void setMetricValues(ForestData forestData) {
-        IMetric metric = forestData.getTrunkHeight();
-        metric = forestData.getLeafNumber();
+    public void setMetricValues(SettingData data) {
+        IMetric metric;
+        
+        metric = data.getLeafNumber();
         if (metric.isClassMetric()) {
             // System.out.println("LEAF NUMBER = " + metric.getName() + " " + getMetricValuePerMax(metric, classMetrics));
-            //setLeafNumberRate(getMetricValuePerMax(metric, classMetrics));
+            setLeafNumberRate(getMetricValuePerMax(metric));
         }
         
-        metric = forestData.getLeafColor();
+        metric = data.getLeafColor();
         if (metric.isClassMetric()) {
             // System.out.println("LEAF COLOR = " + metric.getName() + " : " + getMetricValuePerMax(metric, classMetrics));
-            //setLeafColorRate(getMetricValuePerMax(metric, classMetrics));
+            setLeafColorRate(getMetricValuePerMax(metric));
         }
     }
     
     private void setLeafAppearance() {
         Sphere leaf = new Sphere((float)leafSize);
-        Color3f leafColor = new Color3f(0.0f, (float)Math.random(), 0.0f);
         
         leafGeometry = leaf.getShape(Sphere.BODY).getGeometry();
         Image image = AbstractShape.getAWTImage("leaf");
@@ -157,12 +157,7 @@ public class Leaves {
         leafAppearance.setTexCoordGeneration(texgen);
         leafAppearance.setMaterial(material);
         
-        TransparencyAttributes attr = new TransparencyAttributes(TransparencyAttributes.SCREEN_DOOR, 0.1f);
-        attr.setTransparency(0.01f);
-        leafAppearance.setTransparencyAttributes(attr);
-        
         PolygonAttributes poly = new PolygonAttributes(PolygonAttributes.POLYGON_FILL, PolygonAttributes.CULL_NONE, 1.0f);
         leafAppearance.setPolygonAttributes(poly);
     }
-    
 }

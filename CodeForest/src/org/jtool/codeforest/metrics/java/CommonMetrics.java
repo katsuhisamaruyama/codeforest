@@ -60,7 +60,7 @@ public class CommonMetrics {
      * @param sort the sort of the metric
      * @param value the metric value
      */
-    protected void putMetricValue(String sort, double value) {
+    public void putMetricValue(String sort, double value) {
         metrics.put(sort, new Double(value));
     }
     
@@ -79,7 +79,7 @@ public class CommonMetrics {
      * @param upper the upper line number of code fragment for this element
      * @param bottom the bottom line number of code fragment for this element
      */
-    protected void setCodeProperties(int start, int len, int upper, int bottom) {
+    public void setCodeProperties(int start, int len, int upper, int bottom) {
     }
     
     /**

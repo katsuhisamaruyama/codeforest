@@ -9,14 +9,15 @@ import org.jtool.eclipse.model.java.JavaClass;
 import org.jtool.eclipse.model.java.JavaField;
 import org.jtool.eclipse.model.java.JavaMethod;
 import org.jtool.codeforest.metrics.java.ClassMetrics;
-import org.jtool.codeforest.metrics.java.CommonMetrics;
 import org.jtool.codeforest.metrics.java.FieldMetrics;
 import org.jtool.codeforest.metrics.java.MethodMetrics;
 import org.jtool.codeforest.metrics.java.PackageMetrics;
 import org.jtool.codeforest.metrics.java.ProjectMetrics;
-import org.eclipse.swt.widgets.Table;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.SWT;
@@ -36,7 +37,7 @@ public class PropertyView {
     
     private Font font11;
     
-    private Table table;
+    private TableViewer tableViewer;
     
     private List<PropertyData> propertyList = new ArrayList<PropertyData>();
     
@@ -51,7 +52,8 @@ public class PropertyView {
     
     public void dispose() {
         font11.dispose();
-        table.dispose();
+        
+        tableViewer = null;
         
         propertyList.clear();
     }
@@ -61,36 +63,56 @@ public class PropertyView {
         
         parent.setLayout(new FillLayout());
         
-        table = new Table(parent, SWT.BORDER | SWT.SINGLE);
-        table.setLinesVisible(true);
-        table.setHeaderVisible(true);
-        table.setFont(font11);
+        tableViewer = new TableViewer(parent, SWT.BORDER | SWT.SINGLE);
+        tableViewer.setContentProvider(new ArrayContentProvider());
+        tableViewer.setLabelProvider(new PropertyLabelProvider());
         
-        TableColumn nameColumn = new TableColumn(table, SWT.LEFT);
+        tableViewer.getTable().setLinesVisible(true);
+        tableViewer.getTable().setHeaderVisible(true);
+        tableViewer.getTable().setFont(font11);
+        
+        TableColumn nameColumn = new TableColumn(tableViewer.getTable(), SWT.LEFT);
         nameColumn.setText("Name");
         nameColumn.setWidth(250);
         nameColumn.setResizable(true);
         
-        TableColumn valueColumn = new TableColumn(table, SWT.RIGHT);
+        TableColumn valueColumn = new TableColumn(tableViewer.getTable(), SWT.RIGHT);
         valueColumn.setText("Value");
         valueColumn.setWidth(60);
         valueColumn.setResizable(true);
         
-        for (int i = 0; i < propertyList.size(); i++) {
-            PropertyData data = propertyList.get(i);
-            
-            TableItem item = new TableItem(table, SWT.NONE);
-            if (data.getImage() != null) {
-                item.setImage(data.getImage());
-                item.setText(0, data.getName());
-            } else {
-                item.setText(0, "        " + data.getName());
-            }
-            item.setText(1, data.getValue());
-            
-        }
+        tableViewer.setInput(propertyList);
         
         parent.pack();
+    }
+    
+    private class PropertyLabelProvider extends LabelProvider implements ITableLabelProvider {
+        
+        public String getColumnText(Object obj, int columnIndex) {
+            if (obj instanceof PropertyData) {
+                PropertyData data = (PropertyData)obj;
+                if (columnIndex == 0) {
+                    if (data.getImage() != null) {
+                        return data.getName();
+                    } else {
+                        return "      " + data.getName();
+                    }
+                } else if (columnIndex == 1) {
+                    return data.getValue();
+                }
+            }
+            return null;
+        }
+        
+        public Image getColumnImage(Object obj, int columnIndex) {
+            if (obj instanceof PropertyData) {
+                PropertyData data = (PropertyData)obj;
+                if (columnIndex == 0) {
+                    return data.getImage();
+                }
+            }
+            return null;
+        }
     }
     
     private void createPropertyData(ProjectMetrics mproject) {
@@ -261,19 +283,10 @@ public class PropertyView {
         }
     }
     
-    public void setMetrics(CommonMetrics metrics) {
-        if (!(metrics instanceof ClassMetrics)) {
-            return;
-        }
-        
-        ClassMetrics mclass = (ClassMetrics)metrics;
-        changeSelection(mclass.getQualifiedName());
-    }
-    
-    private void changeSelection(String name) {
+    public void changeSelection(String className) {
         for (int i = 0; i < propertyList.size(); i++) {
             PropertyData data = propertyList.get(i);
-            if (data.isClass() && data.getName().compareTo(name) == 0) {
+            if (data.isClass() && data.getName().compareTo(className) == 0) {
                 changeSelection(i);
                 break;
             }
@@ -281,13 +294,13 @@ public class PropertyView {
     }
     
     private void changeSelection(final int index) {
-        if (table != null && !(table.isDisposed())) {
-            table.getDisplay().syncExec(new Runnable() {
+        if (tableViewer.getTable() != null && !(tableViewer.getTable().isDisposed())) {
+            tableViewer.getTable().getDisplay().syncExec(new Runnable() {
                 
                 public void run() {
                     try {
-                        table.select(index);
-                        table.setTopIndex(index);
+                        tableViewer.getTable().select(index);
+                        tableViewer.getTable().setTopIndex(index);
                     } catch (Exception e) { /* empty */ }
                 }
             });

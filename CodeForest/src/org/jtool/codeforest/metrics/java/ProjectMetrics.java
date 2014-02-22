@@ -7,11 +7,13 @@ package org.jtool.codeforest.metrics.java;
 import org.jtool.codeforest.Activator;
 import org.jtool.codeforest.metrics.MetricSort;
 import org.jtool.codeforest.metrics.UnsupportedMetricsException;
+import org.jtool.codeforest.util.Time;
 import org.jtool.eclipse.model.java.JavaPackage;
 import org.jtool.eclipse.model.java.JavaProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.ui.IWorkbenchWindow;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.ArrayList;
@@ -40,21 +42,28 @@ public class ProjectMetrics extends CommonMetrics {
     protected List<PackageMetrics> packageMetrics = new ArrayList<PackageMetrics>();
     
     /**
+     * The time when this project information was generated.
+     */
+    private long time;
+    
+    /**
      * Creates a new object storing project metrics.
      * @param name the name of the project
      * @param path the top directory of the project
+     *@param time the time when the project information was generated
      */
-    protected ProjectMetrics(String name, String path) {
+    public ProjectMetrics(String name, String path, long time) {
         super();
         
         jproject = JavaProject.create(name, path);
+        this.time = time;
     }
     
     /**
      * Creates a new object storing project metrics.
      * @param node an AST node for this project
      */
-    protected ProjectMetrics(JavaProject jproject) {
+    public ProjectMetrics(JavaProject jproject) {
         super();
         
         this.jproject = jproject;
@@ -64,6 +73,16 @@ public class ProjectMetrics extends CommonMetrics {
         collectMetricInfo();
         collectMetricInfoForTotal();
         collectMetricInfoForMax();
+        
+        time = Time.getCurrentTime();
+    }
+    
+    /**
+     * Returns the time when this project information was generated.
+     * @return the time
+     */
+    public long getTime() {
+        return time;
     }
     
     /**
@@ -135,7 +154,7 @@ public class ProjectMetrics extends CommonMetrics {
      * Stores a package metrics object.
      * @param pm the package metrics
      */
-    protected void add(PackageMetrics pm) {
+    public void add(PackageMetrics pm) {
         if (!packageMetrics.contains(pm)) {
             packageMetrics.add(pm);
         }
@@ -145,7 +164,7 @@ public class ProjectMetrics extends CommonMetrics {
      * Obtains the collection of all class metrics for this project.
      * @return the collection of the class metrics
      */
-    protected List<ClassMetrics> getClassMetrics() {
+    public List<ClassMetrics> getClassMetrics() {
         List<ClassMetrics> classes = new ArrayList<ClassMetrics>();
         for (PackageMetrics pm : packageMetrics) {
             classes.addAll(pm.getClassMetrics());

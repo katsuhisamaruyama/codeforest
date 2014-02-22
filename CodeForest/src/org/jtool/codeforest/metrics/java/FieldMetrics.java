@@ -37,7 +37,7 @@ public class FieldMetrics extends CommonMetrics {
      * @param isEnumConstant <code>true> if the field is an enum constant, otherwise <code>false</code>
      * @param cm a metrics object for a class containing the field
      */
-    protected FieldMetrics(String name, String type, int modifiers, boolean isEnumConstant, ClassMetrics cm) {
+    public FieldMetrics(String name, String type, int modifiers, boolean isEnumConstant, ClassMetrics cm) {
         super();
         
         JavaClass jclass = cm.getJavaClass();
@@ -66,7 +66,7 @@ public class FieldMetrics extends CommonMetrics {
      * @param upper the upper line number of code fragment for this field
      * @param bottom the bottom line number of code fragment for this field
      */
-    protected void setCodeProperties(int start, int len, int upper, int bottom) {
+    public void setCodeProperties(int start, int len, int upper, int bottom) {
         jfield.setCodeProperties(start, len, upper, bottom);
     }
     

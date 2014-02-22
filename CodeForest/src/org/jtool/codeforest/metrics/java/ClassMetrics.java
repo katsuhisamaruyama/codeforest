@@ -69,7 +69,7 @@ public class ClassMetrics extends CommonMetrics {
      * @param path the path of the file containing the class
      * @param pm a metrics object for a package containing the class
      */
-    protected ClassMetrics(String name, String fqn, int modifiers, boolean isInterface, boolean isEnum, String path, PackageMetrics pm) {
+    public ClassMetrics(String name, String fqn, int modifiers, boolean isInterface, boolean isEnum, String path, PackageMetrics pm) {
         super();
         
         JavaProject jproject = pm.getJavaPackage().getJavaProject();
@@ -86,7 +86,7 @@ public class ClassMetrics extends CommonMetrics {
      * @param node an AST node for this class, interface, or enum
      * @param pm a metrics object for a package containing this class, interface, or enum
      */
-    protected ClassMetrics(JavaClass jclass, PackageMetrics pm) {
+    public ClassMetrics(JavaClass jclass, PackageMetrics pm) {
         super();
         
         this.jclass = jclass;
@@ -122,7 +122,7 @@ public class ClassMetrics extends CommonMetrics {
      * @param upper the upper line number of code fragment for this class
      * @param bottom the bottom line number of code fragment for this class
      */
-    protected void setCodeProperties(int start, int len, int upper, int bottom) {
+    public void setCodeProperties(int start, int len, int upper, int bottom) {
         jclass.setCodeProperties(start, len, upper, bottom);
     }
     
@@ -130,7 +130,7 @@ public class ClassMetrics extends CommonMetrics {
      * Sets the name of super class of this class.
      * @param name the name of the super class
      */
-    protected void setSuperClassName(String name) {
+    public void setSuperClassName(String name) {
         jclass.setSuperClassName(name);
     }
     
@@ -138,7 +138,7 @@ public class ClassMetrics extends CommonMetrics {
      * Returns the name of super class of this class.
      * @return the name of the super class
      */
-    protected String getSuperClassName() {
+    public String getSuperClassName() {
         return jclass.getSuperClassName();
     }
     
@@ -146,7 +146,7 @@ public class ClassMetrics extends CommonMetrics {
      * Adds the name of super interface of this class.
      * @param name the name of the super interface
      */
-    protected void addSuperInterfaceName(String name) {
+    public void addSuperInterfaceName(String name) {
         jclass.addSuperInterfaceName(name);
     }
     
@@ -154,7 +154,7 @@ public class ClassMetrics extends CommonMetrics {
      * Returns the names of super interfaces of this class.
      * @return the collection of the names of the super interfaces
      */
-    protected Set<String> getSuperInterfaceNames() {
+    public Set<String> getSuperInterfaceNames() {
         return jclass.getSuperInterfaceNames();
     }
     
@@ -214,7 +214,7 @@ public class ClassMetrics extends CommonMetrics {
      * Stores a method metrics object.
      * @param pm the method metrics
      */
-    protected void add(MethodMetrics mm) {
+    public void add(MethodMetrics mm) {
         if (!methodMetrics.contains(mm)) {
             methodMetrics.add(mm);
         }
@@ -232,7 +232,7 @@ public class ClassMetrics extends CommonMetrics {
      * Stores a field metrics object.
      * @param pm the field metrics
      */
-    protected void add(FieldMetrics fm) {
+    public void add(FieldMetrics fm) {
         if (!fieldMetrics.contains(fm)) {
             fieldMetrics.add(fm);
         }

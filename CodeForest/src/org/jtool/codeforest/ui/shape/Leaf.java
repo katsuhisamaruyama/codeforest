@@ -4,6 +4,7 @@
 
 package org.jtool.codeforest.ui.shape;
 
+import org.jtool.codeforest.metrics.java.MethodMetrics;
 import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
@@ -11,15 +12,19 @@ import javax.vecmath.Vector3f;
 
 /**
  * Represents a leaf of a tree on a tree view.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
-public class Leaf extends FractalShape {
+public class Leaf extends TransformGroup {
     
-    private static final double LEAF_SCALE = 0.7;
+    private static final double LEAF_SCALE = 0.75;
+    
+    private Leaves leaves;
     
     public Leaf(FractalTree tree, Leaves leaves, float moveY) {
-        super();
+        this.leaves = leaves;
+        
+        setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
         
         TransformGroup transform = new TransformGroup();
         createLeaf(transform, tree, leaves, moveY);
@@ -56,11 +61,14 @@ public class Leaf extends FractalShape {
         
         Transform3D moveTransform = new Transform3D();
         moveTransform.setTranslation(new Vector3f(0.0f, 1.0f - moveY * 3, 0.0f));
-        
         moveTransform.mul(scaleTransform);
         leafTransform.setTransform(moveTransform);
         
         leafTransform.addChild(leaf);
         transform.addChild(leafTransform);
+    }
+    
+    public MethodMetrics getMethodMetrics() {
+        return leaves.getMethodMetrics();
     }
 }

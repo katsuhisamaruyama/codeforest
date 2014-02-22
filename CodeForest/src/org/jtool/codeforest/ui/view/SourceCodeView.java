@@ -5,8 +5,7 @@
 package org.jtool.codeforest.ui.view;
 
 import org.jtool.eclipse.model.java.JavaClass;
-import org.jtool.codeforest.metrics.java.ClassMetrics;
-import org.jtool.codeforest.metrics.java.CommonMetrics;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -30,7 +29,7 @@ import org.eclipse.jdt.internal.ui.text.SimpleJavaSourceViewerConfiguration;
 @SuppressWarnings("restriction")
 public class SourceCodeView {
     
-    private Font font12;
+    private Font font11;
     
     private JavaSourceViewer sourceViewer;
     
@@ -43,7 +42,7 @@ public class SourceCodeView {
     }
     
     public void dispose() {
-        font12.dispose();
+        font11.dispose();
         
         sourceViewer = null;
         sourceViewerConf = null;
@@ -52,8 +51,6 @@ public class SourceCodeView {
     
     private void createPane(Composite parent) {
         parent.setLayout(new FillLayout());
-        
-        font12 = new Font(parent.getDisplay(), "Courier", 12, SWT.NONE);
         
         IDocument document = new Document();
         JavaTextTools tools = JavaPlugin.getDefault().getJavaTextTools();
@@ -69,21 +66,17 @@ public class SourceCodeView {
         sourceViewer.setDocument(document);
         
         StyledText styledText = sourceViewer.getTextWidget();
-        styledText.setFont(font12);
+        if (Platform.getOS().compareTo(Platform.OS_MACOSX) == 0) {
+            font11 = new Font(parent.getDisplay(), "Monaco", 11, SWT.NONE);
+        } else {
+            font11 = new Font(parent.getDisplay(), "Courier New", 11, SWT.NONE);
+        }
+        styledText.setFont(font11);
         
         parent.pack();
     }
     
-    public void setMetrics(CommonMetrics metrics) {
-        if (!(metrics instanceof ClassMetrics)) {
-            return;
-        }
-        
-        ClassMetrics mclass = (ClassMetrics)metrics;
-        setSourceCode(mclass.getJavaClass());
-    }
-    
-    private void setSourceCode(final JavaClass jclass) {
+    public void changeSelection(final JavaClass jclass) {
         if (sourceViewer == null) {
             return;
         }

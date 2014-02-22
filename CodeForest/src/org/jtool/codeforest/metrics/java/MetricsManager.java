@@ -4,11 +4,13 @@
 
 package org.jtool.codeforest.metrics.java;
 
+import org.jtool.codeforest.util.XMLWriter;
 import org.jtool.eclipse.model.java.JavaProject;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import org.w3c.dom.Document;
 import java.io.File;
 import java.io.IOException;
 
@@ -18,7 +20,8 @@ import java.io.IOException;
  */
 public class MetricsManager {
     
-    private static final String XmlFileName = "codeforest.xml";
+    private static final String XML_FILENAME = "codeforest";
+    private static final String XML_FILENAME_EXT = ".xml";
     
     public static final String TopElem = "codeForest";
     
@@ -36,6 +39,9 @@ public class MetricsManager {
     public static final String CodeElem = "code";
     
     public static final String MetricsElem = "metrics";
+    
+    public static final String DateAttr = "date";
+    public static final String TimeAttr = "time";
     
     public static final String NameAttr = "name";
     public static final String PathAttr = "path";
@@ -99,7 +105,7 @@ public class MetricsManager {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             try {
                 SAXParser parser = factory.newSAXParser();
-                XMLImporter handler = new XMLImporter(path);
+                ForestDataImporter handler = new ForestDataImporter(path);
                 parser.parse(file, handler);
                 return handler.getProjectMetrics();
                 
@@ -116,11 +122,10 @@ public class MetricsManager {
     
     /**
      * Exports metric values within a project.
-     * @param jproject the project whose metric values are collected
      * @param mproject the project metrics
      */
-    public void writeXML(JavaProject jproject, ProjectMetrics mproject) {
-        writeXML(jproject.getTopDir(), mproject);
+    public void writeXML(ProjectMetrics mproject) {
+        writeXML(mproject.getJavaProject().getTopDir(), mproject);
     }
     
     /**
@@ -129,14 +134,15 @@ public class MetricsManager {
      * @param mproject the project metrics
      */
     public void writeXML(String topdir, ProjectMetrics mproject) {
-        File file = new File(topdir + File.separator + XmlFileName);
+        String filename = XML_FILENAME + String.valueOf(mproject.getTime()) + XML_FILENAME_EXT;
+        File file = new File(topdir + File.separator + filename);
         
         if (file.exists()) {
             file.delete();
         }
         
-        XMLExporter exporter = new XMLExporter();
-        exporter.export(file, mproject);
+        Document doc = ForestDataExporter.getDocument(mproject);
+        XMLWriter.write(file, doc);
         System.out.println("- Export metric values to xml file: " + file.getAbsolutePath());
     }
 }

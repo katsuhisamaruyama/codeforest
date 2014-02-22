@@ -51,10 +51,11 @@ public class OpenAction extends AbstractHandler {
         part = HandlerUtil.getActivePart(event);
         window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
         
-        // String path = "/Users/maru/Desktop/eclipse-4.3.1-CodeForest/runtime-EclipseApplication/CodeForest";
-        // String path = "/Users/maru/Desktop/eclipse-4.3.1-CodeForest/runtime-EclipseApplication/org.jtool.eclipse";
-        // String path = "/Users/maru/Desktop/eclipse-4.3.1-CodeForest/runtime-EclipseApplication/sample";
-        String path = open();
+        // String path = "/Users/maru/Desktop/eclipse-4.3.1-CodeForest/runtime-EclipseApplication/CodeForest/codeforest.xml";
+        // String path = "/Users/maru/Desktop/eclipse-4.3.1-CodeForest/runtime-EclipseApplication/org.jtool.eclipse/codeforest.xml";
+        String path = "/Users/maru/Desktop/eclipse-4.3.1-CodeForest/runtime-EclipseApplication/sample/codeforest.xml";
+        // path.replace('/', File.separatorChar);
+        path = open();
         
         MetricsManager manager = new MetricsManager();
         ProjectMetrics mproject = manager.readXML(path);
@@ -65,7 +66,6 @@ public class OpenAction extends AbstractHandler {
         }
         
         CodeForestFrame frame = new CodeForestFrame(window.getShell(), mproject);
-        frame.createPane();
         frame.dispose();
         
         System.out.println("Code Forest fin.");

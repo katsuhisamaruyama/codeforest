@@ -12,11 +12,12 @@ import org.jtool.codeforest.metrics.java.ProjectMetrics;
 import org.jtool.codeforest.ui.layout.LayoutableNode;
 import org.jtool.codeforest.ui.shape.ForestTree;
 import org.jtool.codeforest.ui.shape.FractalTree;
+import org.jtool.codeforest.ui.view.SettingData;
+
 import javax.media.j3d.TransformGroup;
 
 /**
  * A visible item displaying on a forest.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
 public class ForestNode extends LayoutableNode {
@@ -25,12 +26,12 @@ public class ForestNode extends LayoutableNode {
     
     protected CommonMetrics commonMetrics;
     
-    protected ForestData forestData;
+    protected SettingData settingData;
     
-    public ForestNode(ForestNodeGroup parent, ForestData fdata) {
+    public ForestNode(ForestNodeGroup parent, SettingData data) {
         super();
         this.parent = parent;
-        this.forestData = fdata;
+        this.settingData = data;
     }
     
     public void changeParent(ForestNodeGroup parent) {
@@ -47,7 +48,7 @@ public class ForestNode extends LayoutableNode {
         }
         
         ClassMetrics mclass = (ClassMetrics)commonMetrics;
-        ForestTree tree = new ForestTree(getProjectMetrics(), mclass, forestData);
+        ForestTree tree = new ForestTree(mclass, settingData);
         tree.setUserData(this);
         
         tree.setLocation(getX(), 0, getZ());
@@ -62,7 +63,7 @@ public class ForestNode extends LayoutableNode {
         }
         
         ClassMetrics mclass = (ClassMetrics)commonMetrics;
-        FractalTree tree = new FractalTree(getProjectMetrics(), mclass, forestData);
+        FractalTree tree = new FractalTree(mclass, settingData);
         tree.setUserData(this);
         
         tree.setLocation(0, 0, 0);
@@ -74,9 +75,8 @@ public class ForestNode extends LayoutableNode {
     protected void setBaseSize() {
         String parameter = "";
         double baseSize = 1;
-        if(parameter != null){
-            if (parameter.equals(MetricSort.NUMBER_OF_FIELDS)
-                    || parameter.equals(MetricSort.NUMBER_OF_METHODS)){
+        if (parameter != null){
+            if (parameter.equals(MetricSort.NUMBER_OF_FIELDS) || parameter.equals(MetricSort.NUMBER_OF_METHODS)){
                 baseSize = baseSize + commonMetrics.getMetricValue(parameter);
                 baseSize = baseSize * baseSize;
             } else {
@@ -96,7 +96,7 @@ public class ForestNode extends LayoutableNode {
         return commonMetrics;
     }
     
-    public ProjectMetrics getProjectMetrics() {
+    public ProjectMetrics getProjectMetrics2() {
         if (commonMetrics instanceof ProjectMetrics) {
             return (ProjectMetrics)commonMetrics;
         } else if (commonMetrics instanceof PackageMetrics) {

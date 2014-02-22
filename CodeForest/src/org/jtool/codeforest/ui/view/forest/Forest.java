@@ -4,8 +4,10 @@
 
 package org.jtool.codeforest.ui.view.forest;
 
+import org.jtool.codeforest.ui.view.SettingData;
 import org.jtool.codeforest.metrics.MetricSort;
 import org.jtool.codeforest.metrics.java.ProjectMetrics;
+
 import javax.media.j3d.Background;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
@@ -14,12 +16,12 @@ import javax.media.j3d.TransformGroup;
 import javax.vecmath.Color3f;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Represents a forest displaying on the screen.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
 public class Forest extends ForestNodeGroup {
@@ -28,8 +30,8 @@ public class Forest extends ForestNodeGroup {
     
     private List<ForestNodePair> pairs = new ArrayList<ForestNodePair>();
     
-    protected Forest(ForestData fdata) {
-        super(null, fdata);
+    protected Forest(SettingData data) {
+        super(null, data);
     }
     
     protected boolean isHierarchy() {
@@ -37,9 +39,9 @@ public class Forest extends ForestNodeGroup {
     }
     
     void setLayoutPosition(ProjectMetrics mproject) {
-        layoutSize = Math.sqrt(getProjectMetrics().getMetricValue(MetricSort.NUMBER_OF_CLASSES));
-        if (layoutSize > 16.0) {
-            layoutSize = 16.0;
+        layoutSize = Math.sqrt(mproject.getMetricValue(MetricSort.NUMBER_OF_CLASSES));
+        if (layoutSize > 160.0) {
+            layoutSize = 160.0;
         }
         contentVisible = true;
         
@@ -50,13 +52,6 @@ public class Forest extends ForestNodeGroup {
     
     public void addRelationNode(ForestNodeGroup group1, ForestNodeGroup group2) {
         pairs.add(new ForestNodePair(0, group1, group2));
-    }
-    
-    private void createBackground(TransformGroup group) {
-        BoundingSphere bounds = new BoundingSphere(new Point3d(), 100.0);
-        Background background = new Background(new Color3f(0.95f, 0.95f, 0.95f));
-        background.setApplicationBounds(bounds);
-        group.addChild(background);
     }
     
     public void createSceneGraph(final BranchGroup forest) {
@@ -72,6 +67,12 @@ public class Forest extends ForestNodeGroup {
         transG.setTransform(trans3D);
         forest.addChild(transG);
         transG.addChild(createSceneGraph());
+    }
+    private void createBackground(TransformGroup group) {
+        BoundingSphere bounds = new BoundingSphere(new Point3d(), 100.0);
+        Background background = new Background(new Color3f(0.95f, 0.95f, 0.95f));
+        background.setApplicationBounds(bounds);
+        group.addChild(background);
     }
     
     public TransformGroup createSceneGraph() {

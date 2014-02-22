@@ -54,7 +54,7 @@ public class PackageMetrics extends CommonMetrics {
      * @param name the name of the package
      * @param pm a metrics object for a project containing the package
      */
-    protected PackageMetrics(String name, ProjectMetrics pm) {
+    public PackageMetrics(String name, ProjectMetrics pm) {
         super();
         
         jpackage = JavaPackage.create(name, pm.getJavaProject());
@@ -107,7 +107,7 @@ public class PackageMetrics extends CommonMetrics {
      * Stores a class metrics object.
      * @param pm the class metrics
      */
-    protected void add(ClassMetrics cm) {
+    public void add(ClassMetrics cm) {
         if (!classMetrics.contains(cm)) {
             classMetrics.add(cm);
         }

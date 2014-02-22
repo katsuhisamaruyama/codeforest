@@ -20,7 +20,7 @@
                id="org.jtool.codeforest.toolbars.new">
             <command
                   commandId="org.jtool.codeforest.commands.open"
-                  icon="icons/codeforest.png"
+                  icon="icons/tree1.gif"
                   id="org.jtool.codeforest.toolbars.open"
                   tooltip="Open a new CodeForest view">
             </command>
@@ -35,7 +35,7 @@
          </separator>
          <command
                commandId="org.jtool.codeforest.commands.new"
-               icon="icons/codeforest.png"
+               icon="icons/tree1.png"
                label="New CodeForest"
                style="push">
             <visibleWhen

@@ -2,10 +2,12 @@
  *  Copyright 2014, Katsuhisa Maruyama (maru@jtool.org)
  */
 
-package org.jtool.codeforest.ui.view;
+package org.jtool.codeforest.ui.view.forest;
 
 import org.jtool.codeforest.Activator;
 import org.jtool.codeforest.ui.CodeForestFrame;
+import org.jtool.codeforest.ui.view.ImageConverter;
+import org.jtool.codeforest.ui.view.MousePicker;
 import org.eclipse.swt.graphics.ImageData;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
@@ -105,7 +107,7 @@ public class CodeForestUniverse extends SimpleUniverse {
         return ambientLightNode;
     }
     
-    protected void picker(BranchGroup branch){
+    protected void picker(BranchGroup branch) {
         BoundingSphere bounds = new BoundingSphere(new Point3d(0,0,0), 100.0);
         MousePicker picker = new MousePicker(getCanvas(), branch, bounds, frame);
         

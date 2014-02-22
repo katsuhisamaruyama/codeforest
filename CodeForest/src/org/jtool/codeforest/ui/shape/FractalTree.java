@@ -4,11 +4,11 @@
 
 package org.jtool.codeforest.ui.shape;
 
-import org.jtool.codeforest.ui.view.forest.ForestData;
+import org.jtool.codeforest.ui.view.SettingData;
 import org.jtool.codeforest.metrics.IMetric;
 import org.jtool.codeforest.metrics.MetricSort;
+import org.jtool.codeforest.metrics.java.MethodMetrics;
 import org.jtool.codeforest.metrics.java.ClassMetrics;
-import org.jtool.codeforest.metrics.java.ProjectMetrics;
 import java.awt.Image;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Geometry;
@@ -19,17 +19,19 @@ import javax.media.j3d.TexCoordGeneration;
 import javax.media.j3d.Texture2D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
+import javax.media.j3d.LineArray;
+import javax.media.j3d.GeometryArray;
 import javax.vecmath.Color3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector4f;
+import javax.vecmath.Point3d;
 import com.sun.j3d.utils.geometry.Cylinder;
 
 /**
  * Represents a tree on a tree view.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
-public class FractalTree extends AbstractTree {
+public class FractalTree extends MetricsTree {
     
     private Geometry trunkGeometry;
     
@@ -45,8 +47,6 @@ public class FractalTree extends AbstractTree {
     
     Appearance branchAppearance;
     
-
-    
     Transform3D transform;
     
     Transform3D[] childTransform;
@@ -61,17 +61,21 @@ public class FractalTree extends AbstractTree {
     
     private final double BRANCH_LENGTH_SCALE = 0.775;
     
-    final double branchNumber;
+    private final double branchNumber;
     
-    final int branchLevelLimit;
+    private double curBranchNumber;
     
-    int currentBranchIndex;
+    private final int branchLevelLimit;
     
-    final ClassMetrics classMetrics;
+    private int curBranchIndex;
+    
+    private int prevBranchIndex;
     
     private double trunkHeight;
     
     private double trunkRadius;
+    
+    private double branchHeight;
     
     private final Color3f trunkColor = new Color3f(0.0f, 0.0f, 0.0f);
     
@@ -81,10 +85,11 @@ public class FractalTree extends AbstractTree {
     
     private final Color3f trunk_DEFAULT_COLOR;
     
-    public FractalTree(ProjectMetrics mproject, ClassMetrics mclass, ForestData fdata) {
-        super(mproject, mclass, fdata);
+    private SettingData settingData;
+    
+    public FractalTree(ClassMetrics mclass, SettingData data) {
+        super(mclass);
         
-        classMetrics = mclass;
         trunkHeight = trunk_DEFAULT_HEIGHT;
         trunkRadius = trunk_DEFAULT_RADIUS;
         
@@ -97,7 +102,12 @@ public class FractalTree extends AbstractTree {
         trunk_DEFAULT_COLOR = new Color3f(0.3f + c1 / 3, c2 / 2, 0.0f);
         trunkColor.set(trunk_DEFAULT_COLOR);
         
-        setMetricValues(forestData);
+        settingData = data;
+        setMetricValues(data);
+    }
+    
+    SettingData getSettingData() {
+        return settingData;
     }
     
     public void setTrunkHeight(double height) {
@@ -106,6 +116,8 @@ public class FractalTree extends AbstractTree {
         } else {
             trunkHeight = trunk_DEFAULT_HEIGHT;
         }
+        
+        branchHeight = trunkHeight * BRANCH_LENGTH_SCALE * 2;
     }
     
     public void setTrunkRadius(double radius) {
@@ -116,8 +128,31 @@ public class FractalTree extends AbstractTree {
         }
     }
     
-    public double getBranchLength() {
-        return BRANCH_LENGTH_SCALE * 2;
+    int getBranchLevelLimit() {
+        return branchLevelLimit;
+    }
+    
+    void incrementBranch() {
+        prevBranchIndex = curBranchIndex;
+        
+        double total = Math.pow(2.0, branchLevelLimit - 1);
+        curBranchNumber = curBranchNumber + branchNumber / total;
+        curBranchIndex = (int)Math.floor(curBranchNumber);
+    }
+    
+    boolean lessThanBranchMax() {
+        return curBranchIndex < branchNumber;
+    }
+    
+    boolean branchTobeCreated() {
+        return curBranchIndex > prevBranchIndex;
+    }
+    
+    MethodMetrics getMethodMetrics() {
+        if (curBranchIndex < branchNumber) {
+            return classMetrics.getMethodMetrics().get(curBranchIndex);
+        }
+        return null;
     }
     
     private int getBranchLevel(double bnum) {
@@ -149,23 +184,26 @@ public class FractalTree extends AbstractTree {
         }
     }
     
-    public void setMetricValues(ForestData forestData) {
-        IMetric metric = forestData.getTrunkHeight();
+    public void setMetricValues(SettingData data) {
+        IMetric metric;
+        
+        metric = data.getTrunkHeight();
         if (metric.isClassMetric()) {
             // System.out.println("TRUNK HEIGHT = " + metric.getName() + " : " + getMetricValuePerAverage(metric, classMetrics));
-            setTrunkHeight(adjust(getMetricValuePerAverage(metric, classMetrics) / 2));
+            setTrunkHeight(adjust(getMetricValuePerAverage(metric) / 2));
         }
         
-        metric = forestData.getTrunkRadius();
+        metric = data.getTrunkRadius();
         if (metric.isClassMetric()) {
             // System.out.println("TRUNK RADIUS = " + metric.getName() + " : " + getMetricValue(metric, classMetrics));
-            setTrunkRadius(adjust(getMetricValue(metric, classMetrics) / 2));
+            // setTrunkRadius(adjust(getMetricValue(metric, classMetrics) / 2));
+            setTrunkRadius(adjust(getMetricValuePerAverage(metric) / 3));
         }
         
-        metric = forestData.getTrunkColor();
+        metric = data.getTrunkColor();
         if (metric.isClassMetric()) {
             // System.out.println("TRUNK COLOR = " + metric.getName() + " : " + getMetricValuePerMax(metric, classMetrics));
-            setTrunkColorRate(getMetricValuePerMax(metric, classMetrics));
+            setTrunkColorRate(getMetricValuePerMax(metric));
         }
     }
     
@@ -185,16 +223,41 @@ public class FractalTree extends AbstractTree {
         form.setTranslation(new Vector3d(0.0d, -trunkHeight / 2, 0.0d));
         trunk.setTransform(form);
         
-        currentBranchIndex = 0;
+        prevBranchIndex = -1;
+        curBranchIndex = 0;
+        curBranchNumber = 0.000001;
         branch = new Branch(this, 1);
+        
         form = new Transform3D();
-        form.setTranslation(new Vector3d(0.0d, getBranchLength() / 2, 0.0d));
+        form.setTranslation(new Vector3d(0.0d, branchHeight / 2, 0.0d));
         branch.setTransform(form);
         
         TransformGroup group = new TransformGroup();
         group.addChild(trunk);
         group.addChild(branch);
+        
+        group.addChild(createAxes());
+        
         addChild(group);
+    }
+    
+    private Shape3D createAxes() {
+        Point3d[] vertex = new Point3d[4];
+        vertex[0] = new Point3d(-1.0d, 0.0d, 0.0d);
+        vertex[1] = new Point3d(1.0d, 0.0d, 0.0d);
+        vertex[2] = new Point3d(0.0d, -1.5d, 0.0d);
+        vertex[3] = new Point3d(0.0d, 1.5d, 0.0d);
+        
+        LineArray line = new LineArray(vertex.length, GeometryArray.COORDINATES | GeometryArray.COLOR_3);
+        line.setCoordinates(0, vertex);
+        
+        Color3f black = new Color3f(0.0f, 0.0f, 0.0f);
+        line.setColor(0, black);
+        line.setColor(1, black);
+        line.setColor(2, black);
+        line.setColor(3, black);
+        
+        return new Shape3D(line);
     }
     
     protected void setAppearance() {
@@ -240,7 +303,7 @@ public class FractalTree extends AbstractTree {
         rz2.rotZ(-ANGLE_Z);
         Transform3D slide = new Transform3D();
         
-        slide.setTranslation(new Vector3d(0.0, getBranchLength() / 2, 0.0));
+        slide.setTranslation(new Vector3d(0.0, branchHeight / 2, 0.0));
         childTransform = new Transform3D[2];
         childTransform[0] = new Transform3D();
         childTransform[1] = new Transform3D();
@@ -257,7 +320,7 @@ public class FractalTree extends AbstractTree {
         childTransform[1].mul(factor);
         childTransform[1].mul(slide);
         
-        Cylinder branch = new Cylinder((float)trunkRadius, (float)getBranchLength());
+        Cylinder branch = new Cylinder((float)trunkRadius, (float)branchHeight);
         branchGeometry = branch.getShape(Cylinder.BODY).getGeometry();
         Image image = AbstractShape.getAWTImage("wood");
         branchTexture = AbstractShape.createTexture(image);
@@ -281,38 +344,4 @@ public class FractalTree extends AbstractTree {
         PolygonAttributes poly = new PolygonAttributes(PolygonAttributes.POLYGON_FILL, PolygonAttributes.CULL_NONE, 1.0f);
         branchAppearance.setPolygonAttributes(poly);
     }
-    
-    /*
-    protected void setLeafAppearance() {
-        Sphere leaf = new Sphere((float)leafSize);
-        Color3f leafColor = new Color3f(0.0f, (float)Math.random(), 0.0f);
-        
-        leafGeometry = leaf.getShape(Sphere.BODY).getGeometry();
-        Image image = getAWTImage("leaf");
-        leafTexture = createTexture(image);
-        
-        Material material = new Material();
-        material.setSpecularColor(leafColor);
-        material.setShininess(1.0f);
-        material.setCapability(Material.ALLOW_COMPONENT_READ);
-        material.setCapability(Material.ALLOW_COMPONENT_WRITE);
-        
-        leafAppearance = new Appearance();
-        leafAppearance.setTexture(leafTexture);
-        TexCoordGeneration texgen = new TexCoordGeneration(TexCoordGeneration.EYE_LINEAR, 
-                TexCoordGeneration.TEXTURE_COORDINATE_2,
-                new Vector4f(1.0f, 0.0f, 0.0f, 0.0f),
-                new Vector4f(0.0f, 1.0f, 0.0f, 0.0f),
-                new Vector4f(0.0f, 0.0f, 1.0f, 0.0f));
-        leafAppearance.setTexCoordGeneration(texgen);
-        leafAppearance.setMaterial(material);
-        
-        TransparencyAttributes attr = new TransparencyAttributes(TransparencyAttributes.SCREEN_DOOR, 0.1f);
-        attr.setTransparency(0.01f);
-        leafAppearance.setTransparencyAttributes(attr);
-        
-        PolygonAttributes poly = new PolygonAttributes(PolygonAttributes.POLYGON_FILL, PolygonAttributes.CULL_NONE, 1.0f);
-        leafAppearance.setPolygonAttributes(poly);
-    }
-    */
 }

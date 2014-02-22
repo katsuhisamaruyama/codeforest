@@ -4,12 +4,12 @@
 
 package org.jtool.codeforest.ui.shape;
 
+import org.jtool.codeforest.metrics.java.MethodMetrics;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 
 /**
  * Represents a branch of a tree on a tree view.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
 public class Branch extends FractalShape {
@@ -32,32 +32,53 @@ public class Branch extends FractalShape {
         group.addChild(shape);
         addChild(group);
         
-        if (generation < tree.branchLevelLimit) {
-            Transform3D child1Transform = new Transform3D();
-            child1Transform.mul(branchTransform);
+        if (generation < tree.getBranchLevelLimit() - 1) {
+            branch(tree, tree.childTransform[0], branchTransform, generation);
+            branch(tree, tree.childTransform[1], branchTransform, generation);
             
-            Transform3D child2Transform =  new Transform3D();
-            child2Transform.mul(branchTransform);
+        } else if (generation == tree.getBranchLevelLimit() - 1) {
             
-            FractalShape child1 = new Branch(tree, generation + 1);
-            child1Transform.mul(tree.childTransform[0]);
+            if (tree.lessThanBranchMax()) {
+                
+                if (tree.branchTobeCreated()) {
+                    MethodMetrics mmethod = tree.getMethodMetrics();
+                    
+                    branch(tree, tree.childTransform[0], branchTransform, generation);
+                    
+                    Leaves leaves = new Leaves(tree, mmethod);
+                    leaves.draw(tree, this, branchTransform);
+                    
+                }
+                
+                tree.incrementBranch();
+            }
             
-            FractalShape child2 = new Branch(tree, generation + 1);
-            child2Transform.mul(tree.childTransform[1]);
-            
-            child1.setTransform(child1Transform);
-            addChild(child1);
-            
-            child2.setTransform(child2Transform);
-            addChild(child2);
-            
-        } else if (generation == tree.branchLevelLimit) {
-            
-            Leaves leaves = new Leaves(tree);
-            leaves.draw(tree, this, branchTransform);
-            
+            if (tree.lessThanBranchMax()) {
+                
+                if (tree.branchTobeCreated()) {
+                    MethodMetrics mmethod = tree.getMethodMetrics();
+                    
+                    branch(tree, tree.childTransform[1], branchTransform, generation);
+                    
+                    Leaves leaves = new Leaves(tree, mmethod);
+                    leaves.draw(tree, this, branchTransform);
+                }
+                
+                tree.incrementBranch();
+            }
         } else {
             return;
         }
+    }
+    
+    private void branch(FractalTree tree, Transform3D trans, Transform3D branchTransform, int generation) {
+        Transform3D child2Transform =  new Transform3D();
+        child2Transform.mul(branchTransform);
+        
+        FractalShape child2 = new Branch(tree, generation + 1);
+        child2Transform.mul(trans);
+        
+        child2.setTransform(child2Transform);
+        addChild(child2);
     }
 }

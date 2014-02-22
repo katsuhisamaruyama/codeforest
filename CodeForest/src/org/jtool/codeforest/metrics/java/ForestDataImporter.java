@@ -8,11 +8,13 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import java.io.File;
+
 /**
- * A class for storing metric values using a SAX2 event handler.
+ * A class importing metric values within a project from an XML file.
  * @author Katsuhisa Maruyama
  */
-public class XMLImporter extends DefaultHandler {
+public class ForestDataImporter extends DefaultHandler {
     
     /**
      * The path name of the project to be imported.
@@ -53,7 +55,7 @@ public class XMLImporter extends DefaultHandler {
      * Creates a new, empty object.
      * @path the path of the project to be imported
      */
-    public XMLImporter(String path) {
+    public ForestDataImporter(String path) {
         this.path = path;
     }
     
@@ -202,15 +204,21 @@ public class XMLImporter extends DefaultHandler {
      */
     private void setProjectAttributes(Attributes attrs) {
         String name = null;
+        long time = -1;
         
         for (int i = 0; i < attrs.getLength(); i++) {
             if (attrs.getQName(i).equals(MetricsManager.NameAttr)) {
                 name = attrs.getValue(i);
+            } else if (attrs.getQName(i).equals(MetricsManager.TimeAttr)) {
+                time = getLong(attrs.getValue(i));
             }
+            
         }
         
-        if (name != null) {
-            projectMetrics = new ProjectMetrics(name, path);
+        if (name != null && time > 0) {
+            int lindex = path.lastIndexOf(File.separatorChar);
+            String projectPath = path.substring(0, lindex);
+            projectMetrics = new ProjectMetrics(name, projectPath, time);
         }
     }
     
@@ -396,5 +404,14 @@ public class XMLImporter extends DefaultHandler {
      */
     private int getInteger(String value) {
         return Integer.parseInt(value);
+    }
+    
+    /**
+     * Converts an integer string into a long value.
+     * @param value the long string
+     * @return the long value
+     */
+    private long getLong(String value) {
+        return Long.parseLong(value);
     }
 }

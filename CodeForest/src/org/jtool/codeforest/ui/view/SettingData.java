@@ -22,9 +22,7 @@ public class SettingData {
     public static final String FOLIAGE_RADIUS = "Foliage radius";
     public static final String FOLIAGE_COLOR = "Foliage color";
     
-    public static final String BRANCH_LENGTH = "Branch length";
     public static final String LEAF_NUMBER = "Leaf number";
-    public static final String LEAF_SIZE = "Leaf size";
     public static final String LEAF_COLOR = "Leaf color";
     
     private IMetric trunkHeight = null;
@@ -34,9 +32,7 @@ public class SettingData {
     private IMetric foliageRadius = null;
     private IMetric foliageColor = null;
     
-    private IMetric branchLength = null;
     private IMetric leafNumber = null;
-    private IMetric leafSize = null;
     private IMetric leafColor = null;
     
     private boolean needsUpdateForestView = false;
@@ -44,6 +40,50 @@ public class SettingData {
     private boolean needsUpdateTreeView = false;
     
     public SettingData() {
+        setTrunkHeight(getHeightItems()[0]);
+        setTrunkRadius(getClassItems()[0]);
+        setTrunkColor(getClassItems()[0]);
+        setFoliageHeight(getHeightItems()[0]);
+        setFoliageRadius(getClassItems()[0]);
+        setFoliageColor(getClassItems()[0]);
+        
+        setLeafNumber(getMethodItems()[0]);
+        setLeafColor(getMethodItems()[0]);
+    }
+    
+    public SettingData(String th, String tr, String tc, String fh, String fr, String fc) {
+        setTrunkHeight(th);
+        setTrunkRadius(th);
+        setTrunkColor(tc);
+        setFoliageHeight(fh);
+        setFoliageRadius(fr);
+        setFoliageColor(tc);
+        
+        setLeafNumber(getMethodItems()[0]);
+        setLeafColor(getMethodItems()[0]);
+    }
+    
+    public SettingData(IMetric th, IMetric tr, IMetric tc, IMetric fh, IMetric fr, IMetric fc, IMetric ln, IMetric lc) {
+        setData(th, tr, tc, fh, fr, fc, ln, lc);
+    }
+    
+    public void setData(IMetric th, IMetric tr, IMetric tc, IMetric fh, IMetric fr, IMetric fc, IMetric ln, IMetric lc) {
+        trunkHeight = th;
+        trunkRadius = tr;
+        trunkColor = tc;
+        foliageHeight = fh;
+        foliageRadius = fr;
+        foliageColor = fc;
+        
+        leafNumber = ln;
+        leafColor = lc;
+        
+        needsUpdateForestView = true;
+        needsUpdateTreeView = false;
+    }
+    
+    public SettingData cloneSettingData() {
+        return new SettingData(trunkHeight, trunkRadius, trunkColor, foliageHeight, foliageRadius, foliageColor, leafNumber, leafColor);
     }
     
     public void setTrunkHeight(String name) {
@@ -100,28 +140,10 @@ public class SettingData {
         needsUpdateTreeView = false;
     }
     
-    public void setBranchLength(String name) {
-        needsUpdateTreeView = !isSame(branchLength, name);
-        if (needsUpdateTreeView) {
-            branchLength = getMetric(name);
-        }
-        
-        needsUpdateForestView = false;
-    }
-    
     public void setLeafNumber(String name) {
         needsUpdateTreeView = !isSame(leafNumber, name);
         if (needsUpdateTreeView) {
             leafNumber = getMetric(name);
-        }
-        
-        needsUpdateForestView = false;
-    }
-    
-    public void setLeafSize(String name) {
-        needsUpdateTreeView = !isSame(leafSize, name);
-        if (needsUpdateTreeView) {
-            leafSize = getMetric(name);
         }
         
         needsUpdateForestView = false;
@@ -160,16 +182,8 @@ public class SettingData {
         return foliageColor;
     }
     
-    public IMetric getBranchLength() {
-        return branchLength;
-    }
-    
     public IMetric getLeafNumber() {
         return leafNumber;
-    }
-    
-    public IMetric getLeafSize() {
-        return leafSize;
     }
     
     public IMetric getLeafColor() {
@@ -202,13 +216,10 @@ public class SettingData {
         return MetricSort.DEFAULT_METRIC;
     }
     
-    public String[] getHeightItems(boolean bool) {
+    public String[] getHeightItems() {
         IMetric[] metrics = MetricSort.ALL_SELECTABLE;
         List<String> items = new ArrayList<String>();
         
-        if (bool) {
-            items.add(MetricSort.DEFAULT_METRIC.getName());
-        }
         for (int i = 0; i < metrics.length; i++) {
             if (metrics[i].isHeightMetric()) {
                 items.add(metrics[i].getName());
@@ -218,13 +229,10 @@ public class SettingData {
         return (String[])items.toArray(new String[0]);
     }
     
-    public String[] getWidthItems(boolean bool) {
+    public String[] getWidthItems() {
         IMetric[] metrics = MetricSort.ALL_SELECTABLE;
         List<String> items = new ArrayList<String>();
         
-        if (bool) {
-            items.add(MetricSort.DEFAULT_METRIC.getName());
-        }
         for (int i = 0; i < metrics.length; i++) {
             if (metrics[i].isWidthMetric()) {
                 items.add(metrics[i].getName());
@@ -234,13 +242,9 @@ public class SettingData {
         return (String[])items.toArray(new String[0]);
     }
     
-    public String[] getClassItems(boolean bool) {
+    public String[] getClassItems() {
         List<String> items = new ArrayList<String>();
         IMetric[] metrics = MetricSort.ALL_SELECTABLE;
-        
-        if (bool) {
-            items.add(MetricSort.DEFAULT_METRIC.getName());
-        }
         
         for (int i = 0; i < metrics.length; i++) {
             if (metrics[i].isClassMetric()) {
@@ -251,13 +255,10 @@ public class SettingData {
         return (String[])items.toArray(new String[0]);
     }
     
-    public String[] getMethodItems(boolean bool) {
+    public String[] getMethodItems() {
         IMetric[] metrics = MetricSort.ALL_SELECTABLE;
         List<String> items = new ArrayList<String>();
         
-        if (bool) {
-            items.add(MetricSort.DEFAULT_METRIC.getName());
-        }
         for (int i = 0; i < metrics.length; i++) {
             if (metrics[i].isMethodMetric()) {
                 items.add(metrics[i].getName());
@@ -265,6 +266,46 @@ public class SettingData {
         }
         
         return (String[])items.toArray(new String[0]);
+    }
+    
+    public int getHeightItemIndex(String name) {
+        String[] items = getHeightItems();
+        for (int i = 0; i < items.length; i++) {
+            if (items[i].compareTo(name) == 0) {
+                return i;
+            }
+        }
+        return 0;
+    }
+    
+    public int getWidthItemIndex(String name) {
+        String[] items = getWidthItems();
+        for (int i = 0; i < items.length; i++) {
+            if (items[i].compareTo(name) == 0) {
+                return i;
+            }
+        }
+        return 0;
+    }
+    
+    public int getClassItemIndex(String name) {
+        String[] items = getClassItems();
+        for (int i = 0; i < items.length; i++) {
+            if (items[i].compareTo(name) == 0) {
+                return i;
+            }
+        }
+        return 0;
+    }
+    
+    public int getMethodItemIndex(String name) {
+        String[] items = getMethodItems();
+        for (int i = 0; i < items.length; i++) {
+            if (items[i].compareTo(name) == 0) {
+                return i;
+            }
+        }
+        return 0;
     }
     
     public void print() {
@@ -275,9 +316,7 @@ public class SettingData {
         System.out.println("Foliage radius     = " + foliageRadius.getName());
         System.out.println("Foliage color      = " + foliageColor.getName());
         
-        System.out.println("Branch length      = " + branchLength.getName());
         System.out.println("Leaf number        = " + leafNumber.getName());
-        System.out.println("Leaf size          = " + leafSize.getName());
         System.out.println("Leaf color         = " + leafColor.getName());
         
         System.out.println("Update forest view = " + needsUpdateForestView);

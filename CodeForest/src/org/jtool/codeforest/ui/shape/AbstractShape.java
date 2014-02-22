@@ -4,14 +4,17 @@
 
 package org.jtool.codeforest.ui.shape;
 
-import org.jtool.codeforest.ui.view.CodeForestUniverse;
+import org.jtool.codeforest.ui.view.forest.CodeForestUniverse;
+
 import javax.media.j3d.ImageComponent;
 import javax.media.j3d.ImageComponent2D;
 import javax.media.j3d.Texture2D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Vector3d;
+
 import com.sun.j3d.utils.image.TextureLoader;
+
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -19,7 +22,6 @@ import java.awt.image.PixelGrabber;
 
 /**
  * Represents an abstract object displaying on a forest view and a tree view.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
 public abstract class AbstractShape extends TransformGroup {
@@ -33,6 +35,8 @@ public abstract class AbstractShape extends TransformGroup {
     abstract protected void setAppearance();
     
     protected AbstractShape() {
+        setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+        setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
     }
     
     public void setLocation() {
@@ -75,6 +79,7 @@ public abstract class AbstractShape extends TransformGroup {
             PixelGrabber pg = new PixelGrabber(image, 0, 0, 128, 128, imagefield, 0, 128);
             try {
                 pg.grabPixels();
+                
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

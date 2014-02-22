@@ -9,11 +9,11 @@ import org.jtool.codeforest.ui.view.PropertyView;
 import org.jtool.codeforest.ui.view.SettingData;
 import org.jtool.codeforest.ui.view.SettingView;
 import org.jtool.codeforest.ui.view.SourceCodeView;
-import org.jtool.codeforest.ui.view.forest.Forest3DView;
-import org.jtool.codeforest.ui.view.forest.ForestData;
-import org.jtool.codeforest.ui.view.tree.TreeView;
-import org.jtool.codeforest.ui.view.history.HistoryView;
-import org.jtool.codeforest.ui.view.memo.MemoView;
+import org.jtool.codeforest.ui.view.control.InteractionView;
+import org.jtool.codeforest.ui.view.control.MemoView;
+import org.jtool.codeforest.ui.view.forest.ForestView;
+import org.jtool.codeforest.ui.view.forest.TreeView;
+import org.jtool.codeforest.util.Time;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -30,29 +30,30 @@ public class CodeForestFrame {
     
     private Shell baseShell;
     
-    private CodeForestTabFrame tabFrame;
+    private CodeForestTopTabFrame topTabFrame;
+    
+    private CodeForestBottomTabFrame bottomTabFrame;
     
     private ProjectMetrics projectMetrics;
     
-    private ForestData forestData;
-    
-    private Forest3DView forestView;
+    private ForestView forestView;
     
     private SettingView settingView;
     
-    private PropertyView propertyView;
-    
     private SourceCodeView sourceCodeView;
     
-    private SettingData settingData;
+    private CodeForestRepository codeForestRepository;
     
     public CodeForestFrame(Shell parent, ProjectMetrics mproject) {
         baseShell = new Shell(parent.getDisplay());
         baseShell.setLayout(new FormLayout());
         baseShell.setSize(1500, 1000);
         
+        baseShell.setText(mproject.getName() + " - " + Time.toString(mproject.getTime()));
+        
         projectMetrics = mproject;
-        settingData = new SettingData();
+        
+        createPane();
     }
     
     public CodeForestFrame(Shell parent) {
@@ -68,82 +69,116 @@ public class CodeForestFrame {
     }
     
     public SettingData getSettingData() {
-        return settingData;
+        return settingView.getSettingData();
     }
     
-    public ForestData getForestData() {
-        return forestData;
-    }
-    
-    public Forest3DView getForestView() {
+    public ForestView getForestView() {
         return forestView;
+    }
+    
+    public TreeView getTreeView() {
+        return topTabFrame.getTreeView();
+    }
+    
+    public MemoView getMemoView() {
+        return topTabFrame.getMemoView();
     }
     
     public SettingView getSettingView() {
         return settingView;
     }
     
-    public PropertyView getPropertyView() {
-        return propertyView;
-    }
-    
     public SourceCodeView getSourceCodeView() {
         return sourceCodeView;
     }
     
-    public TreeView getTreeView() {
-        return tabFrame.getTreeView();
+    public PropertyView getPropertyView() {
+        return bottomTabFrame.getPropertyView();
     }
     
-    public HistoryView getHistoryView() {
-        return tabFrame.getHistoryView();
+    public InteractionView getInteractionView() {
+        return bottomTabFrame.getInteractionView();
     }
     
-    public MemoView getMemoView() {
-        return tabFrame.getMemoView();
+    public void focusTreeView() {
+        topTabFrame.focusTreeView();
     }
     
-    public void createPane() {
-        final int MARGIN = 3;
-        final int TABFRAME_WIDTH = 330;
-        final int TABFRAME_HEIGHT = 430;
-        final int SETTINGVIEW_HEIGHT = 200;
-        final int SOURCEVIEW_HEIGHT = 200;
+    public void focusMemoView() {
+        topTabFrame.focusMemoView();
+    }
+    
+    public void focusPropertyView() {
+        bottomTabFrame.focusPropertyView();
+    }
+    
+    public void focusInteractionView() {
+        bottomTabFrame.focusInteractionView();
+    }
+    
+    private void createPane() {
+        createViews();
         
-        tabFrame = new CodeForestTabFrame(baseShell, this);
-        FormData tdata = new FormData();
-        tdata.right = new FormAttachment(100, -MARGIN);
-        tdata.top = new FormAttachment(0, MARGIN);
-        tdata.width = TABFRAME_WIDTH;
-        tdata.height = TABFRAME_HEIGHT;
-        tabFrame.getTabFolder().setLayoutData(tdata);
+        codeForestRepository = new CodeForestRepository(this);
+        codeForestRepository.readXML();
+        
+        getSettingView().recordInitialization();
+        getInteractionView().refreshInteractionList();
+        getMemoView().refreshMemoList();
+        
+        baseShell.open();
+        
+        waitUntilDispose();
+        
+        codeForestRepository.writeXML();
+        
+        forestView.dispose();
+        settingView.dispose();
+        sourceCodeView.dispose();
+        
+        topTabFrame.dispose();
+        bottomTabFrame.dispose();
+    }
+    
+    private void createViews() {
+        final int MARGIN = 2;
+        final int TREE_VIEW_WIDTH = 330;
+        final int TREE_VIEW_HEIGHT = 330;
+        final int SETTING_VIEW_HEIGHT = 170;
+        final int SOURCE_VIEW_HEIGHT = 200;
+        
+        topTabFrame = new CodeForestTopTabFrame(this);
+        FormData ttbdata = new FormData();
+        ttbdata.top = new FormAttachment(0, MARGIN);
+        ttbdata.right = new FormAttachment(100, -MARGIN);
+        ttbdata.width = TREE_VIEW_WIDTH;
+        ttbdata.height = TREE_VIEW_HEIGHT;
+        topTabFrame.getTabFolder().setLayoutData(ttbdata);
         
         Composite settingPanel = new Composite(baseShell, SWT.NONE);
-        FormData cdata = new FormData();
-        cdata.right = new FormAttachment(100, -MARGIN);
-        cdata.bottom = new FormAttachment(100, -MARGIN);
-        cdata.width = TABFRAME_WIDTH;
-        cdata.height = SETTINGVIEW_HEIGHT;
-        settingPanel.setLayoutData(cdata);
+        FormData stdata = new FormData();
+        stdata.top = new FormAttachment(topTabFrame.getTabFolder(), MARGIN, SWT.VERTICAL);
+        stdata.right = new FormAttachment(100, -MARGIN);
+        stdata.width = TREE_VIEW_WIDTH;
+        stdata.height = SETTING_VIEW_HEIGHT;
+        settingPanel.setLayoutData(stdata);
         
         settingView = new SettingView(settingPanel, this);
         
-        Composite propertyPanel = new Composite(baseShell, SWT.NONE);
-        FormData pdata = new FormData();
-        pdata.top = new FormAttachment(tabFrame.getTabFolder(), MARGIN, SWT.VERTICAL);
-        pdata.right = new FormAttachment(100, -MARGIN);
-        pdata.width = TABFRAME_WIDTH;
-        pdata.bottom = new FormAttachment(settingPanel, -MARGIN);
-        propertyPanel.setLayoutData(pdata);
-        
-        propertyView = new PropertyView(propertyPanel, projectMetrics);
+        bottomTabFrame = new CodeForestBottomTabFrame(this);
+        FormData btbdata = new FormData();
+        btbdata.top = new FormAttachment(settingPanel, MARGIN, SWT.VERTICAL);
+        btbdata.right = new FormAttachment(100, -MARGIN);
+        btbdata.width = TREE_VIEW_WIDTH;
+        btbdata.bottom = new FormAttachment(100, -MARGIN);
+        bottomTabFrame.getTabFolder().setLayoutData(btbdata);
         
         Composite sourceCodePanel = new Composite(baseShell, SWT.BORDER);
         FormData sdata = new FormData();
         sdata.left = new FormAttachment(0, MARGIN);
-        sdata.right = new FormAttachment(tabFrame.getTabFolder(), -MARGIN, SWT.HORIZONTAL);
+        sdata.right = new FormAttachment(topTabFrame.getTabFolder(), -MARGIN, SWT.HORIZONTAL);
         sdata.bottom = new FormAttachment(100, -MARGIN);
-        sdata.height = SOURCEVIEW_HEIGHT;
+        sdata.height = SOURCE_VIEW_HEIGHT;
         sourceCodePanel.setLayoutData(sdata);
         
         sourceCodeView = new SourceCodeView(sourceCodePanel);
@@ -153,41 +188,27 @@ public class CodeForestFrame {
         fdata.top = new FormAttachment(0, MARGIN);
         fdata.bottom = new FormAttachment(sourceCodePanel, -MARGIN);
         fdata.left = new FormAttachment(0, MARGIN);
-        fdata.right = new FormAttachment(tabFrame.getTabFolder(), -MARGIN, SWT.HORIZONTAL);
+        fdata.right = new FormAttachment(topTabFrame.getTabFolder(), -MARGIN, SWT.HORIZONTAL);
         
         forestPanel.setLayoutData(fdata);
         
-        forestView = new Forest3DView(forestPanel, this);
+        forestView = new ForestView(forestPanel, this);
         
-        forestData = new ForestData(settingData);
-        forestView.build(projectMetrics, forestData);
-        
-        baseShell.open();
-        
+        forestView.build(projectMetrics, settingView.getSettingData());
+        getTreeView().setSceneGraph(null);
+    }
+    
+    private void waitUntilDispose() {
         Display display = baseShell.getDisplay();
         while (!baseShell.isDisposed()) {
             if (!display.readAndDispatch()) {
                 display.sleep();
             }
         }
-        
-        forestPanel.dispose();
-        settingPanel.dispose();
-        propertyPanel.dispose();
-        sourceCodePanel.dispose();
-        
-        forestView.dispose();
-        settingView.dispose();
-        propertyView.dispose();
-        sourceCodeView.dispose();
-        
-        tabFrame.getTabFolder().dispose();
-        
-        projectMetrics = null;
-        forestData = null;
     }
     
     public void dispose() {
+        baseShell.dispose();
         baseShell = null;
     }
 }

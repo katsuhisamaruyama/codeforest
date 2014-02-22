@@ -65,6 +65,14 @@ public class NOMDFD extends Metric {
     }
     
     /**
+     * Test if this metric is related to the height of a visual object.
+     * @return always <code>true</code>
+     */
+    public boolean isHeightMetric() {
+        return true;
+    }
+    
+    /**
      * Test if this metric is related to the width of a visual object.
      * @return always <code>true</code>
      */

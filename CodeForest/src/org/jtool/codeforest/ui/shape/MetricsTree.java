@@ -4,7 +4,6 @@
 
 package org.jtool.codeforest.ui.shape;
 
-import org.jtool.codeforest.ui.view.forest.ForestData;
 import org.jtool.codeforest.metrics.IMetric;
 import org.jtool.codeforest.metrics.MetricSort;
 import org.jtool.codeforest.metrics.UnsupportedMetricsException;
@@ -12,38 +11,37 @@ import org.jtool.codeforest.metrics.java.ClassMetrics;
 import org.jtool.codeforest.metrics.java.ProjectMetrics;
 
 /**
- * Represents an abstract tree which concrete trees are intended to be inherited from.
- * @author Daiki Todoroki
+ * Represents a tree with metrics values.
  * @author Katsuhisa Maruyama
  */
-public abstract class AbstractTree extends AbstractShape {
-    
-    protected final ProjectMetrics projectMetrics;
+public abstract class MetricsTree extends AbstractShape {
     
     protected final ClassMetrics classMetrics;
     
-    protected final ForestData forestData;
-    
-    protected AbstractTree(ProjectMetrics mproject, ClassMetrics mclass, ForestData fdata) {
+    protected MetricsTree(ClassMetrics mclass) {
         super();
-        projectMetrics = mproject;
         classMetrics = mclass;
-        forestData = fdata;
     }
     
-    protected double getMetricValue(IMetric metric, ClassMetrics mclass) {
+    public ClassMetrics getClassMetrics() {
+        return classMetrics;
+    }
+    
+    protected double getMetricValue(IMetric metric) {
         try {
-            double value = metric.getValue(mclass);
+            double value = metric.getValue(classMetrics);
             if (value < 0) {
                 return -1;
             }
             
+            /*
             double cnum = projectMetrics.getMetricValue(MetricSort.NUMBER_OF_CLASSES);
             if (cnum > 1000) {
                 value = value / 50;
             } else{
                 value = value / 10;
             }
+            */
             
             return value;
             
@@ -54,15 +52,16 @@ public abstract class AbstractTree extends AbstractShape {
         return -1;
     }
     
-    protected double getMetricValuePerAverage(IMetric metric, ClassMetrics mclass) {
+    protected double getMetricValuePerAverage(IMetric metric) {
         try {
-            double value = metric.getValue(mclass);
+            double value = metric.getValue(classMetrics);
             if (value < 0) {
                 return -1;
             }
             
-            double cnum = projectMetrics.getMetricValue(MetricSort.NUMBER_OF_CLASSES);
-            double average = metric.getTotalValue(mclass) / cnum;
+            ProjectMetrics mproject = classMetrics.getPackageMetrics().getProjectMetrics();
+            double cnum = mproject.getMetricValue(MetricSort.NUMBER_OF_CLASSES);
+            double average = metric.getTotalValue(classMetrics) / cnum;
             if (average != 0) {
                 value = value / average / 1;
             } else {
@@ -78,14 +77,14 @@ public abstract class AbstractTree extends AbstractShape {
         return -1;
     }
     
-    protected double getMetricValuePerMax(IMetric metric, ClassMetrics mclass) {
+    protected double getMetricValuePerMax(IMetric metric) {
         try {
-            double value = metric.getValue(mclass);
+            double value = metric.getValue(classMetrics);
             if (value < 0) {
                 return -1;
             }
             
-            double max = metric.getMaximumValue(mclass);
+            double max = metric.getMaximumValue(classMetrics);
             if (max != 0) {
                 value = value / max;
             } else {

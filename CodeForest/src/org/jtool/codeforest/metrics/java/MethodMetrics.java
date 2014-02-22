@@ -39,7 +39,7 @@ public class MethodMetrics extends CommonMetrics {
      * @param isInitializer <code>true</code> if this method is a initializer, otherwise <code>false</code>
      * @param cm a metrics object for a class containing the method
      */
-    protected MethodMetrics(String name, String sig, String type, int modifiers, boolean isConstructor, boolean isInitializer, ClassMetrics cm) {
+    public MethodMetrics(String name, String sig, String type, int modifiers, boolean isConstructor, boolean isInitializer, ClassMetrics cm) {
         super();
         
         JavaClass jc = cm.getJavaClass();
@@ -67,7 +67,7 @@ public class MethodMetrics extends CommonMetrics {
      * @param upper the upper line number of code fragment for this method
      * @param bottom the bottom line number of code fragment for this method
      */
-    protected void setCodeProperties(int start, int len, int upper, int bottom) {
+    public void setCodeProperties(int start, int len, int upper, int bottom) {
         jmethod.setCodeProperties(start, len, upper, bottom);
     }
     

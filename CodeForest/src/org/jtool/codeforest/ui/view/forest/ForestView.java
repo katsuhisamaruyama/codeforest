@@ -6,11 +6,12 @@ package org.jtool.codeforest.ui.view.forest;
 
 import org.jtool.codeforest.metrics.java.ProjectMetrics;
 import org.jtool.codeforest.ui.CodeForestFrame;
-import org.jtool.codeforest.ui.view.CodeForestUniverse;
+import org.jtool.codeforest.ui.view.SettingData;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
@@ -19,13 +20,13 @@ import java.awt.GraphicsConfiguration;
  * Displays a forest on the screen.
  * @author Katsuhisa Maruyama
  */
-public class Forest3DView {
+public class ForestView {
     
     private ForestCanvas3D canvas;
     
     private ForestBuilder builder;
     
-    public Forest3DView(Composite parent, CodeForestFrame frame) {
+    public ForestView(Composite parent, CodeForestFrame frame) {
         createPane(parent, frame);
     }
     
@@ -45,14 +46,14 @@ public class Forest3DView {
         awtFrame.setVisible(true);
     }
     
-    public void build(ProjectMetrics projectMetrics, ForestData fdata) {
+    public void build(ProjectMetrics projectMetrics, SettingData data) {
         builder = new ForestBuilder();
         builder.setProjectMetrics(projectMetrics);
-        canvas.setForest(builder.build(fdata));
+        canvas.setForest(builder.build(data));
     }
     
-    public void update(ForestData fdata) {
-        canvas.setForest(builder.build(fdata));
+    public void update(SettingData data) {
+        canvas.setForest(builder.build(data));
     }
     
     public void repaint() {

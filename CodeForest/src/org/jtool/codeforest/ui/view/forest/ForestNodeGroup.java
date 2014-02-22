@@ -7,14 +7,16 @@ package org.jtool.codeforest.ui.view.forest;
 import org.jtool.codeforest.ui.layout.IMapModel;
 import org.jtool.codeforest.ui.layout.IMappable;
 import org.jtool.codeforest.ui.shape.Ground;
+import org.jtool.codeforest.ui.view.SettingData;
 import org.jtool.codeforest.metrics.java.PackageMetrics;
+
 import javax.media.j3d.TransformGroup;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Groups nodes constructing a forest.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
 public class ForestNodeGroup extends ForestNode implements IMapModel {
@@ -25,8 +27,8 @@ public class ForestNodeGroup extends ForestNode implements IMapModel {
     
     protected List<ForestNode> nodes;
     
-    public ForestNodeGroup(ForestNodeGroup parent, ForestData fdata) {
-        super(parent, fdata);
+    public ForestNodeGroup(ForestNodeGroup parent, SettingData data) {
+        super(parent, data);
         nodes = new ArrayList<ForestNode>();
     }
     

@@ -5,12 +5,10 @@
 package org.jtool.codeforest.ui.view.forest;
 
 import org.jtool.codeforest.ui.CodeForestFrame;
-
 import java.awt.GraphicsConfiguration;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.TransformGroup;
 import javax.media.j3d.Transform3D;
@@ -19,7 +17,6 @@ import javax.vecmath.Vector3f;
 
 /**
  * Represents a canvas for displaying a forest on a screen.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
  */
 public class ForestCanvas3D extends Canvas3D implements MouseListener, MouseMotionListener {
