@@ -17,7 +17,7 @@ public interface MetricSort {
     public static final String NUMBER_OF_CLASSES = "NOCL";
     public static final String NUMBER_OF_METHODS = "NOMD";
     public static final String NUMBER_OF_FIELDS = "NOFD";
-    public static final String NUMBER_OF_METHODS_AND_FIELDS = "NOMDFD";
+    public static final String NUMBER_OF_METHODS_AND_FIELDS = "NOMF";
     
     public static final String COUPLING_BETWEEN_OBJECTS = "CBO";
     public static final String DEPTH_OF_INHERITANCE_TREE = "DIT";
@@ -79,7 +79,7 @@ public interface MetricSort {
     public static final String MAX_NUMBER_OF_CLASSES = "MAX_NOCL";
     public static final String MAX_NUMBER_OF_METHODS = "MAX_NOMD";
     public static final String MAX_NUMBER_OF_FIELDS = "MAX_NOFD";
-    public static final String MAX_NUMBER_OF_METHODS_AND_FIELDS = "MAX_NOMDFD";
+    public static final String MAX_NUMBER_OF_METHODS_AND_FIELDS = "MAX_NOMF";
     
     public static final String MAX_COUPLING_BETWEEN_OBJECTS = "MAX_CBO";
     public static final String MAX_DEPTH_OF_INHERITANCE_TREE = "MAX_DIT";
@@ -103,7 +103,7 @@ public interface MetricSort {
     public static final String MAX_NUMBER_OF_EFFERENT_FIELDS = "MAX_NOEFD";
     
     public static final IMetric[] ALL_SELECTABLE = {
-        new LOC(), new NOST(), new NOMD(), new NOFD(), new NOMDFD(), new NOPM(), new NOACL(), new NOECL(),
+        new LOC(), new NOST(), new NOMD(), new NOFD(), new NOMF(), new NOPM(), new NOACL(), new NOECL(),
         new CBO(), new DIT(), new NOC(), new RFC(), new WMC(), new LCOM(),
         new NOPT(), new CC(), new MNON()
     };

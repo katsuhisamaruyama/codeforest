@@ -11,7 +11,7 @@ import org.jtool.codeforest.metrics.java.ProjectMetrics;
  * Measures the numbers of methods within respective Java elements.
  * @author Katsuhisa Maruyama
  */
-public class NOMDFD extends Metric {
+public class NOMF extends Metric {
     
     public static final String Name = "NOMD+NOFD";
     
@@ -20,7 +20,7 @@ public class NOMDFD extends Metric {
     /**
      * Creates an object returning a metric measurement.
      */
-    public NOMDFD() {
+    public NOMF() {
         super(Name, Description);
     }
     
