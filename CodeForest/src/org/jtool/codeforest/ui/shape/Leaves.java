@@ -22,27 +22,57 @@ import com.sun.j3d.utils.geometry.Sphere;
 /**
  * Represents leaves of a tree on a tree view.
  * @author Katsuhisa Maruyama
+ * @author Daiki Todoroki
  */
 public class Leaves extends MetricsLeaf {
     
     Geometry leafGeometry;
     
+    /**
+     * The texture of a leaf on the tree.
+     */
     Texture2D leafTexture;
     
+    /**
+     * The appearance of a leaf on the tree.
+     */
     Appearance leafAppearance;
     
+    /**
+     * The size of a leaf on the tree.
+     */
     double leafSize;
     
+    /**
+     * The number of leaves on the tree.
+     */
     double leafNumber;
     
+    /**
+     * The color of a leaf on the tree.
+     */
     final Color3f leafColor = new Color3f(0.0f, 0.0f, 0.0f);
     
+    /**
+     * The default size of a leaf on the tree.
+     */
     private final double leaf_DEFAULT_SIZE = 1.5d;
     
+    /**
+     * The default number of leaves on the tree.
+     */
     private final double leaf_DEFAULT_NUMBER = 10;
     
+    /**
+     * The default color of a leaf on the tree.
+     */
     private final Color3f leaf_DEFAULT_COLOR;
     
+    /**
+     * Creates leaves on a tree
+     * @param tree the tree having the leaves
+     * @param mmethod the method represented by the tree
+     */
     public Leaves(FractalTree tree, MethodMetrics mmethod) {
         super(mmethod);
         
@@ -59,9 +89,15 @@ public class Leaves extends MetricsLeaf {
         
         setMetricValues(tree.getSettingData());
         
-        setLeafAppearance();
+        setAppearance();
     }
     
+    /**
+     * Draws leaves.
+     * @param tree the tree having the leaves
+     * @param branch the branch the leaves attach
+     * @param branchTransform the transformation of a visual object
+     */
     void draw(FractalTree tree, Branch branch, Transform3D branchTransform) {
         for (int i = 0; i < leafNumber; i++) {
             float moveY = ((float)i / (float)leafNumber);
@@ -86,6 +122,10 @@ public class Leaves extends MetricsLeaf {
         }
     }
     
+    /**
+     * Sets the number of leaves.
+     * @param number the number of the leaves
+     */
     public void setLeafNumber(double number) {
         if (number >= 0) {
             leafNumber = number;
@@ -94,6 +134,10 @@ public class Leaves extends MetricsLeaf {
         }
     }
     
+    /**
+     * Set the number rate of leaves.
+     * @param percentage the percentage of the number rate
+     */
     public void setLeafNumberRate(double percentage) {
         if (percentage >= 0) {
             leafNumber = leaf_DEFAULT_NUMBER * 2 * percentage;
@@ -102,6 +146,12 @@ public class Leaves extends MetricsLeaf {
         }
     }
     
+    /**
+     * Sets the color of a left.
+     * @param r the red value of the leaf color
+     * @param g the green value of the leaf color
+     * @param b the blue value of the leaf color
+     */
     public void setLeafColor(float r, float g, float b) {
         if (r >= 0 && g >= 0 && b >= 0) {
             leafColor.set(r, g, b);
@@ -110,6 +160,10 @@ public class Leaves extends MetricsLeaf {
         }
     }
     
+    /**
+     * Sets the color rate of a leaf.
+     * @param percentage the percentage for the color
+     */
     public void setLeafColorRate(double percentage) {
         if (percentage >= 0) {
             leafColor.set(0.0f, (float)percentage, 0.0f);
@@ -118,6 +172,10 @@ public class Leaves extends MetricsLeaf {
         }
     }
     
+    /**
+     * Sets the metric values.
+     * @param data the setting data that forms a tree
+     */
     public void setMetricValues(SettingData data) {
         IMetric metric;
         
@@ -134,7 +192,10 @@ public class Leaves extends MetricsLeaf {
         }
     }
     
-    private void setLeafAppearance() {
+    /**
+     * Sets the appearance of a leaf.
+     */
+    private void setAppearance() {
         Sphere leaf = new Sphere((float)leafSize);
         
         leafGeometry = leaf.getShape(Sphere.BODY).getGeometry();

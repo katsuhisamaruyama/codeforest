@@ -13,13 +13,26 @@ import javax.vecmath.Vector3f;
 /**
  * Represents a leaf of a tree on a tree view.
  * @author Katsuhisa Maruyama
+ * @author Daiki Todoroki
  */
 public class Leaf extends TransformGroup {
     
+    /**
+     * The scale of the leaf size.
+     */
     private static final double LEAF_SCALE = 0.75;
     
+    /**
+     * Leaves containing this leaf.
+     */
     private Leaves leaves;
     
+    /**
+     * Creates a leaf.
+     * @param tree a tree having the leaf
+     * @param leaves leaves on the tree
+     * @param moveY the value of moving along y-axis
+     */
     public Leaf(FractalTree tree, Leaves leaves, float moveY) {
         this.leaves = leaves;
         
@@ -42,6 +55,13 @@ public class Leaf extends TransformGroup {
         addChild(group);
     }
     
+    /**
+     * Creates a leaf.
+     * @param transform the transformation for the leaf
+     * @param tree a tree having the leaf
+     * @param leaves leaves on the tree
+     * @param moveY the value of moving along y-axis
+     */
     private void createLeaf(TransformGroup transform, FractalTree tree, Leaves leaves, float moveY) {
         TransformGroup branchTransform = new TransformGroup();
         Shape3D branch = new Shape3D();
@@ -68,6 +88,10 @@ public class Leaf extends TransformGroup {
         transform.addChild(leafTransform);
     }
     
+    /**
+     * Obtains the metrics for a method.
+     * @return the method metrics
+     */
     public MethodMetrics getMethodMetrics() {
         return leaves.getMethodMetrics();
     }

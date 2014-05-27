@@ -30,63 +30,150 @@ import com.sun.j3d.utils.geometry.Cylinder;
 /**
  * Represents a tree on a tree view.
  * @author Katsuhisa Maruyama
+ * @author Daiki Todoroki
  */
 public class FractalTree extends MetricsTree {
     
+    /**
+     * The geometry of the trunk of this tree.
+     */
     private Geometry trunkGeometry;
     
+    /**
+     * The texture of the trunk of this tree.
+     */
     private Texture2D trunkTexture;
     
+    /**
+     * The appearance of the trunk of this tree.
+     */
     private Appearance trunkAppearance;
     
+    /**
+     * The geometry of the branch of this tree.
+     */
     Geometry branchGeometry;
     
+    /**
+     * The geometry of the cone part of the branch of this tree.
+     */
     Geometry branchConeGeometry;
     
+    /**
+     * The texture of the branch of this tree.
+     */
     Texture2D branchTexture;
     
+    /**
+     * The appearance of the branch of this tree.
+     */
     Appearance branchAppearance;
     
+    /**
+     * The transformation for this tree.
+     */
     Transform3D transform;
     
+    /**
+     * The transformation for trunks of this tree.
+     */
     Transform3D[] childTransform;
     
+    /**
+     * The transformation group for trunks of this tree.
+     */
     private TransformGroup trunk;
     
+    /**
+     * The transformation group for branches of this tree.
+     */
     private TransformGroup branch;
     
+    /**
+     * The angle of y-axis for the trunk of this tree.
+     */
     private final double ANGLE_Y = Math.PI / 5;
     
+    /**
+     * The angle of z-axis for the trunk of this tree.
+     */
     private final double ANGLE_Z = Math.PI / 4;
     
+    /**
+     * The scale of length of the brunch of this tree.
+     */
     private final double BRANCH_LENGTH_SCALE = 0.775;
     
+    /**
+     * The number of the branches of this tree.
+     */
     private final double branchNumber;
     
+    /**
+     * The number of the branches which have been currently created.
+     */
     private double curBranchNumber;
     
+    /**
+     * The limit of the level of the branches of this tree.
+     */
     private final int branchLevelLimit;
     
+    /**
+     * The index of a branch currently created.
+     */
     private int curBranchIndex;
     
+    /**
+     * The index of a branch previously created. 
+     */
     private int prevBranchIndex;
     
+    /**
+     * The height of the trunk of this tree.
+     */
     private double trunkHeight;
     
+    /**
+     * The radius of the trunk of this tree.
+     */
     private double trunkRadius;
     
+    /**
+     * The height of the branch of this tree.
+     */
     private double branchHeight;
     
+    /**
+     * The color of the trunk of this tree.
+     */
     private final Color3f trunkColor = new Color3f(0.0f, 0.0f, 0.0f);
     
+    /**
+     * The default height of the trunk of this tree.
+     */
     private final double trunk_DEFAULT_HEIGHT = 1.0;
     
+    /**
+     * The default radius of the trunk of this tree.
+     */
     private final double trunk_DEFAULT_RADIUS = 1.0;
     
+    /**
+     * The default color of the trunk of this tree.
+     */
     private final Color3f trunk_DEFAULT_COLOR;
     
+    /**
+     * The setting data that forms this tree.
+     */
     private SettingData settingData;
     
+    /**
+     * Creates a tree in a tree view.
+     * @param mclass a class represented by the tree
+     * @param data the setting data that forms the tree
+     */
     public FractalTree(ClassMetrics mclass, SettingData data) {
         super(mclass);
         
@@ -106,10 +193,18 @@ public class FractalTree extends MetricsTree {
         setMetricValues(data);
     }
     
+    /**
+     * Returns the setting data that forms this tree.
+     * @return the setting data for this tree
+     */
     SettingData getSettingData() {
         return settingData;
     }
     
+    /**
+     * Set the height of the trunk of this tree.
+     * @param height the height of the tree trunk
+     */
     public void setTrunkHeight(double height) {
         if (height >= 0) {
             trunkHeight = height;
@@ -120,6 +215,10 @@ public class FractalTree extends MetricsTree {
         branchHeight = trunkHeight * BRANCH_LENGTH_SCALE * 2;
     }
     
+    /**
+     * Sets the radius of the trunk of this tree.
+     * @param radius the radius value of the tree trunk
+     */
     public void setTrunkRadius(double radius) {
         if (radius >= 0) {
             trunkRadius = radius;
@@ -128,10 +227,17 @@ public class FractalTree extends MetricsTree {
         }
     }
     
+    /**
+     * Returns the limited number of branches of this tree.
+     * @return the limited number of the branches
+     */
     int getBranchLevelLimit() {
         return branchLevelLimit;
     }
     
+    /**
+     * Increments the number of branches of this tree.
+     */
     void incrementBranch() {
         prevBranchIndex = curBranchIndex;
         
@@ -140,14 +246,26 @@ public class FractalTree extends MetricsTree {
         curBranchIndex = (int)Math.floor(curBranchNumber);
     }
     
+    /**
+     * Checks if the number of branches is less than the predefined maximum number.
+     * @return <code>true</code> the the number of branches is less than the maximum number, otherwise <code>false</code>
+     */
     boolean lessThanBranchMax() {
         return curBranchIndex < branchNumber;
     }
     
-    boolean branchTobeCreated() {
+    /**
+     * Checks if a branch will be created or not.
+     * @return <code>true</code> the branch will be created, otherwise <code>false</code>
+     */
+    boolean branchToBeCreated() {
         return curBranchIndex > prevBranchIndex;
     }
     
+    /**
+     * Obtains the metrics for a method represented by this tree.
+     * @return the method metrics
+     */
     MethodMetrics getMethodMetrics() {
         if (curBranchIndex < branchNumber) {
             return classMetrics.getMethodMetrics().get(curBranchIndex);
@@ -155,6 +273,11 @@ public class FractalTree extends MetricsTree {
         return null;
     }
     
+    /**
+     * Calculates the branch level needed for representing this tree and returns the branch level.
+     * @param bnum the number of the branch of this tree
+     * @return the the branch level
+     */
     private int getBranchLevel(double bnum) {
         if (bnum == 0){
             return 0;
@@ -168,6 +291,12 @@ public class FractalTree extends MetricsTree {
         return level;
     }
     
+    /**
+     * Sets the color of the trunk of this tree.
+     * @param r the red value of the trunk color
+     * @param g the green value of the trunk color
+     * @param b the blue value of the trunk color
+     */
     public void setTrunkColor(float r, float g, float b) {
         if (r >= 0 && g >= 0 && b >= 0) {
             trunkColor.set(r, g, b);
@@ -176,6 +305,10 @@ public class FractalTree extends MetricsTree {
         }
     }
     
+    /**
+     * Sets the color rate of the trunk of this tree.
+     * @param percentage the percentage of the trunk color
+     */
     public void setTrunkColorRate(double percentage) {
         if (percentage >= 0) {
             trunkColor.set(0.3f + (float)percentage, (float)percentage, 0.0f);
@@ -184,6 +317,10 @@ public class FractalTree extends MetricsTree {
         }
     }
     
+    /**
+     * Sets the metrics value for this tree.
+     * @param data the setting data that forms this tree
+     */
     public void setMetricValues(SettingData data) {
         IMetric metric;
         
@@ -207,10 +344,11 @@ public class FractalTree extends MetricsTree {
         }
     }
     
+    /**
+     * Creates the scene graph for this tree.
+     */
     public void createSceneGraph() {
         setAppearance();
-        
-        setBranchAppearance();
         
         trunk = new TransformGroup();
         Shape3D trunkShape = new Shape3D();
@@ -241,6 +379,10 @@ public class FractalTree extends MetricsTree {
         addChild(group);
     }
     
+    /**
+     * Creates the axes for this tree.
+     * @return the created axes
+     */
     private Shape3D createAxes() {
         Point3d[] vertex = new Point3d[4];
         vertex[0] = new Point3d(-1.0d, 0.0d, 0.0d);
@@ -260,7 +402,18 @@ public class FractalTree extends MetricsTree {
         return new Shape3D(line);
     }
     
+    /**
+     * Sets the appearance of this tree.
+     */
     protected void setAppearance() {
+        setTrunkAppearance();
+        setBranchAppearance();
+    }
+    
+    /**
+     * Sets the appearance of a trunk of this tree.
+     */
+    protected void setTrunkAppearance() {
         transform = new Transform3D();
         
         Cylinder cylinder = new Cylinder((float)trunkRadius, (float)trunkHeight);
@@ -291,6 +444,9 @@ public class FractalTree extends MetricsTree {
         trunkAppearance.setPolygonAttributes(poly);
     }
     
+    /**
+     * Sets the appearance of a branch of this tree.
+     */
     protected void setBranchAppearance() {
         Transform3D factor = new Transform3D();
         factor.setScale(BRANCH_LENGTH_SCALE);

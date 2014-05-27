@@ -16,17 +16,33 @@ import org.jtool.codeforest.metrics.java.ProjectMetrics;
  */
 public abstract class MetricsTree extends AbstractShape {
     
+    /**
+     * The metrics of a class represented by this tree.
+     */
     protected final ClassMetrics classMetrics;
     
+    /**
+     * Creates a tree with metric values.
+     * @param mclass the metrics of a class represented by this tree
+     */
     protected MetricsTree(ClassMetrics mclass) {
         super();
         classMetrics = mclass;
     }
     
+    /**
+     * Returns the metrics of a class represented by this tree.
+     * @return the class metrics
+     */
     public ClassMetrics getClassMetrics() {
         return classMetrics;
     }
     
+    /**
+     * Obtains the value of a specified metric.
+     * @param metric the metric whose value will be obtained
+     * @return the metric value
+     */
     protected double getMetricValue(IMetric metric) {
         try {
             double value = metric.getValue(classMetrics);
@@ -52,6 +68,11 @@ public abstract class MetricsTree extends AbstractShape {
         return -1;
     }
     
+    /**
+     * Obtains the value of a specified metric.
+     * @param metric the metric whose value will be obtained
+     * @return the metric value per the average of all the values
+     */
     protected double getMetricValuePerAverage(IMetric metric) {
         try {
             double value = metric.getValue(classMetrics);
@@ -77,6 +98,11 @@ public abstract class MetricsTree extends AbstractShape {
         return -1;
     }
     
+    /**
+     * Obtains the value of a specified metric.
+     * @param metric the metric whose value will be obtained
+     * @return the metric value per the maximum of all the values
+     */
     protected double getMetricValuePerMax(IMetric metric) {
         try {
             double value = metric.getValue(classMetrics);
@@ -100,6 +126,11 @@ public abstract class MetricsTree extends AbstractShape {
         return -1;
     }
     
+    /**
+     * Adjusts the metric value.
+     * @param value the real value
+     * @return the value after adjustment
+     */
     protected double adjust(double value) {
         if (value < 0.1) {
             value = 0.1;

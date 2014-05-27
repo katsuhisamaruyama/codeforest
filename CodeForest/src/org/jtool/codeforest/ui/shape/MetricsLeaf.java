@@ -7,7 +7,6 @@ package org.jtool.codeforest.ui.shape;
 import org.jtool.codeforest.metrics.IMetric;
 import org.jtool.codeforest.metrics.MetricSort;
 import org.jtool.codeforest.metrics.UnsupportedMetricsException;
-import org.jtool.codeforest.metrics.java.ClassMetrics;
 import org.jtool.codeforest.metrics.java.MethodMetrics;
 
 /**
@@ -16,16 +15,32 @@ import org.jtool.codeforest.metrics.java.MethodMetrics;
  */
 public abstract class MetricsLeaf {
     
+    /**
+     * The metrics of a method represented by this leaf.
+     */
     protected final MethodMetrics methodMetrics;
     
+    /**
+     * Creates a leaf with metric values.
+     * @param mclass the metrics of a method represented by this leaf
+     */
     protected MetricsLeaf(MethodMetrics mmethod) {
         methodMetrics = mmethod;
     }
     
+    /**
+     * Returns the metrics of a method represented by this leaf.
+     * @return the method metrics
+     */
     public MethodMetrics getMethodMetrics() {
         return methodMetrics;
     }
     
+    /**
+     * Obtains the value of a specified metric.
+     * @param metric the metric whose value will be obtained
+     * @return the metric value
+     */
     protected double getMetricValue(IMetric metric) {
         try {
             double value = metric.getValue(methodMetrics);
@@ -42,6 +57,11 @@ public abstract class MetricsLeaf {
         return -1;
     }
     
+    /**
+     * Obtains the value of a specified metric.
+     * @param metric the metric whose value will be obtained
+     * @return the metric value per the average of all the values
+     */
     protected double getMetricValuePerAverage(IMetric metric) {
         try {
             double value = metric.getValue(methodMetrics);
@@ -66,6 +86,11 @@ public abstract class MetricsLeaf {
         return -1;
     }
     
+    /**
+     * Obtains the value of a specified metric.
+     * @param metric the metric whose value will be obtained
+     * @return the metric value per the maximum of all the values
+     */
     protected double getMetricValuePerMax(IMetric metric) {
         try {
             double value = metric.getValue(methodMetrics);
@@ -89,6 +114,11 @@ public abstract class MetricsLeaf {
         return -1;
     }
     
+    /**
+     * Adjusts the metric value.
+     * @param value the real value
+     * @return the value after adjustment
+     */
     protected double adjust(double value) {
         if (value < 0.1) {
             value = 0.1;

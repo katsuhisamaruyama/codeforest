@@ -26,47 +26,110 @@ import com.sun.j3d.utils.geometry.Cylinder;
 /**
  * Represents a tree on a forest view.
  * @author Katsuhisa Maruyama
+ * @author Daiki Todoroki
  */
 public class ForestTree extends MetricsTree {
     
+    /**
+     * The geometry of the trunk of this tree.
+     */
     private static Geometry trunkGeometry;
     
+    /**
+     * The texture of the trunk of this tree.
+     */
     private static Texture2D trunkTexture;
     
+    /**
+     * The geometry of the foliage of this tree.
+     */
     private static Geometry foliageGeometry;
     
+    /**
+     * The geometry of the foliage of this tree.
+     */
     private static Texture2D foliageTexture;
     
+    /**
+     * The appearance of the trunk of this tree.
+     */
     private Appearance trunkAppearance;
     
+    /**
+     * The appearance of the foliage of this tree.
+     */
     private Appearance foliageAppearance;
     
+    /**
+     * The height of the trunk of this tree.
+     */
     private double trunkHeight; // between 0.01 and 10.0
     
+    /**
+     * The radius of the trunk of this tree.
+     */
     private double trunkRadius; // between 1 and 100
     
+    /**
+     * The color of the trunk of this tree.
+     */
     private final Color3f trunkColor = new Color3f(0.0f, 0.0f, 0.0f);
     
+    /**
+     * The height rate of the foliage of this tree.
+     */
     private double foliageHeightRate;  // foliageHeight = trunkHeight * foliageHeightRate
     
+    /**
+     * The radius rate of the foliage of this tree.
+     */
     private double foliageRadiusRate;  // foliageRadius = trunkRadius * (1 + foliageRadiusRate)
     
+    /**
+     * The color of the foliage of this tree.
+     */
     private final Color3f foliageColor = new Color3f(0.0f, 0.0f, 0.0f);
     
+    /**
+     * The default height of the trunk of this tree.
+     */
     private final double trunk_DEFAULT_HEIGHT = 1.0;
     
+    /**
+     * The default radius of the trunk of this tree.
+     */
     private final double trunk_DEFAULT_RADIUS = 1.0;
     
+    /**
+     * The default color of the trunk of this tree.
+     */
     private final Color3f trunk_DEFAULT_COLOR;
     
+    /**
+     * The default color of the foliage of this tree.
+     */
     private final Color3f foliage_DEFAULT_COLOR;
     
+    /**
+     * The default height of the foliage of this tree.
+     */
     private final double foliage_HEIGHT_DEFAULT_RATE = 0.5;
     
+    /**
+     * The default radius of the foliage of this tree.
+     */
     private final double foliage_RADIUS_DEFAULT_RATE = 0.5;
     
+    /**
+     * The color of a selected tree.
+     */
     private static final Color3f SETECTED_COLOR = new Color3f(0.5f, 0.0f, 0.5f);
     
+    /**
+     * Creates a tree in a forest view.
+     * @param mclass a class represented by the tree
+     * @param data the setting data that forms the tree
+     */
     public ForestTree(ClassMetrics mclass, SettingData data) {
         super(mclass);
         
@@ -102,6 +165,9 @@ public class ForestTree extends MetricsTree {
         setMetricValues(data);
     }
     
+    /**
+     * Sets the capability of this tree.
+     */
     private void setCapability() {
         setCapability(ENABLE_PICK_REPORTING);
         setCapability(ALLOW_TRANSFORM_READ);
@@ -109,6 +175,10 @@ public class ForestTree extends MetricsTree {
         setCapability(ALLOW_PICKABLE_READ);
     }
     
+    /**
+     * Sets the height of the trunk of this tree.
+     * @param height the height of the trunk
+     */
     public void setTrunkHeight(double height) {
         if (height >= 0) {
             trunkHeight = height;
@@ -117,6 +187,10 @@ public class ForestTree extends MetricsTree {
         }
     }
     
+    /**
+     * Sets the radius of the trunk of this tree
+     * @param radius the radius of the trunk
+     */
     public void setTrunkRadius(double radius) {
         if (radius >= 0) {
             trunkRadius = radius;
@@ -125,6 +199,12 @@ public class ForestTree extends MetricsTree {
         }
     }
     
+    /**
+     * Sets the color of the trunk of this tree.
+     * @param r the red value of the color of the trunk
+     * @param g the green value of the color of the trunk
+     * @param b the blue value of the color of the trunk
+     */
     public void setTrunkColor(float r, float g, float b) {
         if (r >= 0 && g >= 0 && b >= 0) {
             trunkColor.set(r, g, b);
@@ -133,6 +213,10 @@ public class ForestTree extends MetricsTree {
         }
     }
     
+    /**
+     * Sets the color rate of the trunk of this tree.
+     * @param percentage the percentage of the color of the trunk
+     */
     public void setTrunkColorRate(double percentage) {
         if (percentage >= 0) {
             trunkColor.set(0.3f + (float)percentage, (float)percentage, 0.0f);
@@ -141,6 +225,10 @@ public class ForestTree extends MetricsTree {
         }
     }
     
+    /**
+     * Sets the height of the foliage of this tree.
+     * @param height the height of the foliage
+     */
     public void setFoliageHeight(double height) {
         if (height >= 0) {
             foliageHeightRate = height / trunkHeight;
@@ -149,6 +237,10 @@ public class ForestTree extends MetricsTree {
         }
     }
     
+    /**
+     * Sets the height rate of the trunk of this tree
+     * @param radius the height rate of the trunk
+     */
     public void setFoliageHeightRate(double percentage) {
         if (percentage >= 0) {
             foliageHeightRate = percentage;
@@ -157,6 +249,10 @@ public class ForestTree extends MetricsTree {
         }
     }
     
+    /**
+     * Sets the radius of the foliage of this tree
+     * @param radius the radius of the foliage
+     */
     public void setFoliageRadius(double radius) {
         if (radius >= 0) {
             foliageRadiusRate = (radius / trunkRadius) - 1;
@@ -165,6 +261,10 @@ public class ForestTree extends MetricsTree {
         }
     }
     
+    /**
+     * Sets the radius rate of the foliage of this tree
+     * @param radius the radius rate of the foliage
+     */
     public void setFoliageRadiusRate(double percentage) {
         if (percentage >= 0) {
             foliageRadiusRate = percentage;
@@ -173,6 +273,12 @@ public class ForestTree extends MetricsTree {
         }
     }
     
+    /**
+     * Sets the color of the foliage of this tree.
+     * @param r the red value of the color of the foliage
+     * @param g the green value of the color of the foliage
+     * @param b the blue value of the color of the foliage
+     */
     public void setFoliageColor(float r, float g, float b) {
         if (r >= 0 && g >= 0 && b >= 0) {
             foliageColor.set(r, g, b);
@@ -181,6 +287,10 @@ public class ForestTree extends MetricsTree {
         }
     }
     
+    /**
+     * Sets the color rate of the foliage of this tree.
+     * @param percentage the percentage of the color of the foliage
+     */
     public void setFoliageColorRate(double percentage) {
         if (percentage >= 0) {
             foliageColor.set(0.0f, (float)percentage, 0.0f);
@@ -189,6 +299,10 @@ public class ForestTree extends MetricsTree {
         }
     }
     
+    /**
+     * Sets the metrics value for this tree.
+     * @param data the setting data that forms this tree
+     */
     public void setMetricValues(SettingData data) {
         IMetric metric;
         
@@ -229,6 +343,9 @@ public class ForestTree extends MetricsTree {
         }
     }
     
+    /**
+     * Creates the scene graph for this tree.
+     */
     public void createSceneGraph() {
         setAppearance();
         
@@ -241,6 +358,10 @@ public class ForestTree extends MetricsTree {
         group.addChild(createFoliage());
     }
     
+    /**
+     * Creates a trunk of this tree.
+     * @return the transformation for the trunk
+     */
     private TransformGroup createTrunk() {
         TransformGroup group = new TransformGroup();
         
@@ -257,6 +378,10 @@ public class ForestTree extends MetricsTree {
         return group;
     }
     
+    /**
+     * Creates a foliage of this tree.
+     * @return the transformation for the foliage
+     */
     private TransformGroup createFoliage() {
         TransformGroup group = new TransformGroup();
         
@@ -276,6 +401,9 @@ public class ForestTree extends MetricsTree {
         return group;
     }
     
+    /**
+     * Sets the appearance of this tree.
+     */
     protected void setAppearance() {
         setTrunkAppearance();
         setFoliageAppearance();
@@ -286,6 +414,9 @@ public class ForestTree extends MetricsTree {
         foliageAppearance.setTransparencyAttributes(attr);
     }
     
+    /**
+     * Sets the appearance of a trunk of this tree.
+     */
     private void setTrunkAppearance() {
         trunkAppearance = new Appearance();
         trunkAppearance.setTexture(trunkTexture);
@@ -306,6 +437,9 @@ public class ForestTree extends MetricsTree {
         trunkAppearance.setPolygonAttributes(poly);
     }
     
+    /**
+     * Sets the appearance of a foliage of this tree.
+     */
     protected void setFoliageAppearance() {
         foliageAppearance = new Appearance();
         foliageAppearance.setTexture(foliageTexture);
@@ -327,6 +461,10 @@ public class ForestTree extends MetricsTree {
         foliageAppearance.setPolygonAttributes(poly);
     }
     
+    /**
+     * Selects a tree.
+     * @param isSelected <code>true</code> this tree is selected , otherwise <code>false<c/ode>
+     */
     public void changedSelected(boolean isSelected) {
         if (isSelected) {
             Material material = foliageAppearance.getMaterial();

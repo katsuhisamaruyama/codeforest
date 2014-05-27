@@ -4,7 +4,6 @@
 
 package org.jtool.codeforest.ui.shape;
 
-import java.awt.Image;
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Material;
 import javax.media.j3d.TexCoordGeneration;
@@ -16,25 +15,51 @@ import javax.vecmath.Color3f;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector4f;
 import com.sun.j3d.utils.geometry.Box;
+import java.awt.Image;
 
 /**
  * Represents a ground on a forest view.
  * @author Katsuhisa Maruyama
+ * @author Daiki Todoroki
  */
 public class Ground extends AbstractShape {
     
+    /**
+     * The texture of this ground.
+     */
     private static Texture2D groundTexture;
     
+    /**
+     * The appearance of this ground.
+     */
     private Appearance appearance;
     
+    /**
+     * A flag indicating that a river is visible or not.
+     */
     private boolean hasRiver = false;
     
+    /**
+     * The width of this ground.
+     */
     private double width;
     
+    /**
+     * The depth of this ground.
+     */
     private double depth;
     
+    /**
+     * The height of this ground.
+     */
     private double height;
     
+    /**
+     * Creates a ground.
+     * @param width the width of the ground
+     * @param depth the depth of the ground
+     * @param height the height of the ground
+     */
     public Ground(double width, double depth, double height) {
         this.width = width;
         this.depth = depth;
@@ -46,10 +71,17 @@ public class Ground extends AbstractShape {
         }
     }
     
+    /**
+     * Sets a flag indicating that a river is visible or not.
+     * @param bool <code>true</code> if the river will be visible, otherwise <code>false<c/ode>
+     */
     public void setRiver(boolean bool) {
         hasRiver = bool;
     }
     
+    /**
+     * Sets the appearance of this ground.
+     */
     protected void setAppearance() {
         appearance = new Appearance();
         appearance.setTexture(groundTexture);
@@ -73,6 +105,9 @@ public class Ground extends AbstractShape {
         appearance.setMaterial(groundMt);
     }
     
+    /**
+     * Creates the scene graph for this ground.
+     */
     public void createSceneGraph() {
         setAppearance();
         

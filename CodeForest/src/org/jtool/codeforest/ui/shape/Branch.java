@@ -11,9 +11,15 @@ import javax.media.j3d.TransformGroup;
 /**
  * Represents a branch of a tree on a tree view.
  * @author Katsuhisa Maruyama
+ * @author Daiki Todoroki
  */
 public class Branch extends FractalShape {
     
+    /**
+     * Creates a branch of a tree
+     * @param tree the tree having the branch
+     * @param generation the generation of the branch
+     */
     public Branch(FractalTree tree, int generation) {
         super();
         
@@ -40,7 +46,7 @@ public class Branch extends FractalShape {
             
             if (tree.lessThanBranchMax()) {
                 
-                if (tree.branchTobeCreated()) {
+                if (tree.branchToBeCreated()) {
                     MethodMetrics mmethod = tree.getMethodMetrics();
                     
                     branch(tree, tree.childTransform[0], branchTransform, generation);
@@ -55,7 +61,7 @@ public class Branch extends FractalShape {
             
             if (tree.lessThanBranchMax()) {
                 
-                if (tree.branchTobeCreated()) {
+                if (tree.branchToBeCreated()) {
                     MethodMetrics mmethod = tree.getMethodMetrics();
                     
                     branch(tree, tree.childTransform[1], branchTransform, generation);
@@ -71,6 +77,13 @@ public class Branch extends FractalShape {
         }
     }
     
+    /**
+     * Creates a branch of a tree.
+     * @param tree the tree having the branch
+     * @param trans the transformation for the next branch
+     * @param branchTransform the transformation for the branch
+     * @param generation the generation of the branch
+     */
     private void branch(FractalTree tree, Transform3D trans, Transform3D branchTransform, int generation) {
         Transform3D child2Transform =  new Transform3D();
         child2Transform.mul(branchTransform);

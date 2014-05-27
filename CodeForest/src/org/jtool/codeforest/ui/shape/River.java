@@ -4,8 +4,6 @@
 
 package org.jtool.codeforest.ui.shape;
 
-import java.awt.Image;
-
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Geometry;
 import javax.media.j3d.GeometryArray;
@@ -17,21 +15,40 @@ import javax.media.j3d.Texture2D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.Point3d;
 import javax.vecmath.TexCoord2f;
+import java.awt.Image;
 
 /**
  * Represents a river on a forest view.
  * @author Katsuhisa Maruyama
+ * @author Daiki Todoroki
  */
 public class River extends AbstractShape {
     
+    /**
+     * The texture of this river.
+     */
     private static Texture2D riverTexture;
     
+    /**
+     * The appearance of this river.
+     */
     private Appearance appearance;
     
+    /**
+     * The width of this river.
+     */
     private double width;
     
+    /**
+     * The depth of this river.
+     */
     private double depth;
     
+    /**
+     * Creates a river.
+     * @param width the width of the river
+     * @param depth the depth of the river
+     */
     public River(double width, double depth) {
         this.width = width;
         this.depth = depth;
@@ -42,15 +59,22 @@ public class River extends AbstractShape {
         }
     }
     
+    /**
+     * Creates the scene graph for this river.
+     */
     public void createSceneGraph() {
         setAppearance();
         
         TransformGroup trans = new TransformGroup();
-        createAxis(trans);
+        setAxis(trans);
         addChild(trans);
     }
     
-    private void createAxis(TransformGroup trans) {
+    /**
+     * Sets axis for drawing a river.
+     * @param trans the transformation group for this river
+     */
+    private void setAxis(TransformGroup trans) {
         Point3d[] vertex = new Point3d[8];
         double height = 0.01;
         
@@ -79,6 +103,9 @@ public class River extends AbstractShape {
         trans.addChild(shape);
     }
     
+    /**
+     * Sets the appearance of a river.
+     */
     protected void setAppearance() {
         appearance = new Appearance();
         appearance.setTexture(riverTexture);
