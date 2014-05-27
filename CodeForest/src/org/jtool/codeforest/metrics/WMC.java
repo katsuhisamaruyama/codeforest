@@ -15,7 +15,7 @@ public class WMC extends Metric {
     
     public static final String Name = "WMC";
     
-    private static final String Description = "Weighted methods per class (WMC)";
+    private static final String Description = "Weighted methods per class";
     
     /**
      * Creates an object returning a metric measurement.

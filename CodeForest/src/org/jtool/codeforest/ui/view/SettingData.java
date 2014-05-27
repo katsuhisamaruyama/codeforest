@@ -40,10 +40,10 @@ public class SettingData {
     private boolean needsUpdateTreeView = false;
     
     public SettingData() {
-        setTrunkHeight(getHeightItems()[0]);
+        setTrunkHeight(getClassItems()[0]);
         setTrunkRadius(getClassItems()[0]);
         setTrunkColor(getClassItems()[0]);
-        setFoliageHeight(getHeightItems()[0]);
+        setFoliageHeight(getClassItems()[0]);
         setFoliageRadius(getClassItems()[0]);
         setFoliageColor(getClassItems()[0]);
         

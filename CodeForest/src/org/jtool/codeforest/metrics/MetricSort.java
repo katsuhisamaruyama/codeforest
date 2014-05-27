@@ -103,7 +103,7 @@ public interface MetricSort {
     public static final String MAX_NUMBER_OF_EFFERENT_FIELDS = "MAX_NOEFD";
     
     public static final IMetric[] ALL_SELECTABLE = {
-        new LOC(), new NOST(), new NOMD(), new NOFD(), new NOMDFD(), new NOPM(),
+        new LOC(), new NOST(), new NOMD(), new NOFD(), new NOMDFD(), new NOPM(), new NOACL(), new NOECL(),
         new CBO(), new DIT(), new NOC(), new RFC(), new WMC(), new LCOM(),
         new NOPT(), new CC(), new MNON()
     };

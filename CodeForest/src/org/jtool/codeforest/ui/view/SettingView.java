@@ -301,11 +301,11 @@ public class SettingView {
     }
     
     private void update() {
-        theightSel.select(settingData.getHeightItemIndex(settingData.getTrunkHeight().getName()));
-        tradiusSel.select(settingData.getWidthItemIndex(settingData.getTrunkRadius().getName()));
+        theightSel.select(settingData.getClassItemIndex(settingData.getTrunkHeight().getName()));
+        tradiusSel.select(settingData.getClassItemIndex(settingData.getTrunkRadius().getName()));
         tcolorSel.select(settingData.getClassItemIndex(settingData.getTrunkColor().getName()));
-        fheightSel.select(settingData.getHeightItemIndex(settingData.getFoliageHeight().getName()));
-        fradiusSel.select(settingData.getWidthItemIndex(settingData.getFoliageRadius().getName()));
+        fheightSel.select(settingData.getClassItemIndex(settingData.getFoliageHeight().getName()));
+        fradiusSel.select(settingData.getClassItemIndex(settingData.getFoliageRadius().getName()));
         fcolorSel.select(settingData.getClassItemIndex(settingData.getFoliageColor().getName()));
     }
     

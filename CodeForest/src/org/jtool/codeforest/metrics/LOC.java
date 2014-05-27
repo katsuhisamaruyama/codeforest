@@ -16,7 +16,7 @@ public class LOC extends Metric {
     
     public static final String Name = "LOC";
     
-    private static final String Description = "Line of code";
+    private static final String Description = "Lines of code";
     
     /**
      * Creates an object returning a metric measurement.

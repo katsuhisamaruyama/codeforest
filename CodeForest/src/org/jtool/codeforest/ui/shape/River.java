@@ -52,16 +52,16 @@ public class River extends AbstractShape {
     
     private void createAxis(TransformGroup trans) {
         Point3d[] vertex = new Point3d[8];
-        double height = 0.0;
+        double height = 0.01;
         
-        vertex[0] = new Point3d(-width / 2, height, depth/2);
-        vertex[1] = new Point3d(-width / 2, height, -depth/2);
-        vertex[2] = new Point3d(-width / 2, height, -depth/2);
-        vertex[3] = new Point3d(width / 2, height, -depth/2);
-        vertex[4] = new Point3d(width/2, height, -depth/2);
-        vertex[5] = new Point3d(width/2, height, depth/2);
-        vertex[6] = new Point3d(width/2, height, depth/2);
-        vertex[7] = new Point3d(-width/2, height, depth/2);
+        vertex[0] = new Point3d(-width / 2, height, depth / 2);
+        vertex[1] = new Point3d(-width / 2, height, -depth / 2);
+        vertex[2] = new Point3d(-width / 2, height, -depth / 2);
+        vertex[3] = new Point3d(width / 2, height, -depth / 2);
+        vertex[4] = new Point3d(width / 2, height, -depth / 2);
+        vertex[5] = new Point3d(width / 2, height, depth / 2);
+        vertex[6] = new Point3d(width / 2, height, depth / 2);
+        vertex[7] = new Point3d(-width / 2, height, depth / 2);
         
         TexCoord2f[] txcoords = new TexCoord2f[4];
         txcoords[0] = new TexCoord2f((float)-width / 2, (float)depth / 2);
@@ -86,7 +86,7 @@ public class River extends AbstractShape {
         PolygonAttributes pa = new PolygonAttributes(PolygonAttributes.POLYGON_FILL, PolygonAttributes.CULL_NONE, 0.0f, false);
         appearance.setPolygonAttributes(pa);
         
-        LineAttributes lattr = new LineAttributes(10.0f, LineAttributes.PATTERN_SOLID, true);
+        LineAttributes lattr = new LineAttributes(8.0f, LineAttributes.PATTERN_SOLID, true);
         appearance.setLineAttributes(lattr);
     }
 }

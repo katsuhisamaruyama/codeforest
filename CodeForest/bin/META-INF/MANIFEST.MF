@@ -18,15 +18,15 @@ Eclipse-LazyStart: true
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .,
  bin/,
- lib/gogl-2.0.2-rc12/gluegen-rt-natives-macosx-universal.jar,
- lib/gogl-2.0.2-rc12/gluegen-rt.jar,
- lib/gogl-2.0.2-rc12/gluegen.jar,
- lib/gogl-2.0.2-rc12/jogl-all-natives-macosx-universal.jar,
- lib/gogl-2.0.2-rc12/jogl-all-noawt.jar,
- lib/gogl-2.0.2-rc12/jogl-all.jar,
- lib/java3d-1.6.0-pre8/j3dcore.jar,
- lib/java3d-1.6.0-pre8/j3dutils.jar,
- lib/java3d-1.6.0-pre8/vecmath.jar
+ lib/jogl-2.1.4/gluegen-rt-natives-macosx-universal.jar,
+ lib/jogl-2.1.4/gluegen-rt.jar,
+ lib/jogl-2.1.4/gluegen.jar,
+ lib/jogl-2.1.4/jogl-all-natives-macosx-universal.jar,
+ lib/jogl-2.1.4/jogl-all-noawt.jar,
+ lib/jogl-2.1.4/jogl-all.jar,
+ lib/java3d-1.6.0-pre9/j3dcore.jar,
+ lib/java3d-1.6.0-pre9/j3dutils.jar,
+ lib/java3d-1.6.0-pre9/vecmath.jar
 Export-Package: org.jtool.codeforest.metrics;uses:="org.jtool.codeforest.metrics.java",
  org.jtool.codeforest.metrics.java;uses:="org.eclipse.jdt.core.dom,org.jtool.eclipse.model.java"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7,
