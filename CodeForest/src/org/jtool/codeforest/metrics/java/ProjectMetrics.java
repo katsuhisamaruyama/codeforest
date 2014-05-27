@@ -238,7 +238,7 @@ public class ProjectMetrics extends CommonMetrics {
         double totalNOST = 0;
         double totalNOMD = 0;
         double totalNOFD = 0;
-        double totalNOMDFD = 0;
+        double totalNOMF = 0;
         
         double totalNOPM = 0;
         double totalNOACL = 0;
@@ -258,7 +258,7 @@ public class ProjectMetrics extends CommonMetrics {
                 totalNOST = totalNOST + cm.getMetricValueWithException(MetricSort.NUMBER_OF_STATEMENTS);
                 totalNOMD = totalNOMD + cm.getMetricValueWithException(MetricSort.NUMBER_OF_METHODS);
                 totalNOFD = totalNOFD + cm.getMetricValueWithException(MetricSort.NUMBER_OF_FIELDS);
-                totalNOMDFD = totalNOMDFD + cm.getMetricValueWithException(MetricSort.NUMBER_OF_METHODS_AND_FIELDS);
+                totalNOMF = totalNOMF + cm.getMetricValueWithException(MetricSort.NUMBER_OF_METHODS_AND_FIELDS);
                 
                 totalNOPM = totalNOPM + cm.getMetricValueWithException(MetricSort.NUMBER_OF_PUBLIC_METHODS);
                 totalNOACL = totalNOACL + cm.getMetricValueWithException(MetricSort.NUMBER_OF_AFFERENT_CLASSES);
@@ -279,7 +279,7 @@ public class ProjectMetrics extends CommonMetrics {
         putMetricValue(MetricSort.TOTAL_NUMBER_OF_STATEMENTS, totalNOST);
         putMetricValue(MetricSort.TOTAL_NUMBER_OF_METHODS, totalNOMD);
         putMetricValue(MetricSort.TOTAL_NUMBER_OF_FIELDS, totalNOFD);
-        putMetricValue(MetricSort.TOTAL_NUMBER_OF_METHODS_AND_FIELDS, totalNOMDFD);
+        putMetricValue(MetricSort.TOTAL_NUMBER_OF_METHODS_AND_FIELDS, totalNOMF);
         
         putMetricValue(MetricSort.TOTAL_NUMBER_OF_PUBLIC_METHODS, totalNOPM);
         putMetricValue(MetricSort.TOTAL_NUMBER_OF_AFFERENT_CLASSES, totalNOACL);
@@ -305,7 +305,7 @@ public class ProjectMetrics extends CommonMetrics {
         double maxNOST = 0;
         double maxNOMD = 0;
         double maxNOFD = 0;
-        double maxNOMDFD = 0;
+        double maxNOMF = 0;
         
         double maxNOPM = 0;
         double maxNOACL = 0;
@@ -325,7 +325,7 @@ public class ProjectMetrics extends CommonMetrics {
                 maxNOST = Math.max(maxNOST, cm.getMetricValueWithException(MetricSort.NUMBER_OF_STATEMENTS));
                 maxNOMD = Math.max(maxNOMD, cm.getMetricValueWithException(MetricSort.NUMBER_OF_METHODS));
                 maxNOFD = Math.max(maxNOFD, cm.getMetricValueWithException(MetricSort.NUMBER_OF_FIELDS));
-                maxNOMDFD = Math.max(maxNOMDFD, cm.getMetricValueWithException(MetricSort.NUMBER_OF_METHODS_AND_FIELDS));
+                maxNOMF = Math.max(maxNOMF, cm.getMetricValueWithException(MetricSort.NUMBER_OF_METHODS_AND_FIELDS));
                 
                 maxNOPM = Math.max(maxNOPM, cm.getMetricValueWithException(MetricSort.NUMBER_OF_PUBLIC_METHODS));
                 maxNOACL = Math.max(maxNOACL, cm.getMetricValueWithException(MetricSort.NUMBER_OF_AFFERENT_CLASSES));
@@ -346,7 +346,7 @@ public class ProjectMetrics extends CommonMetrics {
         putMetricValue(MetricSort.MAX_NUMBER_OF_STATEMENTS, maxNOST);
         putMetricValue(MetricSort.MAX_NUMBER_OF_METHODS, maxNOMD);
         putMetricValue(MetricSort.MAX_NUMBER_OF_FIELDS, maxNOFD);
-        putMetricValue(MetricSort.MAX_NUMBER_OF_METHODS_AND_FIELDS, maxNOMDFD);
+        putMetricValue(MetricSort.MAX_NUMBER_OF_METHODS_AND_FIELDS, maxNOMF);
         
         putMetricValue(MetricSort.MAX_NUMBER_OF_PUBLIC_METHODS, maxNOPM);
         putMetricValue(MetricSort.MAX_NUMBER_OF_AFFERENT_CLASSES, maxNOACL);

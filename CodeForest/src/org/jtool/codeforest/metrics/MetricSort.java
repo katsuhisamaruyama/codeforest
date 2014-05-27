@@ -48,7 +48,7 @@ public interface MetricSort {
     public static final String TOTAL_NUMBER_OF_CLASSES = "TOTAL_NOCL";
     public static final String TOTAL_NUMBER_OF_METHODS = "TOTAL_NOMD";
     public static final String TOTAL_NUMBER_OF_FIELDS = "TOTAL_NOFD";
-    public static final String TOTAL_NUMBER_OF_METHODS_AND_FIELDS = "TOTAL_NOMDFD";
+    public static final String TOTAL_NUMBER_OF_METHODS_AND_FIELDS = "TOTAL_NOMF";
     
     public static final String TOTAL_COUPLING_BETWEEN_OBJECTS = "TOTAL_CBO";
     public static final String TOTAL_DEPTH_OF_INHERITANCE_TREE = "TOTAL_DIT";
