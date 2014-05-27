@@ -13,35 +13,59 @@ import org.jtool.codeforest.ui.layout.LayoutableNode;
 import org.jtool.codeforest.ui.shape.ForestTree;
 import org.jtool.codeforest.ui.shape.FractalTree;
 import org.jtool.codeforest.ui.view.SettingData;
-
 import javax.media.j3d.TransformGroup;
 
 /**
- * A visible item displaying on a forest.
+ * A visual object displaying on a forest.
  * @author Katsuhisa Maruyama
  */
 public class ForestNode extends LayoutableNode {
     
+    /**
+     * The parent of this visual object.
+     */
     protected ForestNodeGroup parent;
     
+    /**
+     * The metrics for this visual object.
+     */
     protected CommonMetrics commonMetrics;
     
+    /**
+     * The setting data that forms a forest
+     */
     protected SettingData settingData;
     
+    /**
+     * Creates a visual object within a forest.
+     * @param parent the parent of the visual object
+     * @param data the setting data that forms the forest
+     */
     public ForestNode(ForestNodeGroup parent, SettingData data) {
         super();
         this.parent = parent;
         this.settingData = data;
     }
     
+    /**
+     * Changes the parent of this visual object.
+     * @param parent the parent of this visual object
+     */
     public void changeParent(ForestNodeGroup parent) {
         this.parent = parent;
     }
     
+    /**
+     * Set the layout for this visual object.
+     */
     public void setLayout() {
         calculateBox();
     }
     
+    /**
+     * Creates the scene graph for a tree within a forest and returns the tree.
+     * @return the tree within the forest
+     */
     public TransformGroup createSceneGraph() {
         if (!(commonMetrics instanceof ClassMetrics)) {
             return null;
@@ -57,6 +81,10 @@ public class ForestNode extends LayoutableNode {
         return tree;
     }
     
+    /**
+     * Creates the scene graph for a fractal object and returns its object.
+     * @return the visual object representing a tree.
+     */
     public TransformGroup createSceneGraphFractal() {
         if (!(commonMetrics instanceof ClassMetrics)) {
             return null;
@@ -72,6 +100,9 @@ public class ForestNode extends LayoutableNode {
         return tree;
     }
     
+    /**
+     * Sets the base size for this visual object.
+     */
     protected void setBaseSize() {
         String parameter = "";
         double baseSize = 1;
@@ -88,15 +119,27 @@ public class ForestNode extends LayoutableNode {
         setBaseSize(baseSize);
     }
     
-    public void setData(CommonMetrics metrics) {
+    /**
+     * Sets the metrics.
+     * @param the metrics
+     */
+    public void setMetrics(CommonMetrics metrics) {
         this.commonMetrics = metrics;
     }
     
+    /**
+     * Returns the metrics.
+     * @return the metrics
+     */
     public CommonMetrics getMetrics() {
         return commonMetrics;
     }
     
-    public ProjectMetrics getProjectMetrics2() {
+    /**
+     * Obtains the metrics of the project.
+     * @return the project metrics
+     */
+    public ProjectMetrics getProjectMetrics() {
         if (commonMetrics instanceof ProjectMetrics) {
             return (ProjectMetrics)commonMetrics;
         } else if (commonMetrics instanceof PackageMetrics) {

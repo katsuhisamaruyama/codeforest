@@ -18,7 +18,6 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.SWT;
-
 import java.awt.BorderLayout;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
@@ -29,16 +28,35 @@ import java.awt.GraphicsConfiguration;
  */
 public class TreeView {
     
+    /**
+     * A node on the scene graph, which is a visual object.
+     */
     private ForestNode shape;
     
+    /**
+     * A drawing canvas for this tree view.
+     */
     private TreeCanvas3D canvas;
     
+    /**
+     * Font information.
+     */
     private Font font11;
     
+    /**
+     * Creates a tree view.
+     * @param parent the parent of the tree view
+     * @param frame the main frame
+     */
     public TreeView(Composite parent, CodeForestFrame frame) {
         createPane(parent, frame);
     }
     
+    /**
+     * Creates the pane of a tree view.
+     * @param parent the parent of the tree view
+     * @param frame the main frame
+     */
     private void createPane(Composite parent, final CodeForestFrame frame) {
         final int MARGIN = 0;
         font11 = new Font(parent.getDisplay(), "", 11, SWT.NORMAL);
@@ -50,12 +68,20 @@ public class TreeView {
         treeSettingButton.setText("Tree Setting");
         treeSettingButton.addSelectionListener(new SelectionListener() {
             
+            /**
+             * Invoked when selection occurs in the control.
+             * @param e an event containing information about the selection
+             */
             public void widgetSelected(SelectionEvent e) {
                 TreeSettingDialog dialog = new TreeSettingDialog(frame);
                 dialog.create();
                 dialog.open();
             }
             
+            /**
+             * Invoked when default selection occurs in the control.
+             * @param e an event containing information about the default selection
+             */
             public void widgetDefaultSelected(SelectionEvent e) {
             }
         });
@@ -93,21 +119,34 @@ public class TreeView {
         repaint();
     }
     
+    /**
+     * Sets a given node in the scene graph.
+     * @param shape the node added to the scene graph.
+     */
     public void setSceneGraph(ForestNode shape) {
         this.shape = shape;
         canvas.setSceneGraph(shape);
     }
     
+    /**
+     * Repaints this tree view.
+     */
     public void repaint() {
         canvas.repaint();
     }
     
+    /**
+     * Updates this tree view.
+     */
     public void update() {
         if (shape != null) {
             canvas.setSceneGraph(shape);
         }
     }
     
+    /**
+     * Disposes this tree view.
+     */
     public void dispose() {
         canvas.dispose();
         canvas = null;

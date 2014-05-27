@@ -33,19 +33,31 @@ import com.sun.j3d.utils.universe.SimpleUniverse;
 import com.sun.j3d.utils.universe.ViewingPlatform;
 
 /**
- * A 3D visual environment for forest and tree views.
- * @author Daiki Todoroki
+ * A visual environment for a forest or tree view.
  * @author Katsuhisa Maruyama
+ * @author Daiki Todoroki
  */
 public class CodeForestUniverse extends SimpleUniverse {
     
+    /**
+     * The main frame.
+     */
     protected CodeForestFrame frame;
     
+    /**
+     * Creates visual environment for a forest or tree view.
+     * @param canvas a drawing canvas for a forest or tree
+     * @param frame the main frame
+     */
     protected CodeForestUniverse(Canvas3D canvas, CodeForestFrame frame) {
         super(canvas);
         this.frame = frame;
     }
     
+    /**
+     * Sets capabilities for the branch group of the scene graph.
+     * @param bg the branch group of the scene graph
+     */
     protected void setCapability(BranchGroup bg) {
         bg.setCapability(BranchGroup.ALLOW_DETACH);
         bg.setCapability(BranchGroup.ALLOW_PICKABLE_READ);
@@ -56,12 +68,15 @@ public class CodeForestUniverse extends SimpleUniverse {
         addBranchGraph(bg);
     }
     
-    protected void setConfigurations() {
+    /**
+     * Sets configuration of a forest or tree view.
+     */
+    protected void setConfiguration() {
         BoundingSphere bounds = new BoundingSphere(new Point3d(0,0,0), 100.0);
         
         ViewingPlatform viewingPlatform = getViewingPlatform();
         PlatformGeometry pg = new PlatformGeometry();
-        createSomeLighting(pg);
+        createLighting(pg);
         viewingPlatform.setPlatformGeometry(pg);
         viewingPlatform.setNominalViewingTransform();
         
@@ -75,10 +90,13 @@ public class CodeForestUniverse extends SimpleUniverse {
         OrbitBehavior orbit = new OrbitBehavior(getCanvas(), OrbitBehavior.REVERSE_ALL);
         orbit.setSchedulingBounds(bounds);
         getViewingPlatform().setViewPlatformBehavior(orbit);
-        
     }
     
-    private void createSomeLighting(PlatformGeometry pg) {
+    /**
+     * Creates the lighting for the platform geometry.
+     * @param pg the platform geometry.
+     */
+    private void createLighting(PlatformGeometry pg) {
         pg.addChild(createAmbientLight());
         
         final Color3f lightColor = new Color3f(1.0f, 1.0f, 0.9f);
@@ -90,23 +108,37 @@ public class CodeForestUniverse extends SimpleUniverse {
         pg.addChild(createDirectionLight(lightColor2, lightDirection2));
     }
     
+    /**
+     * Creates the direction light.
+     * @param lightColor the color of the light
+     * @param lightDirection the direction of the light
+     * @return the direction light
+     */
     private Node createDirectionLight(Color3f lightColor, Vector3f lightDirection) {
-        final Bounds bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
-        final DirectionalLight light = new DirectionalLight(lightColor, lightDirection);
+        Bounds bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
+        DirectionalLight light = new DirectionalLight(lightColor, lightDirection);
         
         light.setInfluencingBounds(bounds);
         return light;
     }
     
+    /**
+     * Creates the ambient light.
+     * @return the ambient light
+     */
     private Node createAmbientLight() {
-        final Bounds bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
-        final Color3f ambientColor = new Color3f(1.0f, 1.0f, 1.0f);
-        final AmbientLight ambientLightNode = new AmbientLight(true, ambientColor);
+        Bounds bounds = new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0);
+        Color3f ambientColor = new Color3f(1.0f, 1.0f, 1.0f);
+        AmbientLight ambientLightNode = new AmbientLight(true, ambientColor);
         
         ambientLightNode.setInfluencingBounds(bounds);
         return ambientLightNode;
     }
     
+    /**
+     * Registers the mouse picker.
+     * @param branch the branch group on the scene graph
+     */
     protected void picker(BranchGroup branch) {
         BoundingSphere bounds = new BoundingSphere(new Point3d(0,0,0), 100.0);
         MousePicker picker = new MousePicker(getCanvas(), branch, bounds, frame);
@@ -114,6 +146,11 @@ public class CodeForestUniverse extends SimpleUniverse {
         branch.addChild(picker);
     }
     
+    /**
+     * Obtains the graphics configuration of the main frame.
+     * @param frame the main frame
+     * @return the graphics configuration
+     */
     public static GraphicsConfiguration getGraphicsConfiguration(Frame frame) {
         GraphicsConfiguration gc = frame.getGraphicsConfiguration();
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -133,6 +170,11 @@ public class CodeForestUniverse extends SimpleUniverse {
         return good;
     }
     
+    /**
+     * Obtains an AWT image of a visual object.
+     * @param shape the visual object
+     * @return the AWT image
+     */
     public static Image getAWTImage(String shape) {
         ImageConverter loader = ImageConverter.getInstance();
         if (Activator.getImage(shape) != null) {

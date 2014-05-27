@@ -21,17 +21,34 @@ import java.util.List;
  */
 public class ForestNodeGroup extends ForestNode implements IMapModel {
     
+    /**
+     * A flag indicating the layout for this group is valid or not. 
+     */
     private boolean layoutValid;
     
+    /**
+     * A flag indicating that objects within this group are visible or not.
+     */
     protected boolean contentVisible = true;
     
+    /**
+     * The collection of visual objects within this group. 
+     */
     protected List<ForestNode> nodes;
     
+    /**
+     * Creates a group containing visual objects.
+     * @param parent the parent of this group
+     * @param data the setting data that forms visual objects within this group
+     */
     public ForestNodeGroup(ForestNodeGroup parent, SettingData data) {
         super(parent, data);
         nodes = new ArrayList<ForestNode>();
     }
     
+    /**
+     * Sets the base size of this group.
+     */
     protected void setBaseSize() {
         double baseSize = 0;
         for (int i = 0; i < nodes.size(); i++) {
@@ -42,6 +59,10 @@ public class ForestNodeGroup extends ForestNode implements IMapModel {
         setBaseSize(baseSize);
     }
     
+    /**
+     * Obtains the mappable items within this group.
+     * @return the array of mappable items
+     */
     public IMappable[] getItems() {
         IMappable[] mappable = new IMappable[nodes.size()];
         for(int i = 0; i < nodes.size(); i++) {
@@ -50,10 +71,17 @@ public class ForestNodeGroup extends ForestNode implements IMapModel {
         return mappable;
     }
     
+    /**
+     * Obtains children of this group.
+     * @return the array of visual objects
+     */
     public ForestNode[] getChildren() {
         return nodes.toArray(new ForestNode[0]);
     }
     
+    /**
+     * Checks the layout  for this group.
+     */
     protected void checkLayout() {
         if (!layoutValid) {
             if (nodes.size() != 0) {
@@ -63,6 +91,9 @@ public class ForestNodeGroup extends ForestNode implements IMapModel {
         }
     }
     
+    /**
+     * Sets the layout for this group.
+     */
     public void setLayout() {
         checkLayout();
         calculateBox();
@@ -73,6 +104,9 @@ public class ForestNodeGroup extends ForestNode implements IMapModel {
         }
     }
     
+    /**
+     * Creates the scene graph containing visual objects in this group.
+     */
     public TransformGroup createSceneGraph() {
         checkLayout();
         
@@ -94,10 +128,18 @@ public class ForestNodeGroup extends ForestNode implements IMapModel {
         return trans;
     }
     
+    /**
+     * Adds a visual object into this group.
+     * @param shape
+     */
     public void add(ForestNode shape) {
         nodes.add(shape);
     }
     
+    /**
+     * Obtains the name of the package corresponding to this group.
+     * @return the package name
+     */
     public String getPackageName() {
         PackageMetrics pm = (PackageMetrics)commonMetrics;
         return pm.getName();

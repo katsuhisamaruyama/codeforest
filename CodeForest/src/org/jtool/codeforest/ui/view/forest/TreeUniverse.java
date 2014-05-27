@@ -18,23 +18,35 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3f;
 
 /**
- * A 3D visual environment for a tree view.
+ * A visual environment for a tree view.
  * @author Katsuhisa Maruyama
+ * @author Daiki Todoroki
  */
 public class TreeUniverse extends CodeForestUniverse {
     
+    /**
+     * The branch group of the scene graph.
+     */
     private BranchGroup shapeBranchGroup;
     
+    /**
+     * Creates a visual environment for a tree view.
+     * @param canvas a drawing canvas
+     * @param frame the main frame
+     */
     public TreeUniverse(Canvas3D canvas, CodeForestFrame frame) {
         super(canvas, frame);
         this.shapeBranchGroup = new BranchGroup();
         
         setCapability(shapeBranchGroup);
-        setConfigurations();
+        setConfiguration();
     }
     
-    protected void setConfigurations() {
-        super.setConfigurations();
+    /**
+     * Sets configuration of a tree view.
+     */
+    protected void setConfiguration() {
+        super.setConfiguration();
         
         TransformGroup camera = getViewingPlatform().getViewPlatformTransform();
         Transform3D viewPos = new Transform3D();
@@ -42,14 +54,27 @@ public class TreeUniverse extends CodeForestUniverse {
         camera.setTransform(viewPos);
     }
     
+    /**
+     * Obtains the drawing canvas.
+     * @return the drawing canvas
+     */
     public TreeCanvas3D getCanvas() {
         return getCanvas(0);
     }
     
+    /**
+     * Obtains the drawing canvas corresponding to the specified number.
+     * @param i the number indicating the specified drawing canvas
+     * @return the drawing canvas
+     */
     public TreeCanvas3D getCanvas(int i) {
         return (TreeCanvas3D)viewer[0].getCanvas3D(i);
     }
     
+    /**
+     * Sets a visual object on the scene graph.
+     * @param node the visual object added to the scene graph
+     */
     public void setSceneGraph(ForestNode node) {
         if (shapeBranchGroup != null) {
             shapeBranchGroup.removeAllChildren();
@@ -60,7 +85,7 @@ public class TreeUniverse extends CodeForestUniverse {
         TransformGroup trans = new TransformGroup();
         bg.addChild(trans);
         
-        createBackGround(trans);
+        createBackground(trans);
         
         if (node != null) {
             TransformGroup group = node.createSceneGraphFractal();
@@ -73,7 +98,11 @@ public class TreeUniverse extends CodeForestUniverse {
         shapeBranchGroup.addChild(bg);
     }
     
-    private void createBackGround(TransformGroup group) {
+    /**
+     * Creates the background of a tree view.
+     * @param group the transform group of the scene graph
+     */
+    private void createBackground(TransformGroup group) {
         BoundingSphere bounds = new BoundingSphere(new Point3d(), 100.0);
         Background background = new Background(new Color3f(0.95f, 0.95f, 0.85f));
         
