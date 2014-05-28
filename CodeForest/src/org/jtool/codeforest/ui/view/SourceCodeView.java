@@ -29,26 +29,38 @@ import org.eclipse.jdt.internal.ui.text.SimpleJavaSourceViewerConfiguration;
 @SuppressWarnings("restriction")
 public class SourceCodeView {
     
+    /**
+     * Information on the font.
+     */
     private Font font11;
     
+    /**
+     * A viewer displaying source code.
+     */
     private JavaSourceViewer sourceViewer;
     
+    /**
+     * The configuration of the source code viewer.
+     */
     private SimpleJavaSourceViewerConfiguration sourceViewerConf;
     
+    /**
+     * The current path.
+     */
     private String currentPath = "";
     
+    /**
+     * Creates a source code view.
+     * @param parent the parent of the source code view
+     */
     public SourceCodeView(Composite parent) {
         createPane(parent);
     }
     
-    public void dispose() {
-        font11.dispose();
-        
-        sourceViewer = null;
-        sourceViewerConf = null;
-        currentPath = null;
-    }
-    
+    /**
+     * Creates the pane of this source code view.
+     * @param parent the parent of the source code view
+     */
     private void createPane(Composite parent) {
         parent.setLayout(new FillLayout());
         
@@ -76,6 +88,10 @@ public class SourceCodeView {
         parent.pack();
     }
     
+    /**
+     * Displays source code of a selected class.
+     * @param jclass the selected class
+     */
     public void changeSelection(final JavaClass jclass) {
         if (sourceViewer == null) {
             return;
@@ -85,6 +101,9 @@ public class SourceCodeView {
         if (control != null && !(control.isDisposed())) {
             control.getDisplay().syncExec(new Runnable() {
                 
+                /**
+                 * Runs a new thread.
+                 */
                 public void run() {
                     try {
                         String path = jclass.getJavaFile().getPath();
@@ -102,6 +121,10 @@ public class SourceCodeView {
         }
     }
     
+    /**
+     * Reveals code fragments with a given offset value.
+     * @param offset the offset value of the revealed code fragments
+     */
     private void reveal(int offset) {
         StyledText styledText = sourceViewer.getTextWidget();
         int line = styledText.getLineAtOffset(offset);
@@ -116,5 +139,16 @@ public class SourceCodeView {
         styledText.setSelection(offset);
         
         sourceViewer.getTextWidget().setLineBackground(line, 1, new Color(null, 200, 220, 255));
+    }
+    
+    /**
+     * Disposes this source code view.
+     */
+    public void dispose() {
+        font11.dispose();
+        
+        sourceViewer = null;
+        sourceViewerConf = null;
+        currentPath = null;
     }
 }

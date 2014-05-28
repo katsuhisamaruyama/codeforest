@@ -23,16 +23,45 @@ import org.eclipse.swt.events.SelectionListener;
 
 public class TreeSettingDialog extends TitleAreaDialog {
     
+    /**
+     * Information on the font.
+     */
     private Font font11;
     
+    /**
+     * The setting data that forms a tree.
+     */
     private SettingData settingData;
     
-    private Combo lnumberSel, lcolorSel;
+    /**
+     * The combo of selection of the leaf numbers.
+     */
+    private Combo lnumberSel;
     
-    private IMetric lnumberMetric, lcolorMetric;
+    /**
+     * The combo of selection of the leaf color.
+     */
+    private Combo lcolorSel;
     
+    /**
+     * The metrics of the leaf.
+     */
+    private IMetric lnumberMetric;
+    
+    /**
+     * The metrics of the color
+     */
+    private IMetric lcolorMetric;
+    
+    /**
+     * The main frame.
+     */
     private CodeForestFrame frame;
     
+    /**
+     * Creates a tree setting dialog.
+     * @param frame the main frame
+     */
     public TreeSettingDialog(CodeForestFrame frame) {
         super(frame.getShell());
         
@@ -40,15 +69,26 @@ public class TreeSettingDialog extends TitleAreaDialog {
         this.settingData = frame.getSettingData();
     }
     
+    /**
+     * Configures a given shell.
+     * @param shell the shell
+     */
     protected void configureShell(Shell shell) {
         super.configureShell(shell);
         shell.setText("Tree View Configuration");
     }
     
+    /**
+     * Returns the initial size of this dialog.
+     * @return the initial size of the dialog
+     */
     protected Point getInitialSize() {
         return new Point(330, 230);
     }
     
+    /**
+     * Creates this dialog.
+     */
     public void create() {
         setHelpAvailable(false);
         setDialogHelpAvailable(false);
@@ -57,6 +97,10 @@ public class TreeSettingDialog extends TitleAreaDialog {
         setMessage("Change the sorts of metrics corresponding to respective properties.");
     }
     
+    /**
+     *  Creates the area for this dialog.
+     *  @param parent the parent of this dialog
+     */
     protected Control createDialogArea(Composite parent) {
         font11 = new Font(parent.getDisplay(), "", 11, SWT.NORMAL);
         
@@ -85,6 +129,13 @@ public class TreeSettingDialog extends TitleAreaDialog {
         return parent;
     }
     
+    /**
+     * Creates a combo to select the metric sort.
+     * @param parent the parent of this dialog
+     * @param title the title of this dialog
+     * @param items the array of items to be selected
+     * @return the selection combo
+     */
     private Combo createMetricSelection(Composite parent, String title, String[] items) {
         Composite panel = new Composite(parent, SWT.NONE);
         GridLayout layout = new GridLayout(1, true);
@@ -110,8 +161,16 @@ public class TreeSettingDialog extends TitleAreaDialog {
         return combo;
     }
     
+    /**
+     * A listener for the selection of the number of the leaves.
+     * @author Katsuhisa Maruyama
+     */
     class LeafNumberSelectionListener implements SelectionListener {
         
+        /**
+         * Invoked when selection occurs in the control.
+         * @param e an event containing information about the selection
+         */
         public void widgetSelected(SelectionEvent e) {
             Combo combo = (Combo)e.getSource();
             String name = combo.getItem(combo.getSelectionIndex());
@@ -120,12 +179,24 @@ public class TreeSettingDialog extends TitleAreaDialog {
             update();
         }
         
+        /**
+         * Invoked when default selection occurs in the control.
+         * @param e an event containing information about the default selection
+         */
         public void widgetDefaultSelected(SelectionEvent e) {
         }
     }
     
+    /**
+     * A listener for the selection of leaf color.
+     * @author Katsuhisa Maruyama
+     */
     class LeafColorSelectionListener implements SelectionListener {
         
+        /**
+         * Invoked when selection occurs in the control.
+         * @param e an event containing information about the selection
+         */
         public void widgetSelected(SelectionEvent e) {
             Combo combo = (Combo)e.getSource();
             String name = combo.getItem(combo.getSelectionIndex());
@@ -134,18 +205,31 @@ public class TreeSettingDialog extends TitleAreaDialog {
             update();
         }
         
+        /**
+         * Invoked when default selection occurs in the control.
+         * @param e an event containing information about the default selection
+         */
         public void widgetDefaultSelected(SelectionEvent e) {
         }
     }
     
+    /**
+     * Updates this setting dialog.
+     */
     private void update() {
         frame.getTreeView().update();
     }
     
+    /**
+     * Invoked when the ok button is pressed.
+     */
     protected void okPressed() {
         super.okPressed();
     }
     
+    /**
+     * Invoked when the cancel button is pressed.
+     */
     protected void cancelPressed() {
         settingData.setLeafNumber(lnumberMetric.getName());
         settingData.setLeafColor(lcolorMetric.getName());

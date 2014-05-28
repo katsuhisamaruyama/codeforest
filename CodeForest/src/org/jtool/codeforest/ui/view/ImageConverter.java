@@ -14,21 +14,36 @@ import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 
 /**
- * Converts an SWT-based image into an AWT-based image.
+ * Converts a SWT form image date into an AWT form image, and vice versa.
+ * @author Katsuhisa Maruyama
  * @author Daiki Todoroki
- * @author Katsuhisa Maruyama 
  */
 public class ImageConverter {
     
+    /**
+     * The single instance for this image converter.
+     */
     private static ImageConverter imageLoader = new ImageConverter();
     
+    /**
+     * Prohibits the creation of a new object.
+     */
     private ImageConverter() {
     }
     
+    /**
+     * Obtains the single instance.
+     * @return the single instance
+     */
     public static ImageConverter getInstance() {
         return imageLoader;
     }
     
+    /**
+     * Converts a given SWT image data into an AWT image.
+     * @param data the image data in the SWT form
+     * @return the buffered image in the AWT form
+     */
     public BufferedImage convertToAWT(ImageData data) {
         ColorModel colorModel = null;
         PaletteData palette = data.palette;
@@ -84,6 +99,11 @@ public class ImageConverter {
         }
     }
     
+    /**
+     * Converts a given AWT buffered image into a SWT image data.
+     * @param bufferedImage the buffered image in the AWT form
+     * @return the image data in the SWT form
+     */
     public ImageData convertToSWT(BufferedImage bufferedImage) {
         if (bufferedImage.getColorModel() instanceof DirectColorModel) {
             DirectColorModel colorModel = (DirectColorModel)bufferedImage.getColorModel();

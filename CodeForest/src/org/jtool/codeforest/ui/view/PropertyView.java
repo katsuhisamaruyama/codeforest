@@ -35,29 +35,43 @@ import java.util.Map;
  */
 public class PropertyView {
     
+    /**
+     * Information on the font
+     */
     private Font font11;
     
+    /**
+     * A table viewer.
+     */
     private TableViewer tableViewer;
     
+    /**
+     * The collection of property data.
+     */
     private List<PropertyData> propertyList = new ArrayList<PropertyData>();
     
+    /**
+     * Creates a property view.
+     * @param parent the parent of the property view
+     * @param mproject the metrics of a project
+     */
     public PropertyView(Composite parent, ProjectMetrics mproject) {
         createPropertyData(mproject);
         createPane(parent);
     }
     
+    /**
+     * Creates a property view.
+     * @param parent the parent of the property view
+     */
     public PropertyView(Composite parent) {
         createPane(parent);
     }
     
-    public void dispose() {
-        font11.dispose();
-        
-        tableViewer = null;
-        
-        propertyList.clear();
-    }
-    
+    /**
+     * Creates the pane of this property view.
+     * @param parent the parent of the property view
+     */
     private void createPane(Composite parent) {
         font11 = new Font(parent.getDisplay(), "", 11, SWT.NORMAL);
         
@@ -86,8 +100,29 @@ public class PropertyView {
         parent.pack();
     }
     
+    /**
+     * Disposes this property view.
+     */
+    public void dispose() {
+        font11.dispose();
+        
+        tableViewer = null;
+        
+        propertyList.clear();
+    }
+    
+    /**
+     * A label provider that provides label texts of a table.
+     * @author Katsuhisa Maruyama
+     */
     private class PropertyLabelProvider extends LabelProvider implements ITableLabelProvider {
         
+        /**
+         * Returns the label text for the given column of the given element.
+         * @param obj the object representing the entire row
+         * @param columnIndex the zero-based index of the column in which the label appears
+         * @return the label text or or <code>null</code> if there is no label text
+         */
         public String getColumnText(Object obj, int columnIndex) {
             if (obj instanceof PropertyData) {
                 PropertyData data = (PropertyData)obj;
@@ -104,6 +139,12 @@ public class PropertyView {
             return null;
         }
         
+        /**
+         * Returns the label image for the given column of the given element.
+         * @param obj the object representing the entire row
+         * @param columnIndex the zero-based index of the column in which the label appears
+         * @return the image or <code>null</code> if there is no image
+         */
         public Image getColumnImage(Object obj, int columnIndex) {
             if (obj instanceof PropertyData) {
                 PropertyData data = (PropertyData)obj;
@@ -115,6 +156,10 @@ public class PropertyView {
         }
     }
     
+    /**
+     * Creates the property data of a given project.
+     * @param mproject the metrics of the project
+     */
     private void createPropertyData(ProjectMetrics mproject) {
         Image image = Activator.getImage("project");
         propertyList.add(new PropertyData(mproject.getName(), "", false, image));
@@ -134,6 +179,10 @@ public class PropertyView {
         }
     }
     
+    /**
+     * Creates the property data of a given package.
+     * @param mpackage the metrics of the package
+     */
     private void createPackagePropertyData(PackageMetrics mpackage) {
         Image image = Activator.getImage("project");
         propertyList.add(new PropertyData(mpackage.getName(), "", false, image));
@@ -153,6 +202,10 @@ public class PropertyView {
         }
     }
     
+    /**
+     * Creates the property data of a given class.
+     * @param mclass the metrics of the class
+     */
     private void createClassPropertyData(ClassMetrics mclass) {
         if (mclass.isInterface()) {
             Image image = Activator.getImage("interface");
@@ -187,6 +240,11 @@ public class PropertyView {
         }
     }
     
+    /**
+     * Obtains the string that represents the visibility of a given class.
+     * @param jclass the class
+     * @return the string that represents the visibility
+     */
     private String getVisibility(JavaClass jclass) {
         if (jclass.isPrivate()) {
             return "private";
@@ -200,6 +258,10 @@ public class PropertyView {
         return "";
     }
     
+    /**
+     * Creates the property data of a given field.
+     * @param mfield the metrics of the field
+     */
     private void createFieldPropertyData(FieldMetrics mfield) {
         String sig = mfield.getName() + " : " + mfield.getType();
         if (mfield.isEnumConstant()) {
@@ -224,6 +286,11 @@ public class PropertyView {
         propertyList.addAll(properties);
     }
     
+    /**
+     * Obtains the string that represents the visibility of a given field.
+     * @param jfield the field
+     * @return the string that represents the visibility
+     */
     private String getVivibility(JavaField jfield) {
         if (jfield.isPrivate()) {
             return "private";
@@ -237,6 +304,10 @@ public class PropertyView {
         return "";
     }
     
+    /**
+     * Creates the property data of a given method.
+     * @param mmethod the metrics of the method
+     */
     private void createMethodPropertyData(MethodMetrics mmethod) {
         String sig = mmethod.getSignature() + " : " + mmethod.getReturnType();
         if (mmethod.isConstructor()) {
@@ -262,6 +333,11 @@ public class PropertyView {
         propertyList.addAll(properties);
     }
     
+    /**
+     * Obtains the string that represents the visibility of a given method.
+     * @param jmethod the method
+     * @return the string that represents the visibility
+     */
     private String getVisibility(JavaMethod jmethod) {
         if (jmethod.isPrivate()) {
             return "private";
@@ -275,6 +351,11 @@ public class PropertyView {
         return "";
     }
     
+    /**
+     * Obtains the boolean string for boolean value.
+     * @param bool the boolean value
+     * @return the boolean string
+     */
     private String getBoolean(boolean bool) {
         if (bool) {
             return "yes";
@@ -283,6 +364,10 @@ public class PropertyView {
         }
     }
     
+    /**
+     * Displays property data of a selected class.
+     * @param className the name of the selected class
+     */
     public void changeSelection(String className) {
         for (int i = 0; i < propertyList.size(); i++) {
             PropertyData data = propertyList.get(i);
@@ -293,10 +378,17 @@ public class PropertyView {
         }
     }
     
+    /**
+     * Displays property data of a selected class.
+     * @param index the index number of the property data for the selected class
+     */
     private void changeSelection(final int index) {
         if (tableViewer.getTable() != null && !(tableViewer.getTable().isDisposed())) {
             tableViewer.getTable().getDisplay().syncExec(new Runnable() {
                 
+                /**
+                 * Runs a new thread.
+                 */
                 public void run() {
                     try {
                         tableViewer.getTable().select(index);
@@ -307,8 +399,19 @@ public class PropertyView {
         }
     }
     
-    private void sort(List<PropertyData> ops) {
-        Collections.sort(ops, new Comparator<PropertyData>() {
+    /**
+     * Sorts property data.
+     * @param ops the 
+     */
+    private void sort(List<PropertyData> data) {
+        Collections.sort(data, new Comparator<PropertyData>() {
+            
+            /**
+             * Compares two property data for order.
+             * @param d1 the first object to be compared.
+             * @param d2 the second object to be compared.
+             * @return the negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second.
+             */
             public int compare(PropertyData d1, PropertyData d2) {
                 String name1 = d1.getName();
                 String name2 = d2.getName();

@@ -19,56 +19,96 @@ import javax.media.j3d.BranchGroup;
 import javax.media.j3d.Canvas3D;
 import javax.media.j3d.Node;
 import javax.media.j3d.Transform3D;
-
 import com.sun.j3d.utils.behaviors.mouse.MouseBehaviorCallback;
 import com.sun.j3d.utils.picking.PickResult;
 import com.sun.j3d.utils.picking.behaviors.PickMouseBehavior;
-
 import java.awt.event.MouseEvent;
 
 /**
  * Picks a mouse event on a view.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
+ * @author Daiki Todoroki
  */
 public class MousePicker extends PickMouseBehavior implements MouseBehaviorCallback {
     
+    /**
+     * The main frame.
+     */
     private CodeForestFrame frame;
     
+    /**
+     * A tree currently picked.
+     */
     private Node pickedTree;
     
+    /**
+     * Creates a picker of a mouse event on a view.
+     * @param canvas3d the canvas in which a mouse event occurs
+     * @param branchgroup the branch group of the scene graph
+     * @param bounds the bounds of the canvas
+     * @param frame the main frame
+     */
     public MousePicker(Canvas3D canvas3d, BranchGroup branchgroup, Bounds bounds, CodeForestFrame frame) {
         super(canvas3d, branchgroup, bounds);
         setSchedulingBounds(bounds);
         this.frame = frame;
     }
     
+    /**
+     * Returns the forest view.
+     * @return the forest view
+     */
     public ForestView getForestView() {
         return frame.getForestView();
     }
     
+    /**
+     * Returns the tree view.
+     * @return the tree view
+     */
     public TreeView getTreeView() {
         return frame.getTreeView();
     }
     
+    /**
+     * Returns the memo view.
+     * @return the memo view
+     */
     public MemoView getMemoView() {
         return frame.getMemoView();
     }
     
+    /**
+     * Returns the property view.
+     * @return the property view
+     */
     public PropertyView getPropertyView() {
         return frame.getPropertyView();
     }
     
+    /**
+     * Returns the interaction view.
+     * @return the interaction view
+     */
     public InteractionView getInteractionView() {
         return frame.getInteractionView();
     }
     
+    /**
+     * Returns the source code view.
+     * @return the source code view
+     */
     public SourceCodeView getSourceCodeView() {
         return frame.getSourceCodeView();
     }
     
-    public void updateScene(int xpos, int ypos) {
-        pickCanvas.setShapeLocation(xpos, ypos);
+    /**
+     * Updates the scene graph.
+     * @param x the x-position of a visual node on a view
+     * @param y the y-position of a visual node on a view
+     */
+    public void updateScene(int x, int y) {
+        pickCanvas.setShapeLocation(x, y);
         PickResult pickResult = pickCanvas.pickClosest();
         
         if (pickResult != null) {
@@ -83,6 +123,10 @@ public class MousePicker extends PickMouseBehavior implements MouseBehaviorCallb
         }
     }
     
+    /**
+     * Invoked when a visual object in the forest view is picked.
+     * @param pickedShape the visual node currently picked
+     */
     private void forestViewAction(Node pickedShape) {
         if (pickedTree != null) {
             ((ForestTree)pickedTree).changedSelected(false);
@@ -100,14 +144,23 @@ public class MousePicker extends PickMouseBehavior implements MouseBehaviorCallb
         }
     }
     
+    /**
+     * Invoked when a visual object in the tree view is picked.
+     * @param pickedShape the visual node currently picked
+     */
     private void treeViewAction(Node pickedShape) {
         Leaf leaf = (Leaf)pickedShape.getUserData();
         
         if (mevent.getButton() == MouseEvent.BUTTON1) {
+            // For future extension
             System.out.println(leaf.getMethodMetrics().getSignature());
         }
     }
     
+    /**
+     * Invoked when left button of the mouse is pressed.
+     * @param node the visual node in the scene graph
+     */
     private void pressLeftButton(ForestNode node) {
         getTreeView().setSceneGraph(node);
         getTreeView().repaint();
@@ -124,6 +177,10 @@ public class MousePicker extends PickMouseBehavior implements MouseBehaviorCallb
         }
     }
     
+    /**
+     * Invoked when right button of the mouse is pressed.
+     * @param node the visual node in the scene graph
+     */
     private void pressRightButton(ForestNode node) {
         getTreeView().setSceneGraph(node);
         getTreeView().repaint();
@@ -135,6 +192,11 @@ public class MousePicker extends PickMouseBehavior implements MouseBehaviorCallb
         }
     }
     
-    public void transformChanged(int i, Transform3D transform3d) {
+    /**
+     * Invoked every time the mouse behavior updates the the transformation of visual nodes.
+     * @param type the type of the transformation
+     * @param transform3d the transformation of the node
+     */
+    public void transformChanged(int type, Transform3D transform3d) {
     }
 }
