@@ -15,27 +15,42 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 
 /**
- * Provides a base frame that lays out forest and tree views.
+ * Provides a tab frame that displays property and interaction views.
  * @author Katsuhisa Maruyama
  */
 public class CodeForestBottomTabFrame {
     
+    /**
+     * A folder that holds tabs display property and interaction views.
+     */
     private CTabFolder tabFolder;
     
-    private SelectionListener tabFrameSelectionListener;
-    
+    /**
+     * The title string that represents the property view.
+     */
     private static final String PROPERTY_VIEW_TITLE = "Properties";
     
+    /**
+     * The title string that represents the interaction view.
+     */
     private static final String INTERACTION_VIEW_TITLE = "Interaction";
     
+    /**
+     * A property view.
+     */
     private PropertyView propertyView;
     
+    /**
+     * An interaction view.
+     */
     private InteractionView interactionView;
     
+    /**
+     * Creates tab frame display on the bottom of the window.
+     * @param frame the main frame
+     */
     CodeForestBottomTabFrame(CodeForestFrame frame) {
         Shell shell = frame.getShell();
         ProjectMetrics mproject = frame.getProjectMetrics();
@@ -68,51 +83,52 @@ public class CodeForestBottomTabFrame {
         interactionViewTab.setText(INTERACTION_VIEW_TITLE);
         interactionViewTab.setControl(interactionPanel);
         interactionViewTab.setImage(Activator.getImage("task"));
-        
-        tabFrameSelectionListener = new TabFrameSelectionListener();
-        tabFolder.addSelectionListener(tabFrameSelectionListener);
     }
     
+    /**
+     * Obtains the tab folder.
+     * @return the tab folder
+     */
     CTabFolder getTabFolder() {
         return tabFolder;
     }
     
+    /**
+     * Obtains the property view.
+     * @return the property view
+     */
     PropertyView getPropertyView() {
         return propertyView;
     }
     
+    /**
+     * Obtains the interaction view.
+     * @return the interaction view.
+     */
     InteractionView getInteractionView() {
         return interactionView;
     }
     
+    /**
+     * Focuses on the property view.
+     */
     void focusPropertyView() {
         tabFolder.setSelection(0);
     }
     
+    /**
+     * Focuses on the interaction view.
+     */
     void focusInteractionView() {
         tabFolder.setSelection(1);
     }
     
+    /**
+     * Disposes this tab frame.
+     */
     void dispose() {
         propertyView.dispose();
         interactionView.dispose();
         tabFolder.dispose();
-    }
-    
-    private class TabFrameSelectionListener implements SelectionListener {
-        
-        public void widgetSelected(SelectionEvent evt) {
-            /*
-            CTabItem tab = tabFolder.getSelection();
-            String title = tab.getText();
-            
-            if (title.compareTo(INTERACTION_VIEW_TITLE) == 0) {
-            } else if (title.compareTo(MEMO_VIEW_TITLE) == 0) {
-            }
-            */
-        }
-        
-        public void widgetDefaultSelected(SelectionEvent e) {
-        }
     }
 }

@@ -16,21 +16,40 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 
 /**
- * Provides a base frame that lays out forest and tree views.
+ * Provides a tab frame that displays tree and memo views.
  * @author Katsuhisa Maruyama
  */
 public class CodeForestTopTabFrame {
     
+    /**
+     * A folder that holds tabs display tree and memo views.
+     */
     private CTabFolder tabFolder;
     
+    /**
+     * The title string that represents the tree view.
+     */
     private static final String TREE_VIEW_TITLE = "Tree ";
     
+    /**
+     * The title string that represents the memo view.
+     */
     private static final String MEMO_VIEW_TITLE = "Memo ";
     
+    /**
+     * A tree view.
+     */
     private TreeView treeView;
     
+    /**
+     * A memo view.
+     */
     private MemoView memoView;
     
+    /**
+     * Creates tab frame display on the top of the window.
+     * @param frame the main frame
+     */
     CodeForestTopTabFrame(CodeForestFrame frame) {
         Shell shell = frame.getShell();
         
@@ -64,26 +83,47 @@ public class CodeForestTopTabFrame {
         memoViewTab.setImage(Activator.getImage("memo"));
     }
     
+    /**
+     * Obtains the tab folder.
+     * @return the tab folder
+     */
     CTabFolder getTabFolder() {
         return tabFolder;
     }
     
+    /**
+     * Obtains the tree view.
+     * @return the tree view
+     */
     TreeView getTreeView() {
         return treeView;
     }
     
+    /**
+     * Obtains the memo view.
+     * @return the memo view
+     */
     MemoView getMemoView() {
         return memoView;
     }
     
+    /**
+     * Focuses on the tree view.
+     */
     void focusTreeView() {
         tabFolder.setSelection(0);
     }
     
+    /**
+     * Focuses on the memo view.
+     */
     void focusMemoView() {
         tabFolder.setSelection(1);
     }
     
+    /**
+     * Disposes this tab frame.
+     */
     void dispose() {
         treeView.dispose();
         memoView.dispose();

@@ -16,6 +16,10 @@ import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import java.util.Map;
 
+/**
+ * Checks the version of Java3D.
+ * @author Katsuhisa Maruyama
+ */
 public class Java3DVersionCheck {
     
     Java3DVersionCheck() {

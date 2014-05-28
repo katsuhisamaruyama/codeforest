@@ -48,12 +48,25 @@ public class CodeForestRepository {
     private static final String MemoElem          = "memo";
     private static final String ClassNameAttr     = "class";
     
+    /**
+     * The metrics of a project represented by a forest.
+     */
     private ProjectMetrics projectMetrics;
     
+    /**
+     * An interaction view
+     */
     private InteractionView interactionView;
     
+    /**
+     * A memo view.
+     */
     private MemoView memoView;
     
+    /**
+     * Creates a repository that stores information on a forest.
+     * @param frame the main frame
+     */
     public CodeForestRepository(CodeForestFrame frame) {
         projectMetrics = frame.getProjectMetrics();
         interactionView = frame.getInteractionView();
@@ -61,14 +74,23 @@ public class CodeForestRepository {
     }
     
     private static final String XML_FILENAME = "codeforest-repo";
+    
     private static final String XML_FILENAME_EXT = ".xml";
     
+    /**
+     * Obtains the name of an XML file.
+     * @param mproject the project metrics
+     * @return the name
+     */
     private String getXMLFileName(ProjectMetrics mproject) {
         String topdir = mproject.getJavaProject().getTopDir();
         String filename = XML_FILENAME + String.valueOf(mproject.getTime()) + XML_FILENAME_EXT;
         return topdir + File.separator + filename;
     }
     
+    /**
+     * Writes information on a project into an XML document.
+     */
     public void writeXML() {
         File file = new File(getXMLFileName(projectMetrics));
         if (file.exists()) {
@@ -80,6 +102,11 @@ public class CodeForestRepository {
         System.out.println("- Export: " + file.getAbsolutePath());
     }
     
+    /**
+     * Obtains the XML document object storing information on a project.
+     * @param mproject the project metrics
+     * @return the XML document object
+     */
     public Document getDocument(ProjectMetrics mproject) {
         try {
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -93,6 +120,11 @@ public class CodeForestRepository {
         return null;
     }
     
+    /**
+     * Exports information on a project to an XML document object.
+     * @param doc the XML document object
+     * @param mproject the project metrics
+     */
     private void export(Document doc, ProjectMetrics mproject) {
         Element rootElem = doc.createElement(CodeForestRepository.TopElem);
         rootElem.setAttribute(CodeForestRepository.NameAttr, mproject.getName());
@@ -108,6 +140,12 @@ public class CodeForestRepository {
         }
     }
     
+    /**
+     * Exports information on interaction records to an XML document object.
+     * @param doc the XML document object
+     * @param parent the parent of the XML element storing the information
+     * @param record the interaction records
+     */
     private void exportInteractionRecord(Document doc, Element parent, InteractionRecord record) {
         Element recordElem = doc.createElement(CodeForestRepository.InteractionElem);
         recordElem.setAttribute(CodeForestRepository.TimeAttr, String.valueOf(record.getTime()));
@@ -124,6 +162,12 @@ public class CodeForestRepository {
         parent.appendChild(recordElem);
     }
     
+    /**
+     * Exports information on memos to an XML document object.
+     * @param doc the XML document object
+     * @param parent the parent of the XML element storing the information
+     * @param memo the memos
+     */
     private void exportMemo(Document doc, Element parent, Memo memo) {
         Element memoElem = doc.createElement(CodeForestRepository.MemoElem);
         memoElem.setAttribute(CodeForestRepository.TimeAttr, String.valueOf(memo.getTime()));
@@ -133,6 +177,9 @@ public class CodeForestRepository {
         parent.appendChild(memoElem);
     }
     
+    /**
+     * Reads the XML document and stores information on interaction records and memos.
+     */
     public void readXML() {
         File file = new File(getXMLFileName(projectMetrics));
         if (file.canRead()) {
@@ -151,6 +198,10 @@ public class CodeForestRepository {
         }
     }
     
+    /**
+     * Reads information on interaction records.
+     * @param rootElem the XML element that stores the interaction records
+     */
     private void readInteractionRecord(Element rootElem) {
         NodeList interactionRecordNodes = rootElem.getElementsByTagName(CodeForestRepository.InteractionElem);
         for (int i = 0; i < interactionRecordNodes.getLength(); i++) {
@@ -175,6 +226,10 @@ public class CodeForestRepository {
         }
     }
     
+    /**
+     * Reads information on memos.
+     * @param rootElem the XML element that stores the memos
+     */
     private void readMemo(Element rootElem) {
         NodeList memoNodes = rootElem.getElementsByTagName(CodeForestRepository.MemoElem);
         for (int i = 0; i < memoNodes.getLength(); i++) {
@@ -198,11 +253,21 @@ public class CodeForestRepository {
         }
     }
     
-    private int getInteger(String value) {
-        return Integer.parseInt(value);
+    /**
+     * Translates the integer string to its value.
+     * @param str the integer string
+     * @return the integer value
+     */
+    private int getInteger(String str) {
+        return Integer.parseInt(str);
     }
     
-    private long getLong(String value) {
-        return Long.parseLong(value);
+    /**
+     * Translates the long string to its value.
+     * @param str long string
+     * @return the long value
+     */
+    private long getLong(String str) {
+        return Long.parseLong(str);
     }
 }
