@@ -76,7 +76,7 @@ public class River extends AbstractShape {
      */
     private void setAxis(TransformGroup trans) {
         Point3d[] vertex = new Point3d[8];
-        double height = 0.01;
+        double height = 0.015;
         
         vertex[0] = new Point3d(-width / 2, height, depth / 2);
         vertex[1] = new Point3d(-width / 2, height, -depth / 2);
