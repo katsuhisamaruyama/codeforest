@@ -30,8 +30,8 @@ import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.jtool.codeforest.Activator;
 import org.jtool.codeforest.ui.view.SettingData;
 
@@ -41,20 +41,46 @@ import org.jtool.codeforest.ui.view.SettingData;
  */
 public class WorkingSetDialog extends TitleAreaDialog {
     
+    /**
+     * The main frame.
+     */
     private CodeForestFrame frame;
     
+    /**
+     * The table viewer.
+     */
     private TableViewer tableViewer;
     
+    /**
+     * The text area which shows the description of the working set.
+     */
     private Text text;
     
+    /**
+     * A setting view.
+     */
     private SettingView settingView;
     
+    /**
+     * The setting data.
+     */
     private SettingData settingData;
     
+    /**
+     * The cancel button of this dialog.
+     */
     private Button cancelButton;
     
+    /**
+     * The name of the selected working set.
+     */
     private String selectedName;
     
+    /**
+     * Creates a working set dialog.
+     * @param shell the shell
+     * @param frame the main frame
+     */
     public WorkingSetDialog(Shell shell, CodeForestFrame frame) {
         super(shell);
         
@@ -63,15 +89,26 @@ public class WorkingSetDialog extends TitleAreaDialog {
         this.settingData = frame.getSettingData();
     }
     
+    /**
+     * Configures a given shell.
+     * @param shell the shell
+     */
     protected void configureShell(Shell shell) {
         super.configureShell(shell);
         shell.setText("Event Listener List Configuration");
     }
     
+    /**
+     * Returns the initial size of this dialog.
+     * @return the initial size of the dialog
+     */
     protected Point getInitialSize() {
         return new Point(400, 500);
     }
     
+    /**
+     * Creates this dialog.
+     */
     public void create() {
         setHelpAvailable(false);
         setDialogHelpAvailable(false);
@@ -81,6 +118,10 @@ public class WorkingSetDialog extends TitleAreaDialog {
         setMessage("Add or remove working sets of metrics.");
     }
     
+    /**
+     *  Creates the area for this dialog.
+     *  @param parent the parent of this dialog
+     */
     protected Control createDialogArea(Composite parent) {
         Composite container = (Composite)super.createDialogArea(parent);
         
@@ -97,6 +138,10 @@ public class WorkingSetDialog extends TitleAreaDialog {
         tableViewer.setLabelProvider(new WorkingSetLabelProvider());
         tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
             
+            /**
+             * Invoked when the selection has changed.
+             * @param event event object describing the change
+             */
             public void selectionChanged(SelectionChangedEvent event) {
                 IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
                 Object obj = selection.getFirstElement();
@@ -112,6 +157,10 @@ public class WorkingSetDialog extends TitleAreaDialog {
         
         tableViewer.addDoubleClickListener(new IDoubleClickListener() {
             
+            /**
+             * Invoked when a mouse double click occurs.
+             * @param event event object describing the double-click
+             */
             public void doubleClick(DoubleClickEvent event) {
                 IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
                 Object obj = selection.getFirstElement();
@@ -149,8 +198,13 @@ public class WorkingSetDialog extends TitleAreaDialog {
         Button changeButton = new Button(buttons, SWT.FLAT);
         changeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         changeButton.setText("Change View");
-        changeButton.addSelectionListener(new SelectionAdapter() {
+        
+        changeButton.addSelectionListener(new SelectionListener() {
             
+            /**
+             * Invoked when selection occurs in the control.
+             * @param e an event containing information about the selection
+             */
             public void widgetSelected(SelectionEvent e) {
                 if (selectedName != null) {
                     settingView.change(WorkingSetStore.getWorkingSet(selectedName));
@@ -159,14 +213,26 @@ public class WorkingSetDialog extends TitleAreaDialog {
                     recordWorkingSetAction("change", selectedName);
                 }
             }
+            
+            /**
+             * Invoked when default selection occurs in the control.
+             * @param e an event containing information about the default selection
+             */
+            public void widgetDefaultSelected(SelectionEvent e) {
+            }
         });
         
         Button addButton = new Button(buttons, SWT.FLAT);
         addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         addButton.setText("Add");
-        addButton.addSelectionListener(new SelectionAdapter() {
+        
+        addButton.addSelectionListener(new SelectionListener() {
             AddWorkingSetDialog dialog = new AddWorkingSetDialog(frame.getShell());
             
+            /**
+             * Invoked when selection occurs in the control.
+             * @param e an event containing information about the selection
+             */
             public void widgetSelected(SelectionEvent e) {
                 if (dialog.open() == Window.OK) {
                     WorkingSetStore.addWorkingSet(dialog.getName(), dialog.getDescription(), settingData);
@@ -176,13 +242,25 @@ public class WorkingSetDialog extends TitleAreaDialog {
                     recordWorkingSetAction("add", dialog.getName());
                 }
             }
+            
+            /**
+             * Invoked when default selection occurs in the control.
+             * @param e an event containing information about the default selection
+             */
+            public void widgetDefaultSelected(SelectionEvent e) {
+            }
         });
         
         Button removeButton = new Button(buttons, SWT.FLAT);
         removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         removeButton.setText("Remove");
-        removeButton.addSelectionListener(new SelectionAdapter() {
+        
+        removeButton.addSelectionListener(new SelectionListener() {
             
+            /**
+             * Invoked when selection occurs in the control.
+             * @param e an event containing information about the selection
+             */
             public void widgetSelected(SelectionEvent e) {
                 if (selectedName != null) {
                     WorkingSetStore.removeWorkingSet(selectedName);
@@ -190,29 +268,60 @@ public class WorkingSetDialog extends TitleAreaDialog {
                     refresh();
                 }
             }
+            
+            /**
+             * Invoked when default selection occurs in the control.
+             * @param e an event containing information about the default selection
+             */
+            public void widgetDefaultSelected(SelectionEvent e) {
+            }
         });
         
         Button clearButton = new Button(buttons, SWT.FLAT);
         clearButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         clearButton.setText("Clear");
-        clearButton.addSelectionListener(new SelectionAdapter() {
+        
+        clearButton.addSelectionListener(new SelectionListener() {
             
+            /**
+             * Invoked when selection occurs in the control.
+             * @param e an event containing information about the selection
+             */
             public void widgetSelected(SelectionEvent e) {
                 WorkingSetStore.clearWorkingSets();
                 cancelButton.setEnabled(false);
                 refresh();
+            }
+            
+            /**
+             * Invoked when default selection occurs in the control.
+             * @param e an event containing information about the default selection
+             */
+            public void widgetDefaultSelected(SelectionEvent e) {
             }
         });
         
         Button defaultButton = new Button(buttons, SWT.FLAT);
         defaultButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         defaultButton.setText("Set as Default");
-        defaultButton.addSelectionListener(new SelectionAdapter() {
+        
+        defaultButton.addSelectionListener(new SelectionListener() {
             
+            /**
+             * Invoked when selection occurs in the control.
+             * @param e an event containing information about the selection
+             */
             public void widgetSelected(SelectionEvent e) {
                 WorkingSetStore.setDefaultWorkingSet(settingData);
                 cancelButton.setEnabled(false);
                 refresh();
+            }
+            
+            /**
+             * Invoked when default selection occurs in the control.
+             * @param e an event containing information about the default selection
+             */
+            public void widgetDefaultSelected(SelectionEvent e) {
             }
         });
         
@@ -222,34 +331,52 @@ public class WorkingSetDialog extends TitleAreaDialog {
         return container;
     }
     
+    /**
+     * Refreshes this dialog.
+     */
+    void refresh() {
+        tableViewer.setInput(WorkingSetStore.getWorkingSets());
+        tableViewer.refresh(true, true);
+    }
+    
+    /**
+     * Adds buttons to this dialog's button bar.
+     * @param the parent of this dialog
+     */
     protected void createButtonsForButtonBar(Composite parent) {
         cancelButton = createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, true);
         cancelButton.setEnabled(true);
         createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
     }
     
-    void refresh() {
-        tableViewer.setInput(WorkingSetStore.getWorkingSets());
-        tableViewer.refresh(true, true);
-    }
-    
-    private boolean ok = false;
-    
-    boolean isOk() {
-        return ok;
-    }
-    
+    /**
+     * Invoked when the ok button is pressed.
+     */
     protected void okPressed() {
         super.okPressed();
     }
     
+    /**
+     * Records an action related to the working set.
+     * @param action the action to be recorded
+     * @param name the name of the working set
+     */
     private void recordWorkingSetAction(String action, String name) {
         InteractionView interactionView = frame.getInteractionView();
         interactionView.recordWorkingSetAction(settingData, action, name);
     }
     
+    /**
+     * A label provider that provides label texts of a table.
+     * @author Katsuhisa Maruyama
+     */
     private class WorkingSetLabelProvider extends LabelProvider {
         
+        /**
+         * Returns the label text for the given column of the given element.
+         * @param obj the object representing the entire row
+         * @return the label text or or <code>null</code> if there is no label text
+         */
         public String getText(Object obj) {
             if (obj instanceof WorkingSet) {
                 WorkingSet settingData = (WorkingSet)obj;
@@ -258,6 +385,11 @@ public class WorkingSetDialog extends TitleAreaDialog {
             return null;
         }
         
+        /**
+         * Returns the label image for the given column of the given element.
+         * @param obj the object representing the entire row
+         * @return the image or <code>null</code> if there is no image
+         */
         public Image getImage(Object obj) {
             if (obj instanceof WorkingSet) {
                 return Activator.getImage("workingset");

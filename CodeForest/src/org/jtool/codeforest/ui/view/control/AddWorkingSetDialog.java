@@ -25,29 +25,61 @@ import org.eclipse.swt.events.ModifyEvent;
  */
 class AddWorkingSetDialog extends Dialog {
     
+    /**
+     * The text area in which a user writes the name of the working set.
+     */
     private Text text;
     
+    /**
+     * The text area in which a user writes the description of the working set.
+     */
     private Text text2;
     
+    /**
+     * The name of the working set.
+     */
     private String name;
     
+    /**
+     * The description of the working set.
+     */
     private String description;
     
+    /**
+     * The ok button of this dialog.
+     */
     private Button okButton;
     
+    /**
+     * Creates an interaction edit dialog.
+     * @param shell the shell
+     * @param frame the main frame
+     */
     public AddWorkingSetDialog(Shell shell) {
         super(shell);
     }
     
+    /**
+     * Configures a given shell.
+     * @param shell the shell
+     */
     protected void configureShell(Shell shell) {
         super.configureShell(shell);
         shell.setText("Add Working Set");
     }
     
+    /**
+     * Returns the initial size of this dialog.
+     * @return the initial size of the dialog
+     */
     protected Point getInitialSize() {
         return new Point(300, 250);
     }
     
+    /**
+     *  Creates the area for this dialog.
+     *  @param parent the parent of this dialog
+     */
     protected Control createDialogArea(Composite parent) {
         Composite container = (Composite)super.createDialogArea(parent);
         
@@ -66,6 +98,10 @@ class AddWorkingSetDialog extends Dialog {
         text.setTextLimit(20);
         text.addModifyListener(new ModifyListener() {
             
+            /**
+             * Invoked when the text is modified.
+             * @param e an event containing information about the modify
+             */
             public void modifyText(ModifyEvent e) {
                 name = text.getText();
                 if (name == null || name.length() == 0) {
@@ -89,12 +125,19 @@ class AddWorkingSetDialog extends Dialog {
         return container;
     }
     
+    /**
+     * Adds buttons to this dialog's button bar.
+     * @param the parent of this dialog
+     */
     protected void createButtonsForButtonBar(Composite parent) {
         createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, true);
         okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
         okButton.setEnabled(false); 
     }
     
+    /**
+     * Invoked when the ok button is pressed.
+     */
     protected void okPressed() {
         description = text2.getText();
         description.replace('[', '{');
@@ -102,15 +145,26 @@ class AddWorkingSetDialog extends Dialog {
         super.okPressed();
     }
     
+    /**
+     * Invoked when the cancel button is pressed.
+     */
     protected void cancelPressed() {
         name = null;
         super.cancelPressed();
     }
     
+    /**
+     * The name of a working set.
+     * @return the name of the working set
+     */
     String getName() {
         return name;
     }
     
+    /**
+     * Returns the description of a working set.
+     * @return the description of the working set
+     */
     String getDescription() {
         return description;
     }

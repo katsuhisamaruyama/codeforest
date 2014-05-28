@@ -44,6 +44,9 @@ public class InteractionView {
     
     private CheckboxTableViewer tableViewer;
     
+    /**
+     * Information on the font.
+     */
     private Font font11;
     
     private CodeForestFrame frame;
@@ -223,6 +226,9 @@ public class InteractionView {
         return null;
     }
     
+    /**
+     * Disposes this interaction view.
+     */
     public void dispose() {
         font11.dispose();
         tableViewer = null;
@@ -359,6 +365,11 @@ public class InteractionView {
         tableViewer.getTable().setTopIndex(top);
     }
     
+    /**
+     * Reveals an interaction record with a given index.
+     * @param index the index value of the revealed the interaction record
+     * @return the index value of the top of the interaction records
+     */
     private int reveal(int index) {
         Rectangle area = tableViewer.getTable().getClientArea();
         int num = area.height / tableViewer.getTable().getItemHeight() - 1;
@@ -373,6 +384,11 @@ public class InteractionView {
         return top;
     }
     
+    /**
+     * Centers an interaction record with a given index.
+     * @param index index the index value of the revealed the interaction record
+     * @return the index value of the top of the interaction records
+     */
     @SuppressWarnings("unused")
     private int center(int index) {
         Rectangle area = tableViewer.getTable().getClientArea();
@@ -391,8 +407,18 @@ public class InteractionView {
         return top;
     }
     
+    /**
+     * A label provider that provides label texts of a table.
+     * @author Katsuhisa Maruyama
+     */
     private class InteractionLabelProvider extends LabelProvider implements ITableLabelProvider {
         
+        /**
+         * Returns the label text for the given column of the given element.
+         * @param obj the object representing the entire row
+         * @param columnIndex the zero-based index of the column in which the label appears
+         * @return the label text or or <code>null</code> if there is no label text
+         */
         public String getColumnText(Object obj, int columnIndex) {
             if (obj instanceof InteractionRecord) {
                 InteractionRecord record = (InteractionRecord)obj;
@@ -409,6 +435,12 @@ public class InteractionView {
             return null;
         }
         
+        /**
+         * Returns the label image for the given column of the given element.
+         * @param obj the object representing the entire row
+         * @param columnIndex the zero-based index of the column in which the label appears
+         * @return the image or <code>null</code> if there is no image
+         */
         public Image getColumnImage(Object obj, int columnIndex) {
             if (obj instanceof InteractionRecord) {
                 InteractionRecord record = (InteractionRecord)obj;
@@ -420,4 +452,3 @@ public class InteractionView {
         }
     }
 }
-
