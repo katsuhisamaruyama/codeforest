@@ -131,11 +131,11 @@ public class SettingData {
      */
     public SettingData(String th, String tr, String tc, String fh, String fr, String fc) {
         setTrunkHeight(th);
-        setTrunkRadius(th);
+        setTrunkRadius(tr);
         setTrunkColor(tc);
         setFoliageHeight(fh);
         setFoliageRadius(fr);
-        setFoliageColor(tc);
+        setFoliageColor(fc);
         
         setLeafNumber(getMethodItems()[0]);
         setLeafColor(getMethodItems()[0]);

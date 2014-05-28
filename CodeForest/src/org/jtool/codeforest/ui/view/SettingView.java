@@ -214,11 +214,9 @@ public class SettingView {
         fradiusSel.addSelectionListener(new FoliageRadiusSelectionListener());
         
         tcolorSel = createMetricSelection(settings, SettingData.TRUNK_COLOR, settingData.getClassItems());
-        settingData.setTrunkColor(tcolorSel.getItem(0));
         tcolorSel.addSelectionListener(new TrunkColorSelectionListener());
         
         fcolorSel = createMetricSelection(settings, SettingData.FOLIAGE_COLOR, settingData.getClassItems());
-        settingData.setFoliageColor(fcolorSel.getItem(0));
         fcolorSel.addSelectionListener(new FoliageColorSelectionListener());
     }
     
