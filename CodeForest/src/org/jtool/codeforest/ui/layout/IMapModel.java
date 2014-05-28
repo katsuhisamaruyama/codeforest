@@ -5,11 +5,15 @@
 package org.jtool.codeforest.ui.layout;
 
 /**
- * Interface for a map model.
- * @author Daiki Todoroki
+ * Interface for a model managing mappable nodes.
  * @author Katsuhisa Maruyama
+ * @author Daiki Todoroki
  */
 public interface IMapModel {
     
-    public IMappable[] getItems();
+    /**
+     * Obtains mappable nodes managed by this model.
+     * @return the array of the mappable nodes
+     */
+    public IMappableNode[] getNodes();
 }

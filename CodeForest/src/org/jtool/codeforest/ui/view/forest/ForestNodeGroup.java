@@ -5,7 +5,7 @@
 package org.jtool.codeforest.ui.view.forest;
 
 import org.jtool.codeforest.ui.layout.IMapModel;
-import org.jtool.codeforest.ui.layout.IMappable;
+import org.jtool.codeforest.ui.layout.IMappableNode;
 import org.jtool.codeforest.ui.shape.Ground;
 import org.jtool.codeforest.ui.view.SettingData;
 import org.jtool.codeforest.metrics.java.PackageMetrics;
@@ -60,11 +60,11 @@ public class ForestNodeGroup extends ForestNode implements IMapModel {
     }
     
     /**
-     * Obtains the mappable items within this group.
+     * Obtains the mappable nodes within this group.
      * @return the array of mappable items
      */
-    public IMappable[] getItems() {
-        IMappable[] mappable = new IMappable[nodes.size()];
+    public IMappableNode[] getNodes() {
+        IMappableNode[] mappable = new IMappableNode[nodes.size()];
         for(int i = 0; i < nodes.size(); i++) {
             mappable[i] = nodes.get(i);
         }
@@ -85,7 +85,7 @@ public class ForestNodeGroup extends ForestNode implements IMapModel {
     protected void checkLayout() {
         if (!layoutValid) {
             if (nodes.size() != 0) {
-                setLayout(this, getBounds());
+                layout(this, getBounds());
             }
             layoutValid = true;
         }

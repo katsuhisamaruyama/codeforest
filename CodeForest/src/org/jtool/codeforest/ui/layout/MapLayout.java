@@ -9,8 +9,8 @@ import java.util.Arrays;
 
 /**
  * A class for a map layout.
- * @author Daiki Todoroki
  * @author Katsuhisa Maruyama
+ * @author Daiki Todoroki
  */
 public abstract class MapLayout {
     
@@ -22,49 +22,81 @@ public abstract class MapLayout {
     
     public static final int DESCENDING = 1;
     
-    public abstract void layout(IMappable[] items, Rect bounds);
+    public abstract void layout(IMappableNode[] items, RectArea bounds);
     
-    public void layout(IMapModel model, Rect bounds) {
-        layout(model.getItems(), bounds);
+    /**
+     * Lays out mappable nodes in an area.
+     * @param model the model managing mappable nodes
+     * @param bounds the bounds of the area
+     */
+    public void layout(IMapModel model, RectArea area) {
+        layout(model.getNodes(), area);
     }
     
-    public void layout(IMapModel model, double x, double y, double w, double h) {
-        layout(model, new Rect(x, y, w, h));
+    /**
+     * Lays out mappable nodes in an area.
+     * @param model the model managing mappable nodes
+     * @param x the x-position of the area
+     * @param y the x-position of the area
+     * @param width the width of the area
+     * @param height the height of the area
+     */
+    public void layout(IMapModel model, double x, double y, double width, double height) {
+        layout(model, new RectArea(x, y, width, height));
     }
     
-    public String getName() {
-        return "ABSTRACT";
+    /**
+     * Obtains the total of the base sizes of all mappable nodes.
+     * @param nodes the array of all the mappable nodes
+     * @return the total of the base sizes
+     */
+    public static double getTotalBaseSize(IMappableNode[] nodes) {
+        return getTotalBaseSize(nodes, 0, nodes.length - 1);
     }
     
-    public String getDescription() {
-        return "ABSTRACT";
-    }
-    
-    public static double totalSize(IMappable[] items) {
-        return totalSize(items, 0, items.length - 1);
-    }
-    
-    public static double totalSize(IMappable[] items, int start, int end) {
-        double sum = 0;
+    /**
+     * Obtains the total of the base sizes of mappable nodes.
+     * @param nodes the array of all the mappable nodes
+     * @param start the index number of the starting point of the mappable nodes affecting the total size
+     * @param end the the index number of the ending point of the mappable nodes affecting the total size
+     * @return the total of the base sizes
+     */
+    public static double getTotalBaseSize(IMappableNode[] nodes, int start, int end) {
+        double total = 0;
         for (int i = start; i <= end; i++) {
-            sum = sum + items[i].getBaseSize();
+            total = total + nodes[i].getBaseSize();
         }
-        return sum;
+        return total;
     }
     
-    public IMappable[] sortDescending(IMappable[] items) {
-        IMappable[] sortedItems = new IMappable[items.length];
-        System.arraycopy(items,0, sortedItems, 0, items.length);
+    /**
+     * Obtains the mappable nodes in descending order.
+     * @param nodes the array of the mappable nodes to be sorted
+     * @return the array of the mappable nodes in descending order
+     */
+    public IMappableNode[] sortDescending(IMappableNode[] nodes) {
+        IMappableNode[] sortedItems = new IMappableNode[nodes.length];
+        System.arraycopy(nodes, 0, sortedItems, 0, nodes.length);
         
-        Arrays.sort(sortedItems, new ItemComparator());
+        Arrays.sort(sortedItems, new NodeComparator());
         return sortedItems;
     }
     
-    class ItemComparator implements Comparator<IMappable> {
-        public int compare(IMappable o1, IMappable o2) {
-            if (o1.getBaseSize() > o2.getBaseSize()) {
+    /**
+     * Compares mappable nodes
+     * @author Katsuhisa Maruyama
+     * @author Daiki Todoriki
+     */
+    class NodeComparator implements Comparator<IMappableNode> {
+        
+        /**
+         * Compares the base sizes of two mappable nodes and returns their order.
+         * @return a negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second
+         */
+        public int compare(IMappableNode n1, IMappableNode n2) {
+            if (n1.getBaseSize() > n2.getBaseSize()) {
                 return -1;
-            } else if (o1.getBaseSize() == o2.getBaseSize()) {
+            } else if (n1.getBaseSize() == n2.getBaseSize()) {
                 return 0;
             } else {
                 return 1;
