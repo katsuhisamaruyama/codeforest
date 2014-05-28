@@ -29,6 +29,9 @@ import java.io.File;
  */
 public class CodeForestRepository {
     
+    /**
+     * The names of tags appearing in an XML document.
+     */
     private static final String TopElem           = "codeForestRepository";
     
     private static final String NameAttr          = "name";
@@ -73,8 +76,14 @@ public class CodeForestRepository {
         memoView = frame.getMemoView();
     }
     
+    /**
+     * The prefix of the name of an XML file. 
+     */
     private static final String XML_FILENAME = "codeforest-repo";
     
+    /**
+     * The extension of the name of an XML file. 
+     */
     private static final String XML_FILENAME_EXT = ".xml";
     
     /**
