@@ -156,7 +156,7 @@ public class SettingView {
     }
     
     /**
-     * Create the pane of this setting view
+     * Create the pane of this setting view.
      * @param parent the parent of the setting view
      */
     private void createPane(Composite parent) {

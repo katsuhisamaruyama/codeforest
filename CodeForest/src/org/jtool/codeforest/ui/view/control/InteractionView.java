@@ -40,8 +40,14 @@ import java.util.List;
  */
 public class InteractionView {
     
+    /**
+     * The list of interaction records.
+     */
     private List<InteractionRecord> interactionList;
     
+    /**
+     * the table viewer.
+     */
     private CheckboxTableViewer tableViewer;
     
     /**
@@ -49,8 +55,16 @@ public class InteractionView {
      */
     private Font font11;
     
+    /**
+     * The main frame.
+     */
     private CodeForestFrame frame;
     
+    /**
+     * Creates an interaction view.
+     * @param parent the parent of the interaction view
+     * @param frame the main frame
+     */
     public InteractionView(Composite parent, CodeForestFrame frame) {
         interactionList = new ArrayList<InteractionRecord>();
         sort(interactionList);
@@ -60,6 +74,10 @@ public class InteractionView {
         createPane(parent);
     }
     
+    /**
+     * Retrieves interaction records matched for a given keyword and marks them.
+     * @param keyword the keyword for the retrieval
+     */
     private void retrive(String keyword) {
         for (InteractionRecord record : interactionList) {
             String description = record.getDescription();
@@ -75,6 +93,10 @@ public class InteractionView {
         }
     }
     
+    /**
+     * Creates the pane of this interaction view.
+     * @param parent the parent of the interaction view
+     */
     private void createPane(Composite parent) {
         final int MARGIN = 0;
         final int MARGIN2 = 2;
@@ -108,10 +130,18 @@ public class InteractionView {
         findButton.setText("Find");
         findButton.addSelectionListener(new SelectionListener() {
             
+            /**
+             * Invoked when selection occurs in the control.
+             * @param e an event containing information about the selection
+             */
             public void widgetSelected(SelectionEvent e) {
                 retrive(text.getText());
             }
             
+            /**
+             * Invoked when default selection occurs in the control.
+             * @param e an event containing information about the default selection
+             */
             public void widgetDefaultSelected(SelectionEvent e) {
             }
         });
@@ -139,7 +169,7 @@ public class InteractionView {
             public void doubleClick(DoubleClickEvent event) {
                 InteractionRecord record = getInteractionRecord();
                 if (record != null) {
-                    if (record.isWorkingSetInteraction() || record.isSettingInteraction() || record.isFocusClassInteraction()) {
+                    if (record.isWorkingSetInteraction() || record.isSettingInteraction() || record.isFocusInteraction()) {
                         frame.getSettingView().change(record);
                         recordWorkingSetAction(frame.getSettingData(), "change", "");
                     }
@@ -164,20 +194,28 @@ public class InteractionView {
         tbdata.right = new FormAttachment(100, -MARGIN);
         tableViewer.getTable().setLayoutData(tbdata);
         
-        makeContextMenuAction();
+        makeContextMenuActions();
         
         parent.pack();
         
         tableViewer.setInput(interactionList);
     }
     
-    private void makeContextMenuAction() {
+    /**
+     * Creates the content menu actions.
+     */
+    private void makeContextMenuActions() {
         Menu menu = new Menu(frame.getShell(), SWT.POP_UP);
         
         MenuItem editItem = new MenuItem(menu, SWT.PUSH);
         editItem.setText("Edit");
+        
         editItem.addSelectionListener(new SelectionListener() {
             
+            /**
+             * Invoked when selection occurs in the control.
+             * @param e an event containing information about the selection
+             */
             public void widgetSelected(SelectionEvent e) {
                 InteractionRecord record = getInteractionRecord();
                 if (record != null) {
@@ -190,14 +228,23 @@ public class InteractionView {
                 }
             }
             
+            /**
+             * Invoked when default selection occurs in the control.
+             * @param e an event containing information about the default selection
+             */
             public void widgetDefaultSelected(SelectionEvent e) {
             }
         });
         
         MenuItem removeItem = new MenuItem(menu, SWT.PUSH);
         removeItem.setText("Remove");
+        
         removeItem.addSelectionListener(new SelectionListener() {
             
+            /**
+             * Invoked when selection occurs in the control.
+             * @param e an event containing information about the selection
+             */
             public void widgetSelected(SelectionEvent e) {
                 InteractionRecord record = getInteractionRecord();
                 if (record != null) {
@@ -207,6 +254,10 @@ public class InteractionView {
                 }
             }
             
+            /**
+             * Invoked when default selection occurs in the control.
+             * @param e an event containing information about the default selection
+             */
             public void widgetDefaultSelected(SelectionEvent e) {
             }
         });
@@ -214,6 +265,10 @@ public class InteractionView {
         tableViewer.getControl().setMenu(menu);
     }
     
+    /**
+     * Obtains the selected interaction record.
+     * @return the selected interaction record
+     */
     private InteractionRecord getInteractionRecord() {
         if (tableViewer.getSelection() instanceof IStructuredSelection) {
             IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection();
@@ -236,33 +291,65 @@ public class InteractionView {
         interactionList.clear();
     }
     
+    /**
+     * Returns the list containing all the interaction records.
+     */
     public List<InteractionRecord> getInteractionRecordList() {
         return interactionList;
     }
     
+    /**
+     * Adds an interaction record.
+     * @param record the interaction record to be added
+     */
     public void add(InteractionRecord record) {
         interactionList.add(record);
     }
     
+    /**
+     * Clears the interaction records.
+     */
     public void clear() {
         interactionList.clear();
     }
     
+    /**
+     * Returns the size of the interaction records.
+     * @return the size of the interaction records
+     */
     public int size() {
         return interactionList.size();
     }
     
+    /**
+     * Returns the interaction records with a specified index.
+     * @param index the index number of the interaction record to be retrieved
+     * @return the retrieved interaction record
+     */
     public InteractionRecord getInteractionRecord(int index) {
         return interactionList.get(index);
     }
     
+    /**
+     * Sorts the interaction records.
+     */
     public void sort() {
         sort(interactionList);
     }
     
+    /**
+     * Sorts interaction records.
+     * @param sets the list of the interaction records
+     */
     private static void sort(List<InteractionRecord> records) {
         Collections.sort(records, new Comparator<InteractionRecord>() {
             
+            /**
+             * Compares its two working sets for order.
+             * @param r1 the first interaction record to be compared
+             * @param r2 the second interaction record to be compared
+             * @return the negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second
+             */
             public int compare(InteractionRecord r1, InteractionRecord r2) {
                 long time1 = r1.getTime();
                 long time2 = r2.getTime();
@@ -278,22 +365,20 @@ public class InteractionView {
         });
     }
     
-    private static final String SYSTEM_ACTION = "%s for %s";
+    /**
+     * The templates of messages related to actions.
+     */
     private static final String SETTING_ACTION = "change %s into %s";
     private static final String WORKING_SET_ACTION = "%s a working set %s";
     private static final String FOCUS_CLASS_ACTION = "select %s";
     private static final String MEMO_ACTION = "%s a memo of %s";
     
-    public void recordSystemAction(SettingData data, String action, String projectName) {
-        long time = Time.getCurrentTime();
-        String description = String.format(SYSTEM_ACTION, action, projectName);
-        InteractionRecord record = new InteractionRecord(time, description, InteractionRecord.SYSTEM, data);
-        
-        interactionList.add(record);
-        
-        refreshInteractionList();
-    }
-    
+    /**
+     * Records an action related to a setting.
+     * @param data the setting data related to the action
+     * @param sort the sort of the metric related to the action
+     * @param value the value of the metric related to the action
+     */
     public void recordSettingAction(SettingData data, String sort, String value) {
         long time = Time.getCurrentTime();
         String description = String.format(SETTING_ACTION, sort, value);
@@ -304,9 +389,15 @@ public class InteractionView {
         refreshInteractionList();
     }
     
-    public void recordWorkingSetAction(SettingData data, String action, String name) {
+    /**
+     * Records an action related to a working set.
+     * @param data the setting data related to the action
+     * @param type the type of the action
+     * @param name the name of the working set related to the action
+     */
+    public void recordWorkingSetAction(SettingData data, String type, String name) {
         long time = Time.getCurrentTime();
-        String description = String.format(WORKING_SET_ACTION, action, name);
+        String description = String.format(WORKING_SET_ACTION, type, name);
         InteractionRecord record = new InteractionRecord(time, description, InteractionRecord.WORKING_SET, data);
         
         interactionList.add(record);
@@ -314,7 +405,12 @@ public class InteractionView {
         refreshInteractionList();
     }
     
-    public void recordFocusClassAction(SettingData data, String className) {
+    /**
+     * Records an action related to a focus.
+     * @param data the setting data related to the action
+     * @param className the name of the class related to the action
+     */
+    public void recordFocusAction(SettingData data, String className) {
         long time = Time.getCurrentTime();
         String description = String.format(FOCUS_CLASS_ACTION, className);
         InteractionRecord record = new InteractionRecord(time, description, InteractionRecord.FOCUS_CLASS, data);
@@ -323,15 +419,26 @@ public class InteractionView {
         refreshInteractionList();
     }
     
-    public void recordMemoAction(SettingData data, String action, String className) {
+    /**
+     * Records an action related to a memo.
+     * @param data the setting data related to the action
+     * @param type the type of the action
+     * @param className className the name of the class related to the action
+     */
+    public void recordMemoAction(SettingData data, String type, String className) {
         long time = Time.getCurrentTime();
-        String description = String.format(MEMO_ACTION, action, className);
+        String description = String.format(MEMO_ACTION, type, className);
         InteractionRecord record = new InteractionRecord(time, description, InteractionRecord.MEMO, data);
         
         interactionList.add(record);
         refreshInteractionList();
     }
     
+    /**
+     * Records other action.
+     * @param data the setting data related to the action
+     * @param description the description of the action
+     */
     public void recordOtherAction(SettingData data, String description) {
         long time = Time.getCurrentTime();
         InteractionRecord record = new InteractionRecord(time, description, InteractionRecord.OTHERS, data);
@@ -340,6 +447,9 @@ public class InteractionView {
         refreshInteractionList();
     }
     
+    /**
+     * Refreshes the interaction list of this interaction view.
+     */
     public void refreshInteractionList() {
         if (tableViewer.getTable() != null && !(tableViewer.getTable().isDisposed())) {
             tableViewer.getTable().getDisplay().syncExec(new Runnable() {
@@ -358,6 +468,10 @@ public class InteractionView {
         return tableViewer.getTable().getItemCount();
     }
     
+    /**
+     * Displays the selected interaction record.
+     * @param index the index number of the selected interaction record
+     */
     public void changeSelection(int index) {
         tableViewer.getTable().select(index);
         

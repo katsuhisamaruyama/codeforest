@@ -37,30 +37,57 @@ public class SettingRecord {
         foliageColorMetricName = data.getFoliageColor().getName();
     }
     
+    /**
+     * Returns the name of the metric of the trunk height.
+     * @return the metric name
+     */
     public String getTrunkHeight() {
         return trunkHeightMetricName;
     }
     
+    /**
+     * Returns the name of the metric of the trunk radius.
+     * @return the metric name
+     */
     public String getTrunkRadius() {
         return trunkRadiusMetricName;
     }
     
+    /**
+     * Returns the name of the metric of the trunk color.
+     * @return the metric name
+     */
     public String getTrunkColor() {
         return trunkColorMetricName;
     }
     
+    /**
+     * Returns the name of the metric of the foliage height.
+     * @return the metric name
+     */
     public String getFoliageHeight() {
         return foliageHeightMetricName;
     }
     
+    /**
+     * Returns the name of the metric of the foliage radius.
+     * @return the metric name
+     */
     public String getFoliageRadius() {
         return foliageRadiusMetricName;
     }
     
+    /**
+     * Returns the name of the metric of the foliage color.
+     * @return the metric name
+     */
     public String getFoliageColor() {
         return foliageColorMetricName;
     }
     
+    /**
+     * Displays information on this setting record.
+     */
     public void print() {
         System.out.println("Trunk height  = " + trunkHeightMetricName);
         System.out.println("Trunk radius  = " + trunkRadiusMetricName);

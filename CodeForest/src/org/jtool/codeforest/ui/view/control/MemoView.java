@@ -36,14 +36,31 @@ import java.util.ArrayList;
  */
 public class MemoView {
     
+    /**
+     * The main frame.
+     */
     private CodeForestFrame frame;
     
+    /**
+     * The list of memos.
+     */
     private List<Memo> memoList;
     
+    /**
+     * The memo panel.
+     */
     private Composite memoPanel;
     
+    /**
+     * Information on the font.
+     */
     private Font font11;
     
+    /**
+     * Creates a memo view.
+     * @param parent the parent of the memo view
+     * @param frame the main frame
+     */
     public MemoView(Composite parent, CodeForestFrame frame) {
         this.frame = frame;
         memoList = new ArrayList<Memo>();
@@ -51,6 +68,10 @@ public class MemoView {
         createPane(parent);
     }
     
+    /**
+     * Creates the pane of this memo view.
+     * @param parent the parent of the mome view.
+     */
     private void createPane(Composite parent) {
         final int MEMO_VIEW_HEIGHT = 5000;
         font11 = new Font(parent.getDisplay(), "", 11, SWT.NORMAL);
@@ -68,6 +89,9 @@ public class MemoView {
         sc.setContent(memoPanel);
     }
     
+    /**
+     * Disposes this memo view.
+     */
     public void dispose() {
         memoPanel.dispose();
         memoPanel = null;
@@ -75,6 +99,11 @@ public class MemoView {
         memoList.clear();
     }
     
+    /**
+     * Obtains the list of memos related to a specified class.
+     * @param className the name of the class
+     * @return the memo list
+     */
     public List<Memo> getMemoList(String className) {
         List<Memo> list = new ArrayList<Memo>();
         for (Memo memo : memoList) {
@@ -85,33 +114,66 @@ public class MemoView {
         return list;
     }
     
+    /**
+     * Obtains the list containing all the memos.
+     * @return the memo list
+     */
     public List<Memo> getMemoList() {
         return memoList;
     }
     
+    /**
+     * Adds a memo into the memo list.
+     * @param memo the memo to be added
+     */
     public void add(Memo memo) {
         memoList.add(memo);
     }
     
+    /**
+     * Clears the memo list.
+     */
     public void clear() {
         memoList.clear();
     }
     
+    /**
+     * Returns the size of the memo list (the number of the memos).
+     * @return the size of the memo list
+     */
     public int size() {
         return memoList.size();
     }
     
+    /**
+     * Returns the memo having a specified index number.
+     * @param index the index number that indicates the specified memo
+     * @return the specified memo
+     */
     public Memo getMemo(int index) {
         return memoList.get(index);
     }
     
+    /**
+     * Sorts all the memos in the list.
+     */
     public void sort() {
         sort(memoList);
     }
     
+    /**
+     * Sorts memos.
+     * @param memos the list of memos
+     */
     private static void sort(List<Memo> memos) {
         Collections.sort(memos, new Comparator<Memo>() {
             
+            /**
+             * Compares its two memos for order.
+             * @param m1 the first memo to be compared
+             * @param m2 the second memo to be compared
+             * @return the negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second
+             */
             public int compare(Memo m1, Memo m2) {
                 long time1 = m1.getTime();
                 long time2 = m2.getTime();
@@ -127,12 +189,23 @@ public class MemoView {
         });
     }
     
+    /**
+     * Refreshes this memo view.
+     */
     public void refreshMemoList() {
     }
     
-    public void addMemo(final String className) {
+    /**
+     * Writes a new memo related to a class
+     * @param className the name of the class
+     */
+    public void writeMemo(final String className) {
         if (memoPanel != null && !(memoPanel.isDisposed())) {
             memoPanel.getDisplay().syncExec(new Runnable() {
+                
+                /**
+                 * Runs a new thread.
+                 */
                 public void run() {
                     try {
                         frame.focusMemoView();

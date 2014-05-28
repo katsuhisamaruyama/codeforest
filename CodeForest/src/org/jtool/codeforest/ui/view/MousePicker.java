@@ -173,7 +173,7 @@ public class MousePicker extends PickMouseBehavior implements MouseBehaviorCallb
             getPropertyView().changeSelection(mclass.getQualifiedName());
             getMemoView().changeSelection(mclass.getQualifiedName());
             
-            getInteractionView().recordFocusClassAction(frame.getSettingData(), mclass.getQualifiedName());
+            getInteractionView().recordFocusAction(frame.getSettingData(), mclass.getQualifiedName());
         }
     }
     
@@ -188,7 +188,7 @@ public class MousePicker extends PickMouseBehavior implements MouseBehaviorCallb
         CommonMetrics metrics = node.getMetrics();
         if (metrics instanceof ClassMetrics) {
             ClassMetrics mclass = (ClassMetrics)metrics;
-            getMemoView().addMemo(mclass.getQualifiedName());
+            getMemoView().writeMemo(mclass.getQualifiedName());
         }
     }
     
