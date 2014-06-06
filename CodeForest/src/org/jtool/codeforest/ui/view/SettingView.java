@@ -435,8 +435,8 @@ public class SettingView {
      */
     public void change(SettingData data) {
         settingData.setData(data.getTrunkHeight(), data.getTrunkRadius(), data.getTrunkColor(),
-        data.getFoliageHeight(), data.getFoliageRadius(), data.getFoliageColor(), 
-        data.getLeafNumber(), data.getLeafColor());
+          data.getFoliageHeight(), data.getFoliageRadius(), data.getFoliageColor(), 
+          data.getLeafNumber(), data.getLeafColor());
         
         update();
         updateForest();

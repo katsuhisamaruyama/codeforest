@@ -195,11 +195,12 @@ public class SettingData {
      * @param name the name of the metric
      */
     public void setTrunkHeight(String name) {
-        needsUpdateForestView = !isSame(trunkHeight, name);
-        if (needsUpdateForestView) {
+    	boolean update = !isSame(trunkHeight, name);
+        if (update) {
             trunkHeight = getMetric(name);
         }
         
+        needsUpdateForestView = needsUpdateForestView | update;
         needsUpdateTreeView = needsUpdateForestView;
     }
     
@@ -208,11 +209,12 @@ public class SettingData {
      * @param name the name of the metric
      */
     public void setTrunkRadius(String name) {
-        needsUpdateForestView = !isSame(trunkRadius, name);
-        if (needsUpdateForestView) {
+        boolean update = !isSame(trunkRadius, name);
+        if (update) {
             trunkRadius = getMetric(name);
         }
         
+        needsUpdateForestView = needsUpdateForestView | update;
         needsUpdateTreeView = needsUpdateForestView;
     }
     
@@ -221,11 +223,12 @@ public class SettingData {
      * @param name the name of the metric
      */
     public void setTrunkColor(String name) {
-        needsUpdateForestView = !isSame(trunkColor, name);
-        if (needsUpdateForestView) {
+        boolean update = !isSame(trunkColor, name);
+        if (update) {
             trunkColor = getMetric(name);
         }
         
+        needsUpdateForestView = needsUpdateForestView | update;
         needsUpdateTreeView = needsUpdateForestView;
     }
     
@@ -234,11 +237,12 @@ public class SettingData {
      * @param name the name of the metric
      */
     public void setFoliageHeight(String name) {
-        needsUpdateForestView = !isSame(foliageHeight, name);
-        if (needsUpdateForestView) {
+        boolean update = !isSame(foliageHeight, name);
+        if (update) {
             foliageHeight = getMetric(name);
         }
         
+        needsUpdateForestView = needsUpdateForestView | update;
         needsUpdateTreeView = false;
     }
     
@@ -247,11 +251,12 @@ public class SettingData {
      * @param name the name of the metric
      */
     public void setFoliageRadius(String name) {
-        needsUpdateForestView = !isSame(foliageRadius, name);
-        if (needsUpdateForestView) {
+        boolean update = !isSame(foliageRadius, name);
+        if (update) {
             foliageRadius = getMetric(name);
         }
         
+        needsUpdateForestView = needsUpdateForestView | update;
         needsUpdateTreeView = false;
     }
     
@@ -260,11 +265,12 @@ public class SettingData {
      * @param name the name of the metric
      */
     public void setFoliageColor(String name) {
-        needsUpdateForestView = !isSame(foliageColor, name);
-        if (needsUpdateForestView) {
+        boolean update = !isSame(foliageColor, name);
+        if (update) {
             foliageColor = getMetric(name);
         }
         
+        needsUpdateForestView = needsUpdateForestView | update;
         needsUpdateTreeView = false;
     }
     
@@ -273,11 +279,12 @@ public class SettingData {
      * @param name the name of the metric
      */
     public void setLeafNumber(String name) {
-        needsUpdateTreeView = !isSame(leafNumber, name);
-        if (needsUpdateTreeView) {
+        boolean update = !isSame(leafNumber, name);
+        if (update) {
             leafNumber = getMetric(name);
         }
         
+        needsUpdateForestView = needsUpdateForestView | update;
         needsUpdateForestView = false;
     }
     
@@ -286,11 +293,12 @@ public class SettingData {
      * @param name the name of the metric
      */
     public void setLeafColor(String name) {
-        needsUpdateTreeView = !isSame(leafColor, name);
-        if (needsUpdateTreeView) {
+        boolean update = !isSame(leafColor, name);
+        if (update) {
             leafColor = getMetric(name);
         }
         
+        needsUpdateForestView = needsUpdateForestView | update;
         needsUpdateForestView = false;
     }
     
@@ -378,7 +386,7 @@ public class SettingData {
      * Checks if this metric equals to a given metric.
      * @param metric the metric to be compared
      * @param name the name of the metric to be compared
-     * @return <code>true</code> if both teht metrics are the same, otherwise <code>false</code>
+     * @return <code>true</code> if both the metrics are the same, otherwise <code>false</code>
      */
     private boolean isSame(IMetric metric, String name) {
         if (metric == null || name == null) {
