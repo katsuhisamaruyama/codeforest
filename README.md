@@ -6,9 +6,9 @@ A Source Code Visualization Tool
 
 ## Requirement
 
-JDK 1.6 or later
-Eclipse 4.4 or later
-JxPlatform <https://github.com/katsuhisamaruyama/jxplatform/>
+JDK 1.6 or later  
+Eclipse 4.4 or later  
+JxPlatform <https://github.com/katsuhisamaruyama/jxplatform/>  
 
 ## Author
 
